@@ -1,0 +1,199 @@
+body {
+    font-family: georgia, arial, helvetica, sans-serif;
+    font-size: 1.2em;
+    line-height: 1.3em;
+    margin: 0;
+    padding: 0;
+    background: black;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.outer {
+    background: rgb(78, 67, 57);
+    padding: 20px;
+    min-width: 450px;
+}
+
+.boss {
+    margin-bottom: 20px;
+}
+
+.boss-name {
+    padding: 10px;
+    .white-text-with-background();
+}
+
+.raid {
+    margin: 0 20px;
+}
+
+.frame {
+    cursor: pointer;
+    border: 1px solid #000;
+    box-shadow: 0 0 5px #000;
+    background: linear-gradient(to bottom, #666, #000);
+    color: #fff;
+    padding: 4px;
+    border-radius: 4px;
+
+    &.thin {
+        padding: 1px;
+        border-radius: 1px;
+    }
+
+    &.unselectable {
+        cursor: default;
+    }
+
+    div {
+        border-radius: 2px;
+    }
+}
+
+
+.frame.selected {
+    border: 1px solid #fff;
+}
+
+.health-bar-background {
+    position: relative;
+    background: rgb(0, 24, 0);
+    border: 1px solid rgb(0, 24, 0);
+}
+
+.health-bar {
+    background: linear-gradient(to top right, rgb(0, 200, 0), rgb(0, 150, 0));
+}
+
+.health-bar-text {
+    top: 0;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 0);
+
+    font-size: 16px;
+    .white-text-with-background();
+}
+
+.party {
+    display: inline-block;
+    width: 25%;
+
+    .frame {
+        margin: 0px 0px 40px 0px;
+    }
+}
+
+.party-member {
+    width: 100%;
+    max-width: 300px;
+
+    .health-bar {
+        text-align: center;
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
+.party-member-name {
+    font-size: 16px;
+    line-height: 16px;
+    background: black;
+    border: 1px solid black;
+    padding: 4px;
+
+    &.targeted {
+        background: linear-gradient(to top, #a00 , #300);
+        .white-text-with-background();
+    }
+}
+
+.party-member-health {
+    background: red;
+}
+
+.party-member-health-bar {
+    background: green;
+}
+
+.party-member-buffs-container {
+    position: relative;
+}
+
+.party-member-buffs {
+    position: absolute;
+    top: -36px;
+    left: 5px;
+}
+
+.party-member-buff {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+
+    &.frame {
+        padding: 4px;
+        border-radius: 0px;
+        background: linear-gradient(to bottom, #333 , #000);
+    }
+}
+
+.cast-bar-container {
+    margin: 8px;
+}
+
+.cast-bar-background {
+    background: rgb(0, 0, 24);
+    border-radius: 4px;
+    position: relative;
+    height: 24px;
+}
+
+.cast-bar {
+    background: linear-gradient(to top, rgb(0, 0, 150), rgb(0, 0, 200));
+    border-radius: 4px;
+    width: 0;
+    opacity: 1;
+
+    text-align: center;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.actions {
+    text-align: center;
+}
+
+.action {
+    width: 75px;
+    height: 75px;
+    margin-right: 10px;
+    display: inline-block;
+    background: rgb(22, 22, 22);
+    border: 1px solid #ccc;
+    box-shadow: inset 1px 1px 5px rgb(128,128,128), 0 0 10px rgb(0,0,0);
+    .white-text-with-background();
+}
+
+.action:active {
+    background: black;
+}
+
+.action:nth-last-child(1) {
+    margin: 0;
+}
+
+.white-text-with-background {
+    color: white;
+    text-shadow: 1px 1px 1px #000;
+}
+
+.nowrap {
+    white-space: nowrap;
+}

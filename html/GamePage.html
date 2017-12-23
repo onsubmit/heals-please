@@ -1,0 +1,47 @@
+<div class="outer">
+    <div class="boss frame">
+        <div class="health-bar-background">
+            <div class="health-bar" data-bind="animate: inCombat() ? boss.health : null">
+                <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <div class="raid">
+        <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">
+            <div class="party-member">
+                <div class="frame" data-bind="
+                    click: $parent.player.setTarget,
+                    css: { 'selected': $parent.player.target() === member }">
+                    <div class="party-member-name nowrap" data-bind="
+                        text: member.name,
+                        css: { 'targeted': $parent.boss.targets.indexOf(member) !== -1 }">
+                    </div>
+                    <div class="health-bar-background">
+                        <div class="health-bar" data-bind="style: { width: member.healthPercentageString }">&nbsp;</div>
+                        <div class="health-bar-text nowrap" data-bind="text: member.healthStatusString"></div>
+                    </div>
+                </div>
+                <div class="party-member-buffs-container">
+                    <div class="party-member-buffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
+                        <div class="party-member-buff frame"><img data-bind="attr: { src: debuff.icon }" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cast-bar-container frame thin unselectable">
+        <div class="cast-bar-background">
+            <div class="cast-bar" data-bind="
+                animate: currentCast() || fadeOutCastBarAnimation,
+                animateFinish: currentCast.finishAnimation">&nbsp;</div>
+
+            <div class="health-bar-text nowrap" data-bind="text: currentCast() && currentCast().name"></div>
+        </div>
+    </div>
+    <div class="actions" data-bind="foreach: { data: player.actions, as: 'action' }">
+        <div class="action frame" data-bind="text: action, click: $parent.cast"></div>
+    </div>
+    <div>
+        <button data-bind="click: engageBoss">Engage</button>
+    </div>
+</div>
