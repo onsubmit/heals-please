@@ -1,11 +1,15 @@
 var path = require("path");
 
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 var extractLess = new ExtractTextPlugin({
     filename: "app.css"
 });
 
+var extractHtml = new HtmlWebpackPlugin({
+    title: "Heals, please."
+});
 
 module.exports = {
     entry: "./js/app.js",
@@ -52,7 +56,8 @@ module.exports = {
         ]
     },
     plugins: [
-        extractLess
+        extractLess,
+        extractHtml
     ],
     devtool: 'eval-source-map'
 }

@@ -11,7 +11,8 @@
   },
   "scripts": {
     "dev": "webpack --display-error-details",
-    "watch": "webpack --progress --colors --watch"
+    "watch": "webpack --progress --colors --watch",
+    "deploy": "gh-pages -d out"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,8 @@
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
+    "gh-pages": "^1.1.0",
+    "html-webpack-plugin": "^2.30.1",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "velocity-animate": "^1.5.0"
