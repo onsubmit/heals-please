@@ -2,11 +2,10 @@ var ko = require("knockout");
 var Actions = require("./Actions.js");
 var Random = require("../../Random.js");
 var AnimationHelpers = require("../../AnimationHelpers.js");
-var DotDebuff = require("../../DotDebuff.js");
 var Loops = require("../../Loops.js");
 var Loop = require("../../Loop.js");
 
-module.exports = new function()
+module.exports = new function ()
 {
     var _this = this;
 
@@ -101,4 +100,4 @@ module.exports = new function()
 
         _onDeathCallback();
     }
-}
+};

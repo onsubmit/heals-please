@@ -4,7 +4,7 @@ exports.applyExtensions = function (ko)
 {
     ko.bindingHandlers.animate =
     {
-        update: function (element, valueAccessor, allBindings)
+        update: function (element, valueAccessor)
         {
             var currentCast = valueAccessor();
 

@@ -40,4 +40,4 @@ module.exports = function (target, onSuccess, onCancel)
         _this.cast();
         onSuccess();
     }
-}
+};

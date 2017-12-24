@@ -1,3 +1,4 @@
+var ko = require("knockout");
 var AnimationHelpers = require("../../../AnimationHelpers.js");
 var DotDebuff = require("../../../DotDebuff.js");
 var Random = require("../../../Random.js");
@@ -39,16 +40,16 @@ module.exports = function (targets, onSuccess)
                         interval: 1000,
                         duration: 5000,
                         effect: function (foodPoisoningTarget)
-                            {
-                                var foodPoisoningHarmAmount = Random.fromIntegerIntervalInclusive(8, 16);
-                                foodPoisoningTarget.harm(foodPoisoningHarmAmount);
-                            }
+                        {
+                            var foodPoisoningHarmAmount = Random.fromIntegerIntervalInclusive(8, 16);
+                            foodPoisoningTarget.harm(foodPoisoningHarmAmount);
+                        }
                     });
 
                     target.applyDebuff(foodPoisoningDebuff);
                 }
             });
-    };
+    }
 
     function _complete()
     {

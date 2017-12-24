@@ -18,8 +18,17 @@ module.exports = {
         filename: "app.bundle.js"
     },
     module: {
-        loaders:
-        [
+        loaders: [
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "eslint-loader",
+                options: {
+                    failOnWarning: true,
+                    failOnError: true
+                }
+            },
             {
                 test: /knockout-latest(\.debug)?\.js$/,
                 loader: "expose-loader?ko"
@@ -57,7 +66,7 @@ module.exports = {
     },
     plugins: [
         extractLess,
-        extractHtml
+        extractHtml,
     ],
     devtool: 'eval-source-map'
-}
+};

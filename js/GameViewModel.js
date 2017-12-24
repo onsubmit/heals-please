@@ -6,15 +6,14 @@ var Party = require("./Party.js");
 var Heals = require("./Heals.js");
 var Bosses = require("./Bosses.js");
 
-require("../css/app.less")
+require("../css/app.less");
 
-module.exports = function (serverData)
+module.exports = function ()
 {
     var _this = this;
 
     var c_defaultHeals = ["Small Heal"];
 
-    var _castTimeout = null;
     var _queuedAction = null;
 
     _this.inCombat = ko.observable(false);
@@ -72,8 +71,9 @@ module.exports = function (serverData)
         _this.inCombat(true);
     };
 
-    _this.showDebuff = function (debuff)
+    _this.showDebuff = function (/*debuff*/)
     {
+
     };
 
     _this.pause = function ()

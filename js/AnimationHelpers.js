@@ -9,8 +9,8 @@ module.exports =
     makeUpdateProgressFunction: function (updateProgressFunction)
     {
         return function (elements, complete, remaining, start, tweenValue)
-            {
-                updateProgressFunction({ complete: complete, remaining: remaining, start: start, tweenValue: tweenValue });
-            };
+        {
+            updateProgressFunction({ complete: complete, remaining: remaining, start: start, tweenValue: tweenValue });
+        };
     }
 };

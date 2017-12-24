@@ -24,7 +24,7 @@ function Party(members)
             ? [].concat(_this.members)
             : ko.utils.arrayFilter(
                 _this.members,
-                function(member)
+                function (member)
                 {
                     return !member.isDead();
                 });
@@ -38,7 +38,7 @@ function Party(members)
         amount = Math.min(amount, clone.length - amount);
 
         var randomMembers = [];
-        for (i = 0; i < amount; i++)
+        for (var i = 0; i < amount; i++)
         {
             var index = Random.nonNegativeIntegerUpToNonInclusive(clone.length);
             randomMembers.push(clone.splice(index, 1)[0]);
@@ -83,7 +83,7 @@ function Party(members)
             new Friendly("Tank", { health: 200 }),
             new Friendly("DPS #1"),
             new Friendly("DPS #2"),
-            new Friendly("DPS #3"),
+            new Friendly("DPS #3")
         ].concat(members || []);
     })();
 }

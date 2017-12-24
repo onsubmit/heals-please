@@ -7,10 +7,10 @@ function Loops()
     var _loops = {};
     var _loopArguments = arguments;
 
-    _this.get = function(loopName)
+    _this.get = function (loopName)
     {
         return _loops[loopName];
-    }
+    };
 
     _this.start = function ()
     {
@@ -50,7 +50,7 @@ function Loops()
             {
                 _loops[loop.name] = loop;
             });
-    })()
+    })();
 }
 
 module.exports = Loops;
