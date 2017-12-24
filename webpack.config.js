@@ -8,7 +8,7 @@ var extractLess = new ExtractTextPlugin({
 });
 
 var extractHtml = new HtmlWebpackPlugin({
-    title: "Heals, please."
+    template: "index.template.html"
 });
 
 module.exports = {
