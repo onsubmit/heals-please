@@ -18,6 +18,9 @@ body {
   min-width: 300px;
 }
 .boss {
+  margin-bottom: 44px;
+}
+.boss.casting {
   margin-bottom: 20px;
 }
 .boss-name {
@@ -26,7 +29,7 @@ body {
   text-shadow: 1px 1px 1px #000;
 }
 .raid {
-  margin: 0 20px;
+  margin: 0;
 }
 .frame {
   cursor: pointer;
@@ -106,21 +109,16 @@ body {
 }
 .party-member-buffs {
   position: absolute;
-  right: -36px;
-  bottom: 26px;
+  right: 8px;
+  bottom: 38px;
 }
 .party-member-buff {
   width: 20px;
   height: 20px;
   display: inline-block;
 }
-.party-member-buff.frame {
-  padding: 4px;
-  border-radius: 0px;
-  background: linear-gradient(to bottom, #333, #000);
-}
 .cast-bar-container {
-  margin: 8px;
+  margin-bottom: 10px;
 }
 .cast-bar-background {
   background: #000018;
