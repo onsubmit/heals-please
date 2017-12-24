@@ -1,0 +1,166 @@
+body {
+  font-family: georgia, arial, helvetica, sans-serif;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  margin: 0;
+  padding: 0;
+  background: black;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.outer {
+  background: #4e4339;
+  padding: 20px;
+  min-width: 450px;
+}
+.boss {
+  margin-bottom: 20px;
+}
+.boss-name {
+  padding: 10px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.raid {
+  margin: 0 20px;
+}
+.frame {
+  cursor: pointer;
+  border: 1px solid #000;
+  box-shadow: 0 0 5px #000;
+  background: linear-gradient(to bottom, #666, #000);
+  color: #fff;
+  padding: 4px;
+  border-radius: 4px;
+}
+.frame.thin {
+  padding: 1px;
+  border-radius: 1px;
+}
+.frame.unselectable {
+  cursor: default;
+}
+.frame div {
+  border-radius: 2px;
+}
+.frame.selected {
+  border: 1px solid #fff;
+}
+.health-bar-background {
+  position: relative;
+  background: #001800;
+  border: 1px solid #001800;
+}
+.health-bar {
+  background: linear-gradient(to top right, #00c800, #009600);
+}
+.health-bar-text {
+  top: 0;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+  font-size: 16px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.party {
+  display: inline-block;
+  width: 25%;
+}
+.party .frame {
+  margin: 0px 0px 40px 0px;
+}
+.party-member {
+  width: 100%;
+  max-width: 300px;
+}
+.party-member .health-bar {
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+}
+.party-member-name {
+  font-size: 16px;
+  line-height: 16px;
+  background: black;
+  border: 1px solid black;
+  padding: 4px;
+}
+.party-member-name.targeted {
+  background: linear-gradient(to top, #a00, #300);
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.party-member-health {
+  background: red;
+}
+.party-member-health-bar {
+  background: green;
+}
+.party-member-buffs-container {
+  position: relative;
+}
+.party-member-buffs {
+  position: absolute;
+  top: -36px;
+  left: 5px;
+}
+.party-member-buff {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
+.party-member-buff.frame {
+  padding: 4px;
+  border-radius: 0px;
+  background: linear-gradient(to bottom, #333, #000);
+}
+.cast-bar-container {
+  margin: 8px;
+}
+.cast-bar-background {
+  background: #000018;
+  border-radius: 4px;
+  position: relative;
+  height: 24px;
+}
+.cast-bar {
+  background: linear-gradient(to top, #000096, #0000c8);
+  border-radius: 4px;
+  width: 0;
+  opacity: 1;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+}
+.actions {
+  text-align: center;
+}
+.action {
+  width: 75px;
+  height: 75px;
+  margin-right: 10px;
+  display: inline-block;
+  background: #161616;
+  border: 1px solid #ccc;
+  box-shadow: inset 1px 1px 5px #808080, 0 0 10px #000000;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.action:active {
+  background: black;
+}
+.action:nth-last-child(1) {
+  margin: 0;
+}
+.white-text-with-background {
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.nowrap {
+  white-space: nowrap;
+}
