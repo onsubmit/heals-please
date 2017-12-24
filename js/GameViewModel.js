@@ -12,7 +12,7 @@ module.exports = function (serverData)
 {
     var _this = this;
 
-    var c_defaultHeals = [Object.keys(Heals)[0]];
+    var c_defaultHeals = ["Small Heal"];
 
     var _castTimeout = null;
     var _queuedAction = null;

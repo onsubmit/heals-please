@@ -1,9 +1,10 @@
 var ko = require("knockout");
-var Random = require("../Random.js");
-var AnimationHelpers = require("../AnimationHelpers.js");
-var DotDebuff = require("../DotDebuff.js");
-var Loops = require("../Loops.js");
-var Loop = require("../Loop.js");
+var Actions = require("./Actions.js");
+var Random = require("../../Random.js");
+var AnimationHelpers = require("../../AnimationHelpers.js");
+var DotDebuff = require("../../DotDebuff.js");
+var Loops = require("../../Loops.js");
+var Loop = require("../../Loop.js");
 
 module.exports = new function()
 {
@@ -16,6 +17,7 @@ module.exports = new function()
 
     _this.name = "Gordo Ramzee";
     _this.targets = ko.observableArray([]);
+    _this.currentCast = ko.observable();
 
     _this.health = ko.utils.extend(ko.observable(1000),
         {
@@ -25,7 +27,7 @@ module.exports = new function()
                     properties: AnimationHelpers.zeroWidth,
                     options:
                         {
-                            duration: 30000,
+                            duration: 60000,
                             begin: AnimationHelpers.removeStyleAttribute,
                             complete: _onDeath
                         }
@@ -49,8 +51,8 @@ module.exports = new function()
         _this.targets.push(_tank);
 
         _loops = new Loops(
-            new Loop(_attackTank, function () { return 1000 * Random.fromFloatInterval(2, 4); }),
-            new Loop(_throwFood, function () { return 10000; }));
+            new Loop("Attack Tank", _attackTank, function () { return 1000 * Random.fromFloatInterval(2, 4); }),
+            new Loop("Throw Food", _throwFood, 10000));
 
         _loops.start();
     };
@@ -74,35 +76,21 @@ module.exports = new function()
 
     function _throwFood()
     {
-        // TODO: Give this a 1-second cast time. Focus will be taken off the tank during that time.
+        _loops.get("Attack Tank").pause();
+
         var throwFoodTargets = _raid.getRandomMembers(2);
         _this.targets(throwFoodTargets);
 
-        ko.utils.arrayForEach(
+        var throwFood = new Actions.ThrowFood(
             throwFoodTargets,
-            function (throwFoodTarget)
+            function ()
             {
-                var throwFoodHarmAmount = Random.fromIntegerIntervalInclusive(12, 18);
-                throwFoodTarget.harm(throwFoodHarmAmount);
+                _this.currentCast(null);
+                _loops.get("Attack Tank").resume();
+            }
+        );
 
-                if (Math.random() < 1)
-                {
-                    var foodPoisoningDebuff = new DotDebuff({
-                        name: "Food Poisoning",
-                        description: "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
-                        icon: require("../../images/food-poisoning.png"),
-                        interval: 1000,
-                        duration: 5000,
-                        effect: function (foodPoisoningTarget)
-                            {
-                                var foodPoisoningHarmAmount = Random.fromIntegerIntervalInclusive(8, 16);
-                                foodPoisoningTarget.harm(foodPoisoningHarmAmount);
-                            }
-                    });
-
-                    throwFoodTarget.applyDebuff(foodPoisoningDebuff);
-                }
-            });
+        _this.currentCast(throwFood);
     }
 
     function _onDeath()

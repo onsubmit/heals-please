@@ -1,6 +1,8 @@
-function Loop(callback, delay)
+function Loop(name, callback, delay)
 {
     var _this = this;
+
+    _this.name = name;
 
     var _timerId;
     var _timerStart;
@@ -35,10 +37,10 @@ function Loop(callback, delay)
 
     function _loop(delayOverride)
     {
-        (function runLoopIteration()
+        (function runLoopIteration(innerDelayOverride)
         {
             _timerStart = new Date().getTime();
-            _timerRemaining = delayOverride || (typeof delay === "function" ? delay() : delay);
+            _timerRemaining = innerDelayOverride || (typeof delay === "function" ? delay() : delay);
 
             _timerId = setTimeout(
                 function ()
@@ -51,7 +53,7 @@ function Loop(callback, delay)
                         runLoopIteration();
                     }
                 }, _timerRemaining);
-        })();
+        })(delayOverride);
     }
 }
 

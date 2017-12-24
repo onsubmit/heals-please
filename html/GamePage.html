@@ -1,10 +1,19 @@
 <div class="outer">
-    <div class="boss frame">
+    <div class="boss frame" data-bind="css: { 'casting': boss.currentCast }">
         <div class="health-bar-background">
             <div class="health-bar" data-bind="animate: inCombat() ? boss.health : null">
                 <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
             </div>
         </div>
+        <!-- ko if: boss.currentCast -->
+        <div class="cast-bar-background">
+            <div class="cast-bar" data-bind="
+                animate: boss.currentCast() || fadeOutCastBarAnimation,
+                animateAction: boss.currentCast.action">&nbsp;</div>
+
+            <div class="health-bar-text nowrap" data-bind="text: boss.currentCast().name"></div>
+        </div>
+        <!-- /ko -->
     </div>
     <div class="raid">
         <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">

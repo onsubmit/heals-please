@@ -26,7 +26,7 @@ function DotDebuff(params)
     {
         _target = target;
 
-        _loop = new Loop(_tick, _interval);
+        _loop = new Loop("Dot Debuff", _tick, _interval);
         _loop.start();
     };
 

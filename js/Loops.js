@@ -4,7 +4,13 @@ function Loops()
 {
     var _this = this;
 
-    var _loops = arguments;
+    var _loops = {};
+    var _loopArguments = arguments;
+
+    _this.get = function(loopName)
+    {
+        return _loops[loopName];
+    }
 
     _this.start = function ()
     {
@@ -28,13 +34,23 @@ function Loops()
 
     function _call(functionName)
     {
-        ko.utils.arrayForEach(
+        ko.utils.objectForEach(
             _loops,
-            function (loop)
+            function (loopName, loop)
             {
                 loop[functionName]();
             });
     }
+
+    (function _initialize()
+    {
+        ko.utils.arrayForEach(
+            _loopArguments,
+            function (loop)
+            {
+                _loops[loop.name] = loop;
+            });
+    })()
 }
 
 module.exports = Loops;
