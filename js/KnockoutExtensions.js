@@ -23,13 +23,13 @@ exports.applyExtensions = function (ko)
         }
     };
 
-    ko.bindingHandlers.animateFinish =
+    ko.bindingHandlers.animateAction =
     {
         update: function (element, valueAccessor)
         {
-            var finish = ko.unwrap(valueAccessor());
+            var action = ko.unwrap(valueAccessor());
 
-            if (!finish)
+            if (!action)
             {
                 return;
             }
@@ -38,7 +38,7 @@ exports.applyExtensions = function (ko)
                 element,
                 function ()
                 {
-                    return { animation: [{ properties: "finish" }] };
+                    return { animation: { properties: action } };
                 });
         }
     };

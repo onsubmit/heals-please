@@ -23,7 +23,7 @@
                 </div>
                 <div class="party-member-buffs-container">
                     <div class="party-member-buffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
-                        <div class="party-member-buff frame"><img data-bind="attr: { src: debuff.icon }" /></div>
+                        <div class="party-member-buff"><a href="#" data-bind="click: $root.showDebuff"><img data-bind="attr: { src: debuff.icon }" /></a></div>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
                 animate: currentCast() || fadeOutCastBarAnimation,
-                animateFinish: currentCast.finishAnimation">&nbsp;</div>
+                animateAction: currentCast.action">&nbsp;</div>
 
             <div class="health-bar-text nowrap" data-bind="text: currentCast() && currentCast().name"></div>
         </div>
@@ -43,5 +43,7 @@
     </div>
     <div>
         <button data-bind="click: engageBoss">Engage</button>
+        <button data-bind="click: pause">Pause</button>
+        <button data-bind="click: resume">Resume</button>
     </div>
 </div>

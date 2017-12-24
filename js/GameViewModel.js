@@ -1,4 +1,6 @@
 var ko = require("knockout");
+var Velocity = require("velocity-animate");
+
 var Friendly = require("./Friendly.js");
 var Party = require("./Party.js");
 var Heals = require("./Heals.js");
@@ -22,7 +24,7 @@ module.exports = function (serverData)
     _this.boss = Bosses.GordoRamzee;
     _this.currentCast = ko.utils.extend(ko.observable(),
         {
-            finishAnimation: ko.observable(false).extend({ notify: "always" })
+            action: ko.observable().extend({ notify: "always" })
         });
 
     _this.fadeOutCastBarAnimation =
@@ -34,12 +36,6 @@ module.exports = function (serverData)
                 }
         };
 
-    _this.bossHealthPercentageString = ko.pureComputed(
-        function ()
-        {
-            return _bossHealthPercentage() + "%";
-        });
-
     _this.cast = function (actionName)
     {
         var target = _this.player.target();
@@ -47,7 +43,10 @@ module.exports = function (serverData)
         {
             return;
         }
+
         var action = new Heals[actionName](target, _finishCast, _cancelCast);
+
+        // TODO: Do this better.
         action.name = actionName;
 
         var currentCast = _this.currentCast();
@@ -73,6 +72,31 @@ module.exports = function (serverData)
         _this.inCombat(true);
     };
 
+    _this.showDebuff = function (debuff)
+    {
+    };
+
+    _this.pause = function ()
+    {
+        var pausedElements = document.getElementsByClassName("velocity-animating");
+        Velocity(pausedElements, "pause");
+
+        _this.boss.pause();
+        _this.friendlies.pause();
+
+        return pausedElements;
+    };
+
+    _this.resume = function ()
+    {
+        var pausedElements = document.getElementsByClassName("velocity-animating");
+
+        _this.boss.resume();
+        _this.friendlies.resume();
+
+        Velocity(pausedElements, "resume");
+    };
+
     function _castAction(action)
     {
         if (action.isInstant)
@@ -81,7 +105,7 @@ module.exports = function (serverData)
             return;
         }
 
-        _this.currentCast.finishAnimation(true);
+        _this.currentCast.action("finish");
         _this.currentCast(action);
     }
 

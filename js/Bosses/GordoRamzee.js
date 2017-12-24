@@ -2,15 +2,19 @@ var ko = require("knockout");
 var Random = require("../Random.js");
 var AnimationHelpers = require("../AnimationHelpers.js");
 var DotDebuff = require("../DotDebuff.js");
+var Loops = require("../Loops.js");
+var Loop = require("../Loop.js");
 
 module.exports = new function()
 {
     var _this = this;
 
+    var _tank = null;
+    var _raid = null;
+    var _loops = null;
     var _onDeathCallback = null;
 
     _this.name = "Gordo Ramzee";
-    _this.timeouts = {};
     _this.targets = ko.observableArray([]);
 
     _this.health = ko.utils.extend(ko.observable(1000),
@@ -40,79 +44,72 @@ module.exports = new function()
 
         _onDeathCallback = onDeathCallback;
 
-        _this.targets.push(tank);
+        _tank = tank;
+        _raid = raid;
+        _this.targets.push(_tank);
 
-        (function tankAttackLoop()
-        {
-            var attackTankWait = 1000 * Random.fromFloatInterval(2, 4);
-            _this.timeouts.attackTank = setTimeout(
-                function ()
-                {
-                    _this.targets([tank]);
-                    var attackTankAmount = Random.fromIntegerIntervalInclusive(20, 25);
-                    tank.harm(attackTankAmount);
-                    tankAttackLoop();
-                },
-                attackTankWait);
-        })();
+        _loops = new Loops(
+            new Loop(_attackTank, function () { return 1000 * Random.fromFloatInterval(2, 4); }),
+            new Loop(_throwFood, function () { return 10000; }));
 
-        (function throwFoodLoop()
-        {
-            var throwFoodWait = 10000;
-            _this.timeouts.throwFood = setTimeout(
-                function ()
-                {
-                    // TODO: Give this a 1-second cast time. Focus will be taken off the tank during that time.
-                    var throwFoodTargets = raid.getRandomMembers(2);
-                    _this.targets(throwFoodTargets);
-
-                    ko.utils.arrayForEach(
-                        throwFoodTargets,
-                        function (throwFoodTarget)
-                        {
-                            var throwFoodHarmAmount = Random.fromIntegerIntervalInclusive(12, 18);
-                            throwFoodTarget.harm(throwFoodHarmAmount);
-
-                            if (Math.random() < 0.5)
-                            {
-                                var foodPoisoningDebuff = new DotDebuff({
-                                    name: "Food Poisoning",
-                                    description: "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
-                                    icon: require("../../images/food-poisoning.png"),
-                                    interval: 1000,
-                                    duration: 5000,
-                                    effect: function (foodPoisoningTarget)
-                                        {
-                                            var foodPoisoningHarmAmount = Random.fromIntegerIntervalInclusive(8, 16);
-                                            foodPoisoningTarget.harm(foodPoisoningHarmAmount);
-                                        }
-                                });
-
-                                throwFoodTarget.applyDebuff(foodPoisoningDebuff);
-                            }
-                        });
-
-                    throwFoodLoop();
-                },
-                throwFoodWait);
-        })();
+        _loops.start();
     };
 
-    _this.giveFoodPoisoning = function (target)
+    _this.pause = function ()
     {
-
+        _loops.pause();
     };
+
+    _this.resume = function ()
+    {
+        _loops.resume();
+    };
+
+    function _attackTank()
+    {
+        _this.targets([_tank]);
+        var attackTankAmount = Random.fromIntegerIntervalInclusive(20, 25);
+        _tank.harm(attackTankAmount);
+    }
+
+    function _throwFood()
+    {
+        // TODO: Give this a 1-second cast time. Focus will be taken off the tank during that time.
+        var throwFoodTargets = _raid.getRandomMembers(2);
+        _this.targets(throwFoodTargets);
+
+        ko.utils.arrayForEach(
+            throwFoodTargets,
+            function (throwFoodTarget)
+            {
+                var throwFoodHarmAmount = Random.fromIntegerIntervalInclusive(12, 18);
+                throwFoodTarget.harm(throwFoodHarmAmount);
+
+                if (Math.random() < 1)
+                {
+                    var foodPoisoningDebuff = new DotDebuff({
+                        name: "Food Poisoning",
+                        description: "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
+                        icon: require("../../images/food-poisoning.png"),
+                        interval: 1000,
+                        duration: 5000,
+                        effect: function (foodPoisoningTarget)
+                            {
+                                var foodPoisoningHarmAmount = Random.fromIntegerIntervalInclusive(8, 16);
+                                foodPoisoningTarget.harm(foodPoisoningHarmAmount);
+                            }
+                    });
+
+                    throwFoodTarget.applyDebuff(foodPoisoningDebuff);
+                }
+            });
+    }
 
     function _onDeath()
     {
         _this.targets.removeAll();
 
-        ko.utils.objectForEach(
-            _this.timeouts,
-            function (key, timeout)
-            {
-                clearTimeout(timeout);
-            });
+        _loops.stop();
 
         _onDeathCallback();
     }

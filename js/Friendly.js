@@ -47,35 +47,19 @@ function Friendly(name, params)
 
     _this.applyDebuff = function (debuff)
     {
-        var debuffTickTimeout = debuff.start(_this);
-
-        var debuffAndTickTimeout = { timeout: debuffTickTimeout, debuff: debuff };
-        _this.debuffs.push(debuffAndTickTimeout);
+        debuff.start(_this);
+        _this.debuffs.push(debuff);
     };
 
     _this.removeDebuff = function (debuffToRemove)
     {
-        var removedDebuffs = _this.debuffs.remove(
-            function (debuffAndTickTimeout)
-            {
-                return debuffAndTickTimeout.debuff === debuffToRemove;
-            });
-
-        ko.utils.arrayForEach(
-            removedDebuffs,
-            function (debuffAndTickTimeout)
-            {
-                if (debuffAndTickTimeout.timeout)
-                {
-                    clearTimeout(debuffAndTickTimeout.timeout);
-                }
-            });
+        _this.debuffs.remove(debuffToRemove);
+        debuffToRemove.stop();
     };
 
     _this.removeLastDebuff = function ()
     {
-        var debuffAndTickTimeout = _this.debuffs.pop();
-        clearTimeout(debuffAndTickTimeout.timeout);
+        _this.debuffs.pop().stop();
     };
 
     _this.setTarget = function (target)
@@ -87,6 +71,31 @@ function Friendly(name, params)
     {
         return _this.health.peek() === 0;
     };
+
+    _this.pause = function ()
+    {
+        _doDebuffAction("pause");
+    };
+
+    _this.stop = function ()
+    {
+        _doDebuffAction("stop");
+    };
+
+    _this.resume = function ()
+    {
+        _doDebuffAction("resume");
+    };
+
+    function _doDebuffAction(actionName)
+    {
+        ko.utils.arrayForEach(
+            _this.debuffs(),
+            function (debuff)
+            {
+                debuff[actionName]();
+            });
+    }
 
     function _adjustHealth(amount)
     {

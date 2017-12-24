@@ -1,3 +1,5 @@
+var Loop = require("./Loop.js");
+
 function DotDebuff(params)
 {
     params = params || {};
@@ -11,7 +13,9 @@ function DotDebuff(params)
     var _effect = params.effect;
     var _icon = params.icon;
 
-    var _timeout = null;
+    var _loop = null;
+    var _target = null;
+    var _tickCount = 0;
     var _numTicks = Math.floor(_duration / _interval);
 
     _this.name = _name;
@@ -20,31 +24,36 @@ function DotDebuff(params)
 
     _this.start = function (target)
     {
-        var _tickCount = 0;
-        (function debuffLoop()
-        {
-            _timeout = setTimeout(
-                function ()
-                {
-                    _effect(target);
+        _target = target;
 
-                    if (++_tickCount < _numTicks)
-                    {
-                        debuffLoop(target);
-                    }
-                    else
-                    {
-                        _timeout = null;
-                        target.removeDebuff(_this);
-                    }
-                },
-                _interval);
-        })();
+        _loop = new Loop(_tick, _interval);
+        _loop.start();
     };
 
     _this.stop = function ()
     {
-        clearTimeout(_timeout);
+        _loop.stop();
+    };
+
+    _this.resume = function ()
+    {
+        _loop.resume();
+    };
+
+    _this.pause = function ()
+    {
+        _loop.pause();
+    };
+
+    function _tick()
+    {
+        _effect(_target);
+
+        if (++_tickCount === _numTicks)
+        {
+            _loop.stop();
+            _target.removeDebuff(_this);
+        }
     }
 }
 

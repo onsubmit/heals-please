@@ -1,3 +1,4 @@
+var ko = require("knockout");
 var Friendly = require("./Friendly.js");
 var Random = require("./Random.js");
 
@@ -45,6 +46,36 @@ function Party(members)
 
         return chooseMembersToRemove ? clone : randomMembers;
     };
+
+    _this.start = function ()
+    {
+        _doMemberAction("start");
+    };
+
+    _this.stop = function ()
+    {
+        _doMemberAction("stop");
+    };
+
+    _this.pause = function ()
+    {
+        _doMemberAction("pause");
+    };
+
+    _this.resume = function ()
+    {
+        _doMemberAction("resume");
+    };
+
+    function _doMemberAction(functionName)
+    {
+        ko.utils.arrayForEach(
+            _this.members,
+            function (member)
+            {
+                member[functionName]();
+            });
+    }
 
     (function _initialize()
     {
