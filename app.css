@@ -117,19 +117,47 @@ body {
   height: 20px;
   display: inline-block;
 }
-.cast-bar-container {
-  margin-bottom: 10px;
-}
 .cast-bar-background {
-  background: #000018;
+  background: #181800;
   border-radius: 4px;
   position: relative;
   height: 24px;
 }
 .cast-bar {
-  background: linear-gradient(to top, #000096, #0000c8);
+  background: linear-gradient(to top, #db7500, #682a00);
   border-radius: 4px;
   width: 0;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+}
+.cast-bar-text {
+  top: 0;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+  font-size: 16px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+  visibility: hidden;
+}
+.cast-bar-text.casting,
+.cast-bar-text.velocity-animating {
+  visibility: visible;
+}
+.mana-bar-container {
+  margin-bottom: 10px;
+}
+.mana-bar-background {
+  background: #000018;
+  border-radius: 4px;
+  position: relative;
+  height: 24px;
+}
+.mana-bar {
+  background: linear-gradient(to top, #000096, #0000c8);
+  border-radius: 4px;
+  width: 100%;
   opacity: 1;
   text-align: center;
   font-size: 16px;
