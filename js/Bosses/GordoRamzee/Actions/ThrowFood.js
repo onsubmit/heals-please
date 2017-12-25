@@ -1,6 +1,6 @@
-var AnimationHelpers = require("../../../AnimationHelpers.js");
-var DotDebuff = require("../../../DotDebuff.js");
-var Random = require("../../../Random.js");
+var AnimationHelpers = require("js/AnimationHelpers");
+var DotDebuff = require("js/DotDebuff");
+var Random = require("js/Random");
 
 module.exports = function (targets, onSuccess)
 {

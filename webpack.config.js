@@ -64,6 +64,13 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        extensions: [".js"],
+        alias: {
+            js: path.resolve(__dirname, "./js"),
+            html: path.resolve(__dirname, "./html")
+        }
+    },
     plugins: [
         extractLess,
         extractHtml,

@@ -1,5 +1,5 @@
-var Friendly = require("./Friendly.js");
-var Random = require("./Random.js");
+var Friendly = require("./Friendly");
+var Random = require("./Random");
 
 function Party(members)
 {

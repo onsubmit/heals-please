@@ -1,4 +1,4 @@
-var AnimationHelpers = require("../AnimationHelpers.js");
+var AnimationHelpers = require("js/AnimationHelpers");
 
 SmallHeal.healName = "Small Heal";
 

@@ -1,9 +1,9 @@
 var ko = require("knockout");
-var Actions = require("./Actions.js");
-var Random = require("../../Random.js");
-var AnimationHelpers = require("../../AnimationHelpers.js");
-var Loops = require("../../Loops.js");
-var Loop = require("../../Loop.js");
+var Random = require("js/Random");
+var AnimationHelpers = require("js/AnimationHelpers");
+var Loops = require("js/Loops");
+var Loop = require("js/Loop");
+var Actions = require("./GordoRamzee/Actions");
 
 module.exports = new function ()
 {

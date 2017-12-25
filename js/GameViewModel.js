@@ -1,10 +1,10 @@
 var ko = require("knockout");
 var Velocity = require("velocity-animate");
 
-var Friendly = require("./Friendly.js");
-var Party = require("./Party.js");
-var Heals = require("./Heals.js");
-var Bosses = require("./Bosses.js");
+var Friendly = require("./Friendly");
+var Party = require("./Party");
+var Heals = require("./Heals");
+var Bosses = require("./Bosses");
 
 require("../css/app.less");
 
@@ -20,7 +20,7 @@ module.exports = function ()
 
     _this.player = new Friendly("Player", { actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
-    _this.boss = Bosses.GordoRamzee;
+    _this.boss = Bosses["Gordo Ramzee"];
     _this.currentCast = ko.utils.extend(ko.observable(),
         {
             action: ko.observable().extend({ notify: "always" })

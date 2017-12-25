@@ -1,4 +1,4 @@
-var Loop = require("./Loop.js");
+var Loop = require("./Loop");
 
 function DotDebuff(params)
 {

@@ -1,22 +1,15 @@
-var context = require.context("./Heals/", true, /\.js$/);
+var RequireHelper = require("./RequireHelper");
 
-var Heals = {};
-context.keys().forEach(
-    function (filename)
+var Heals = RequireHelper.requireAll(
+    require.context("./Heals/", true, /\.js$/),
+    function (heal)
     {
-        var heal = context(filename);
-
         if (!heal.healName)
         {
             throw "Missing heal name";
         }
 
-        if (Heals[heal.healName])
-        {
-            throw "Heal <" + heal.healName + "> already defined";
-        }
-
-        Heals[heal.healName] = heal;
+        return heal.healName;
     });
 
 
