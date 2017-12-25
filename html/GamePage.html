@@ -41,10 +41,19 @@
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
-                animate: currentCast() || fadeOutCastBarAnimation,
+                animate: currentCast() || animations.fadeOutCastBarBackground,
                 animateAction: currentCast.action">&nbsp;</div>
 
-            <div class="health-bar-text nowrap" data-bind="text: currentCast() && currentCast().name"></div>
+            <div class="cast-bar-text nowrap" data-bind="
+                css: { 'casting': currentCast },
+                text: lastCast() && lastCast().healName,
+                animate: !currentCast() && animations.fadeOutCastBarText"></div>
+        </div>
+    </div>
+    <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast }">
+        <div class="mana-bar-background">
+            <div class="mana-bar" data-bind="style: { width: player.manaPercentageString }">&nbsp;</div>
+            <div class="health-bar-text nowrap" data-bind="text: player.manaStatusString"></div>
         </div>
     </div>
     <div class="actions" data-bind="foreach: { data: player.actions, as: 'action' }">

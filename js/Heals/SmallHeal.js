@@ -1,10 +1,19 @@
 var AnimationHelpers = require("js/AnimationHelpers");
+var Random = require("js/Random");
 
-SmallHeal.healName = "Small Heal";
+SmallHeal.healName = SmallHeal.prototype.healName = "Small Heal";
+SmallHeal.prototype.manaCost = 30;
 
-function SmallHeal(target, onSuccess, onCancel)
+function SmallHeal(target, params)
 {
+    params = params || {};
+
     var _this = this;
+
+    var _critChance = params.critChance || 0.1;
+    var _critMultiplier = params.critMultiplier || 1.5;
+    var _onFinish = params.onFinish;
+    var _onCancel = params.onCancel;
 
     _this.castProgress = 0.0;
 
@@ -24,12 +33,19 @@ function SmallHeal(target, onSuccess, onCancel)
 
     _this.cast = function ()
     {
-        return target.heal(20);
+        var healAmount = Random.fromIntegerIntervalInclusive(18, 24);
+
+        if (Math.random() < _critChance)
+        {
+            healAmount = Math.round(healAmount * _critMultiplier);
+        }
+
+        return target.heal(healAmount);
     };
 
     _this.cancel = function ()
     {
-        onCancel();
+        _onCancel(_this);
     };
 
     function _updateProgress(progress)
@@ -40,7 +56,7 @@ function SmallHeal(target, onSuccess, onCancel)
     function _complete()
     {
         _this.cast();
-        onSuccess();
+        _onFinish(_this);
     }
 }
 

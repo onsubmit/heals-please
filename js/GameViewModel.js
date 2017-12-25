@@ -5,6 +5,7 @@ var Friendly = require("./Friendly");
 var Party = require("./Party");
 var Heals = require("./Heals");
 var Bosses = require("./Bosses");
+var AnimationHelpers = require("./AnimationHelpers");
 
 require("../css/app.less");
 
@@ -26,13 +27,34 @@ module.exports = function ()
             action: ko.observable().extend({ notify: "always" })
         });
 
-    _this.fadeOutCastBarAnimation =
+    _this.lastCast = ko.observable();
+
+    _this.animations =
         {
-            animation:
+            fadeOutCastBarBackground:
                 {
-                    properties: "fadeOut",
-                    options: { duration: 200 }
-                }
+                    animation:
+                        {
+                            properties: "fadeOut",
+                            options:
+                                {
+                                    duration: 200,
+                                    complete: AnimationHelpers.removeStyleAttribute
+                                }
+                        }
+                },
+            fadeOutCastBarText:
+            {
+                animation:
+                    {
+                        properties: "fadeOut",
+                        options:
+                            {
+                                duration: 200,
+                                complete: AnimationHelpers.removeStyleAttribute
+                            }
+                    }
+            }
         };
 
     _this.cast = function (actionName)
@@ -43,7 +65,20 @@ module.exports = function ()
             return;
         }
 
-        var action = new Heals[actionName](target, _finishCast, _cancelCast);
+        var healParams =
+            {
+                critChance: _this.player.critChance(),
+                onFinish: _finishCast,
+                onCancel: _cancelCast
+            };
+
+        var action = new Heals[actionName](target, healParams);
+
+        if (_this.player.mana() < action.manaCost)
+        {
+            // Out of mana
+            return;
+        }
 
         var currentCast = _this.currentCast();
         if (currentCast)
@@ -98,6 +133,7 @@ module.exports = function ()
     {
         if (action.isInstant)
         {
+            _this.player.spendMana(action.manaCost);
             action.cast();
             return;
         }
@@ -106,8 +142,10 @@ module.exports = function ()
         _this.currentCast(action);
     }
 
-    function _finishCast()
+    function _finishCast(action)
     {
+        _this.player.spendMana(action.manaCost);
+
         if (_queuedAction)
         {
             _castAction(_queuedAction);
@@ -131,5 +169,15 @@ module.exports = function ()
 
     (function _initialize()
     {
+        // TODO: Wrap currentCast and lastCast into a "stickyObservable" class.
+        // Use it for the boss cast bar too.
+        _this.currentCast.subscribe(
+            function (newValue)
+            {
+                if (newValue)
+                {
+                    _this.lastCast(newValue);
+                }
+            });
     })();
 };
