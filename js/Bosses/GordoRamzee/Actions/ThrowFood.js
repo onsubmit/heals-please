@@ -1,4 +1,3 @@
-var ko = require("knockout");
 var AnimationHelpers = require("../../../AnimationHelpers.js");
 var DotDebuff = require("../../../DotDebuff.js");
 var Random = require("../../../Random.js");
@@ -24,8 +23,7 @@ module.exports = function (targets, onSuccess)
 
     function _cast()
     {
-        ko.utils.arrayForEach(
-            targets,
+        targets.forEach(
             function (target)
             {
                 var harmAmount = Random.fromIntegerIntervalInclusive(12, 18);

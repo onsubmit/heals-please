@@ -1,4 +1,3 @@
-var ko = require("knockout");
 var Friendly = require("./Friendly.js");
 var Random = require("./Random.js");
 
@@ -22,8 +21,7 @@ function Party(members)
 
         var clone = allowDead
             ? [].concat(_this.members)
-            : ko.utils.arrayFilter(
-                _this.members,
+            : _this.members.filter(
                 function (member)
                 {
                     return !member.isDead();
@@ -69,8 +67,7 @@ function Party(members)
 
     function _doMemberAction(functionName)
     {
-        ko.utils.arrayForEach(
-            _this.members,
+        _this.members.forEach(
             function (member)
             {
                 member[functionName]();

@@ -12,7 +12,7 @@ module.exports = function ()
 {
     var _this = this;
 
-    var c_defaultHeals = ["Small Heal"];
+    var c_defaultHeals = [Object.keys(Heals)[0]];
 
     var _queuedAction = null;
 
@@ -44,9 +44,6 @@ module.exports = function ()
         }
 
         var action = new Heals[actionName](target, _finishCast, _cancelCast);
-
-        // TODO: Do this better.
-        action.name = actionName;
 
         var currentCast = _this.currentCast();
         if (currentCast)

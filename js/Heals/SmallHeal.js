@@ -1,6 +1,8 @@
 var AnimationHelpers = require("../AnimationHelpers.js");
 
-module.exports = function (target, onSuccess, onCancel)
+SmallHeal.healName = "Small Heal";
+
+function SmallHeal(target, onSuccess, onCancel)
 {
     var _this = this;
 
@@ -40,4 +42,6 @@ module.exports = function (target, onSuccess, onCancel)
         _this.cast();
         onSuccess();
     }
-};
+}
+
+module.exports = SmallHeal;

@@ -89,8 +89,7 @@ function Friendly(name, params)
 
     function _doDebuffAction(actionName)
     {
-        ko.utils.arrayForEach(
-            _this.debuffs(),
+        _this.debuffs().forEach(
             function (debuff)
             {
                 debuff[actionName]();
