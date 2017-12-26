@@ -5,15 +5,16 @@
                 <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
             </div>
         </div>
-        <!-- ko if: boss.currentCast -->
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
-                animate: boss.currentCast() || fadeOutCastBarAnimation,
+                animate: boss.currentCast() || animations.fadeOutCastBar,
                 animateAction: boss.currentCast.action">&nbsp;</div>
 
-            <div class="health-bar-text nowrap" data-bind="text: boss.currentCast().name"></div>
+            <div class="cast-bar-text nowrap" data-bind="
+                css: { 'casting': boss.currentCast },
+                text: boss.currentCast.previous() && boss.currentCast.previous().name,
+                animate: !boss.currentCast() && animations.fadeOutCastBar"></div>
         </div>
-        <!-- /ko -->
     </div>
     <div class="raid">
         <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">
@@ -41,13 +42,13 @@
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
-                animate: currentCast() || animations.fadeOutCastBarBackground,
+                animate: currentCast() || animations.fadeOutCastBar,
                 animateAction: currentCast.action">&nbsp;</div>
 
             <div class="cast-bar-text nowrap" data-bind="
                 css: { 'casting': currentCast },
-                text: lastCast() && lastCast().healName,
-                animate: !currentCast() && animations.fadeOutCastBarText"></div>
+                text: currentCast.previous() && currentCast.previous().healName,
+                animate: !currentCast() && animations.fadeOutCastBar"></div>
         </div>
     </div>
     <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast }">

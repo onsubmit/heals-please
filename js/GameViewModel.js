@@ -6,6 +6,7 @@ var Party = require("./Party");
 var Heals = require("./Heals");
 var Bosses = require("./Bosses");
 var AnimationHelpers = require("./AnimationHelpers");
+var PreviousValueTracker = require("./PreviousValueTracker");
 
 require("../css/app.less");
 
@@ -23,16 +24,14 @@ module.exports = function ()
     _this.player = new Player({ actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
     _this.boss = Bosses["Gordo Ramzee"];
-    _this.currentCast = ko.utils.extend(ko.observable(),
+    _this.currentCast = ko.utils.extend(PreviousValueTracker.observable(),
         {
             action: ko.observable().extend({ notify: "always" })
         });
 
-    _this.lastCast = ko.observable();
-
     _this.animations =
         {
-            fadeOutCastBarBackground:
+            fadeOutCastBar:
                 {
                     animation:
                         {
@@ -43,19 +42,7 @@ module.exports = function ()
                                     complete: AnimationHelpers.removeStyleAttribute
                                 }
                         }
-                },
-            fadeOutCastBarText:
-            {
-                animation:
-                    {
-                        properties: "fadeOut",
-                        options:
-                            {
-                                duration: 200,
-                                complete: AnimationHelpers.removeStyleAttribute
-                            }
-                    }
-            }
+                }
         };
 
     _this.cast = function (actionName)
@@ -176,18 +163,4 @@ module.exports = function ()
     {
         alert("You win!");
     }
-
-    (function _initialize()
-    {
-        // TODO: Wrap currentCast and lastCast into a "stickyObservable" class.
-        // Use it for the boss cast bar too.
-        _this.currentCast.subscribe(
-            function (newValue)
-            {
-                if (newValue)
-                {
-                    _this.lastCast(newValue);
-                }
-            });
-    })();
 };

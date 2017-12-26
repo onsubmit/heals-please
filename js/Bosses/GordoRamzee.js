@@ -3,6 +3,7 @@ var Random = require("js/Random");
 var AnimationHelpers = require("js/AnimationHelpers");
 var Loops = require("js/Loops");
 var Loop = require("js/Loop");
+var PreviousValueTracker = require("js/PreviousValueTracker");
 var Actions = require("./GordoRamzee/Actions");
 
 module.exports = new function ()
@@ -16,7 +17,7 @@ module.exports = new function ()
 
     _this.name = "Gordo Ramzee";
     _this.targets = ko.observableArray([]);
-    _this.currentCast = ko.observable();
+    _this.currentCast = PreviousValueTracker.observable();
 
     _this.health = ko.utils.extend(ko.observable(1000),
         {
