@@ -1,7 +1,7 @@
 var ko = require("knockout");
 var Velocity = require("velocity-animate");
 
-var Friendly = require("./Friendly");
+var Player = require("./Player");
 var Party = require("./Party");
 var Heals = require("./Heals");
 var Bosses = require("./Bosses");
@@ -13,13 +13,14 @@ module.exports = function ()
 {
     var _this = this;
 
-    var c_defaultHeals = [Object.keys(Heals)[0]];
+    var c_defaultHeals = ["Small Heal"];
 
     var _queuedAction = null;
 
+    _this.isPaused = ko.observable(false);
     _this.inCombat = ko.observable(false);
 
-    _this.player = new Friendly("Player", { actions: c_defaultHeals });
+    _this.player = new Player({ actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
     _this.boss = Bosses["Gordo Ramzee"];
     _this.currentCast = ko.utils.extend(ko.observable(),
@@ -59,6 +60,11 @@ module.exports = function ()
 
     _this.cast = function (actionName)
     {
+        if (_this.isPaused())
+        {
+            return;
+        }
+
         var target = _this.player.target();
         if (!target)
         {
@@ -110,6 +116,8 @@ module.exports = function ()
 
     _this.pause = function ()
     {
+        _this.isPaused(true);
+
         var pausedElements = document.getElementsByClassName("velocity-animating");
         Velocity(pausedElements, "pause");
 
@@ -121,6 +129,8 @@ module.exports = function ()
 
     _this.resume = function ()
     {
+        _this.isPaused(false);
+
         var pausedElements = document.getElementsByClassName("velocity-animating");
 
         _this.boss.resume();

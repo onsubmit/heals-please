@@ -60,8 +60,8 @@
         <div class="action frame" data-bind="text: action, click: $parent.cast"></div>
     </div>
     <div>
-        <button data-bind="click: engageBoss">Engage</button>
-        <button data-bind="click: pause">Pause</button>
-        <button data-bind="click: resume">Resume</button>
+        <button data-bind="click: engageBoss, visible: !inCombat()">Engage</button>
+        <button data-bind="click: pause, visible: inCombat() && !isPaused()">Pause</button>
+        <button data-bind="click: resume, visible: isPaused">Resume</button>
     </div>
 </div>
