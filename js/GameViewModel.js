@@ -1,10 +1,11 @@
 var ko = require("knockout");
 var Velocity = require("velocity-animate");
 
+var RequireHelper = require("./RequireHelper");
 var Player = require("./Player");
 var Party = require("./Party");
-var Heals = require("./Heals");
-var Bosses = require("./Bosses");
+var Heals = RequireHelper.requireAll(require.context("./Heals/", true, /\.js$/));
+var Bosses = RequireHelper.requireAll(require.context("./Bosses/", false, /\.js$/));
 var AnimationHelpers = require("./AnimationHelpers");
 var PreviousValueTracker = require("./PreviousValueTracker");
 
@@ -23,7 +24,7 @@ module.exports = function ()
 
     _this.player = new Player({ actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
-    _this.boss = Bosses["Gordo Ramzee"];
+    _this.boss = new Bosses["Gordo Ramzee"];
     _this.currentCast = ko.utils.extend(PreviousValueTracker.observable(),
         {
             action: ko.observable().extend({ notify: "always" })

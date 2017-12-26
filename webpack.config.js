@@ -68,7 +68,8 @@ module.exports = {
         extensions: [".js"],
         alias: {
             js: path.resolve(__dirname, "./js"),
-            html: path.resolve(__dirname, "./html")
+            html: path.resolve(__dirname, "./html"),
+            images: path.resolve(__dirname, "./images")
         }
     },
     plugins: [

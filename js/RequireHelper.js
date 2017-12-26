@@ -1,13 +1,18 @@
 module.exports =
 {
-    requireAll: function (context, getKey)
+    requireAll: function (context)
     {
         var map = {};
         context.keys().forEach(
             function (filename)
             {
                 var required = context(filename);
-                var key = getKey(required);
+                var key = required.id;
+
+                if (!key)
+                {
+                    throw "Missing identifier. filename: " + filename;
+                }
 
                 if (map[key])
                 {

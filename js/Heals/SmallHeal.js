@@ -1,7 +1,7 @@
 var AnimationHelpers = require("js/AnimationHelpers");
 var Random = require("js/Random");
 
-SmallHeal.healName = SmallHeal.prototype.healName = "Small Heal";
+SmallHeal.id = SmallHeal.prototype.name = "Small Heal";
 SmallHeal.prototype.manaCost = 30;
 
 function SmallHeal(target, params)

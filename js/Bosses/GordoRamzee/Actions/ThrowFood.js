@@ -2,11 +2,11 @@ var AnimationHelpers = require("js/AnimationHelpers");
 var DotDebuff = require("js/DotDebuff");
 var Random = require("js/Random");
 
-module.exports = function (targets, onSuccess)
+ThrowFood.id = ThrowFood.prototype.name = "Throw Food";
+
+function ThrowFood(targets, onSuccess)
 {
     var _this = this;
-
-    _this.name = "Throw Food";
 
     _this.animation =
         [
@@ -34,7 +34,7 @@ module.exports = function (targets, onSuccess)
                     var foodPoisoningDebuff = new DotDebuff({
                         name: "Food Poisoning",
                         description: "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
-                        icon: require("../../../../images/food-poisoning.png"),
+                        icon: require("images/food-poisoning.png"),
                         interval: 1000,
                         duration: 5000,
                         effect: function (foodPoisoningTarget)
@@ -54,4 +54,6 @@ module.exports = function (targets, onSuccess)
         _cast();
         onSuccess();
     }
-};
+}
+
+module.exports = ThrowFood;

@@ -1,39 +1,20 @@
-var ko = require("knockout");
+var RequireHelper = require("js/RequireHelper");
+var Boss = require("js/Boss");
 var Random = require("js/Random");
-var AnimationHelpers = require("js/AnimationHelpers");
 var Loops = require("js/Loops");
 var Loop = require("js/Loop");
-var PreviousValueTracker = require("js/PreviousValueTracker");
-var Actions = require("./GordoRamzee/Actions");
+var Actions = RequireHelper.requireAll(require.context("./GordoRamzee/Actions/", false, /\.js$/));
 
-module.exports = new function ()
+GordoRamzee.id = GordoRamzee.prototype.name = "Gordo Ramzee";
+
+function GordoRamzee()
 {
+    Boss.call(this, 60000);
+
     var _this = this;
 
     var _tank = null;
     var _raid = null;
-    var _loops = null;
-    var _onDeathCallback = null;
-
-    _this.name = "Gordo Ramzee";
-    _this.targets = ko.observableArray([]);
-    _this.currentCast = PreviousValueTracker.observable();
-
-    _this.health = ko.utils.extend(ko.observable(1000),
-        {
-            animation:
-            [
-                {
-                    properties: AnimationHelpers.zeroWidth,
-                    options:
-                        {
-                            duration: 60000,
-                            begin: AnimationHelpers.removeStyleAttribute,
-                            complete: _onDeath
-                        }
-                }
-            ]
-        });
 
     _this.engage = function (player, tank, raid, onDeathCallback)
     {
@@ -44,27 +25,16 @@ module.exports = new function ()
         // There's a 50% chance the food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.
         // Every 30 seconds, he enrages and all damage done to the party is doubled for 5 seconds.
 
-        _onDeathCallback = onDeathCallback;
-
         _tank = tank;
         _raid = raid;
         _this.targets.push(_tank);
 
-        _loops = new Loops(
+        var loops = new Loops(
             new Loop("Attack Tank", _attackTank, function () { return 1000 * Random.fromFloatInterval(2, 4); }),
             new Loop("Throw Food", _throwFood, 10000));
 
-        _loops.start();
-    };
-
-    _this.pause = function ()
-    {
-        _loops.pause();
-    };
-
-    _this.resume = function ()
-    {
-        _loops.resume();
+        _this.initialize(loops, onDeathCallback);
+        _this.start();
     };
 
     function _attackTank()
@@ -76,29 +46,22 @@ module.exports = new function ()
 
     function _throwFood()
     {
-        _loops.get("Attack Tank").pause();
+        _this.getLoop("Attack Tank").pause();
 
         var throwFoodTargets = _raid.getRandomMembers(2);
         _this.targets(throwFoodTargets);
 
-        var throwFood = new Actions.ThrowFood(
+        var throwFood = new Actions["Throw Food"](
             throwFoodTargets,
             function ()
             {
                 _this.currentCast(null);
-                _loops.get("Attack Tank").resume();
+                _this.getLoop("Attack Tank").resume();
             }
         );
 
         _this.currentCast(throwFood);
     }
+}
 
-    function _onDeath()
-    {
-        _this.targets.removeAll();
-
-        _loops.stop();
-
-        _onDeathCallback();
-    }
-};
+module.exports = GordoRamzee;
