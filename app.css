@@ -18,9 +18,6 @@ body {
   min-width: 300px;
 }
 .boss {
-  margin-bottom: 44px;
-}
-.boss.casting {
   margin-bottom: 20px;
 }
 .boss-name {
