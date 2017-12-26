@@ -1,17 +1,21 @@
 var ko = require("knockout");
 
-exports.observable = function ()
+module.exports = function (initialValue)
 {
-    var value = ko.utils.extend(ko.observable(), { previous: ko.observable() });
+    var _this = this;
 
-    value.subscribe(
-        function (newValue)
-        {
-            if (newValue !== null)
+    _this.value = ko.observable(initialValue);
+    _this.previous = ko.observable(initialValue);
+
+    (function _initialize()
+    {
+        _this.value.subscribe(
+            function (newValue)
             {
-                value.previous(newValue);
-            }
-        });
-
-    return value;
+                if (newValue !== null)
+                {
+                    _this.previous(newValue);
+                }
+            });
+    })();
 };

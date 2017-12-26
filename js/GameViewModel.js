@@ -1,10 +1,9 @@
 var ko = require("knockout");
-var Velocity = require("velocity-animate");
 
 var RequireHelper = require("./RequireHelper");
 var Player = require("./Player");
 var Party = require("./Party");
-var Heals = RequireHelper.requireAll(require.context("./Heals/", true, /\.js$/));
+var Heals = RequireHelper.requireAll(require.context("./Heals/", false, /\.js$/));
 var Bosses = RequireHelper.requireAll(require.context("./Bosses/", false, /\.js$/));
 var AnimationHelpers = require("./AnimationHelpers");
 var PreviousValueTracker = require("./PreviousValueTracker");
@@ -25,7 +24,7 @@ module.exports = function ()
     _this.player = new Player({ actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
     _this.boss = new Bosses["Gordo Ramzee"];
-    _this.currentCast = ko.utils.extend(PreviousValueTracker.observable(),
+    _this.currentCast = ko.utils.extend(new PreviousValueTracker(),
         {
             action: ko.observable().extend({ notify: "always" })
         });
@@ -74,7 +73,7 @@ module.exports = function ()
             return;
         }
 
-        var currentCast = _this.currentCast();
+        var currentCast = _this.currentCast.value();
         if (currentCast)
         {
             if (currentCast.castProgress > 0.5)
@@ -106,25 +105,18 @@ module.exports = function ()
     {
         _this.isPaused(true);
 
-        var pausedElements = document.getElementsByClassName("velocity-animating");
-        Velocity(pausedElements, "pause");
-
         _this.boss.pause();
         _this.friendlies.pause();
-
-        return pausedElements;
+        AnimationHelpers.pause();
     };
 
     _this.resume = function ()
     {
         _this.isPaused(false);
 
-        var pausedElements = document.getElementsByClassName("velocity-animating");
-
         _this.boss.resume();
         _this.friendlies.resume();
-
-        Velocity(pausedElements, "resume");
+        AnimationHelpers.resume();
     };
 
     function _castAction(action)
@@ -137,7 +129,7 @@ module.exports = function ()
         }
 
         _this.currentCast.action("finish");
-        _this.currentCast(action);
+        _this.currentCast.value(action);
     }
 
     function _finishCast(action)
@@ -151,13 +143,13 @@ module.exports = function ()
         }
         else
         {
-            _this.currentCast(null);
+            _this.currentCast.value(null);
         }
     }
 
     function _cancelCast()
     {
-        _this.currentCast(null);
+        _this.currentCast.value(null);
     }
 
     function _onBossKill()

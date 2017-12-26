@@ -3,6 +3,7 @@ var Boss = require("js/Boss");
 var Random = require("js/Random");
 var Loops = require("js/Loops");
 var Loop = require("js/Loop");
+var Trigger = require("js/Trigger");
 var Actions = RequireHelper.requireAll(require.context("./GordoRamzee/Actions/", false, /\.js$/));
 
 GordoRamzee.id = GordoRamzee.prototype.name = "Gordo Ramzee";
@@ -15,6 +16,7 @@ function GordoRamzee()
 
     var _tank = null;
     var _raid = null;
+    var _isEnraged = false;
 
     _this.engage = function (player, tank, raid, onDeathCallback)
     {
@@ -23,30 +25,58 @@ function GordoRamzee()
         // Every 10 seconds, he throws food, hitting 2 members of the party, damaging each between 12-18.
         // Affected party members eat the food. I mean, who wouldn't?
         // There's a 50% chance the food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.
-        // Every 30 seconds, he enrages and all damage done to the party is doubled for 5 seconds.
+        // At 20% health, he enrages and all damage done to the tank is doubled.
 
         _tank = tank;
         _raid = raid;
-        _this.targets.push(_tank);
 
         var loops = new Loops(
-            new Loop("Attack Tank", _attackTank, function () { return 1000 * Random.fromFloatInterval(2, 4); }),
+            new Loop("Attack Tank", _attackTank, function () { return 1000 * Random.fromIntegerIntervalInclusive(2, 4); }),
             new Loop("Throw Food", _throwFood, 10000));
 
-        _this.initialize(loops, onDeathCallback);
+        var triggers =
+            [
+                new Trigger(
+                    function (progress)
+                    {
+                        if (progress >= 0.8)
+                        {
+                            _enrage();
+                            return true;
+                        }
+
+                        return false;
+                    })
+            ];
+
+        var bossParams =
+            {
+                initialTargets: _tank,
+                loops: loops,
+                triggers: triggers,
+                onDeathCallback: onDeathCallback
+            };
+
+        _this.initialize(bossParams);
         _this.start();
     };
 
     function _attackTank()
     {
-        _this.targets([_tank]);
+        _targetTank();
+
         var attackTankAmount = Random.fromIntegerIntervalInclusive(20, 25);
+        if (_isEnraged)
+        {
+            attackTankAmount *= 2;
+        }
+
         _tank.harm(attackTankAmount);
     }
 
     function _throwFood()
     {
-        _this.getLoop("Attack Tank").pause();
+        _getAttackTankLoop().pause();
 
         var throwFoodTargets = _raid.getRandomMembers(2);
         _this.targets(throwFoodTargets);
@@ -55,12 +85,40 @@ function GordoRamzee()
             throwFoodTargets,
             function ()
             {
-                _this.currentCast(null);
-                _this.getLoop("Attack Tank").resume();
+                _this.finishCast(throwFood);
+                _targetTank();
+                _getAttackTankLoop().resume();
             }
         );
 
-        _this.currentCast(throwFood);
+        _this.cast(throwFood);
+    }
+
+    function _enrage()
+    {
+        _this.pause();
+
+        var enrage = new Actions["Enrage"](
+            function ()
+            {
+                _isEnraged = true;
+
+                _this.finishCast(enrage);
+                _targetTank();
+                _this.resume();
+            });
+
+        _this.cast(enrage);
+    }
+
+    function _targetTank()
+    {
+        _this.targets([_tank]);
+    }
+
+    function _getAttackTankLoop()
+    {
+        return _this.getLoop("Attack Tank");
     }
 }
 

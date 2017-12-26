@@ -1,19 +1,21 @@
 <div class="outer">
-    <div class="boss frame" data-bind="css: { 'casting': boss.currentCast }">
+    <div class="boss frame" data-bind="css: { 'casting': boss.currentCasts }">
         <div class="health-bar-background">
             <div class="health-bar" data-bind="animate: inCombat() ? boss.health : null">
                 <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
             </div>
         </div>
-        <div class="cast-bar-background">
-            <div class="cast-bar" data-bind="
-                animate: boss.currentCast() || animations.fadeOutCastBar,
-                animateAction: boss.currentCast.action">&nbsp;</div>
+        <div class="boss-cast-bars" data-bind="foreach: { data: boss.currentCasts, as: 'bossCast' }">
+            <div class="cast-bar-background">
+                <div class="cast-bar" data-bind="
+                    animate: bossCast.value() || $parent.animations.fadeOutCastBar,
+                    animateAction: bossCast && bossCast.action">&nbsp;</div>
 
-            <div class="cast-bar-text nowrap" data-bind="
-                css: { 'casting': boss.currentCast },
-                text: boss.currentCast.previous() && boss.currentCast.previous().name,
-                animate: !boss.currentCast() && animations.fadeOutCastBar"></div>
+                <div class="cast-bar-text nowrap" data-bind="
+                    css: { 'casting': bossCast.value },
+                    text: bossCast && bossCast.previous() && bossCast.previous().name,
+                    animate: !bossCast.value && $parent.animations.fadeOutCastBar"></div>
+            </div>
         </div>
     </div>
     <div class="raid">
@@ -42,16 +44,16 @@
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
-                animate: currentCast() || animations.fadeOutCastBar,
+                animate: currentCast.value() || animations.fadeOutCastBar,
                 animateAction: currentCast.action">&nbsp;</div>
 
             <div class="cast-bar-text nowrap" data-bind="
-                css: { 'casting': currentCast },
+                css: { 'casting': currentCast.value },
                 text: currentCast.previous() && currentCast.previous().name,
-                animate: !currentCast() && animations.fadeOutCastBar"></div>
+                animate: !currentCast.value() && animations.fadeOutCastBar"></div>
         </div>
     </div>
-    <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast }">
+    <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast.value }">
         <div class="mana-bar-background">
             <div class="mana-bar" data-bind="style: { width: player.manaPercentageString }">&nbsp;</div>
             <div class="health-bar-text nowrap" data-bind="text: player.manaStatusString"></div>

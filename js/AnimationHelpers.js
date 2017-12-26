@@ -1,3 +1,6 @@
+
+var Velocity = require("velocity-animate");
+
 module.exports =
 {
     fullWidth: { width: "100%" },
@@ -5,6 +8,20 @@ module.exports =
     removeStyleAttribute: function (elements)
     {
         elements[0].removeAttribute("style");
+    },
+    pause: function ()
+    {
+        var animatingElements = document.getElementsByClassName("velocity-animating");
+        Velocity(animatingElements, "pause");
+
+        return animatingElements;
+    },
+    resume: function ()
+    {
+        var pausedElements = document.getElementsByClassName("velocity-animating");
+        Velocity(pausedElements, "resume");
+
+        return pausedElements;
     },
     makeUpdateProgressFunction: function (updateProgressFunction)
     {
