@@ -4,7 +4,7 @@ body {
   line-height: 1.3em;
   margin: 0;
   padding: 0;
-  background: black;
+  background: #4e4339;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -13,9 +13,30 @@ body {
   user-select: none;
 }
 .outer {
-  background: #4e4339;
   padding: 20px;
   min-width: 300px;
+}
+.bottom {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: calc(100% - 40px);
+}
+.game-actions {
+  float: right;
+  margin: 5px;
+}
+.game-actions div {
+  background: #333;
+  padding: 3px;
+  width: 60px;
+  text-align: center;
+  font-size: 0.8em;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.game-actions div:active {
+  background: #000;
 }
 .boss {
   margin-bottom: 20px;
