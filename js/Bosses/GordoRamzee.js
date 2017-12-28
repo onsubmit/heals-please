@@ -10,10 +10,11 @@ GordoRamzee.id = GordoRamzee.prototype.name = "Gordo Ramzee";
 
 function GordoRamzee()
 {
-    Boss.call(this, 60000);
+    Boss.call(this, 90000);
 
     var _this = this;
 
+    var _player = null;
     var _tank = null;
     var _raid = null;
     var _isEnraged = false;
@@ -27,6 +28,7 @@ function GordoRamzee()
         // There's a 50% chance the food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.
         // At 20% health, he enrages and all damage done to the tank is doubled.
 
+        _player = player;
         _tank = tank;
         _raid = raid;
 
@@ -61,6 +63,36 @@ function GordoRamzee()
         _this.start();
     };
 
+    _this.onDeathOfFriendly = function (friendly)
+    {
+        if (friendly === _tank)
+        {
+            // The tank just died.
+
+            _this.targets.remove(_tank);
+
+            var remainingAlive = _raid.getLivingMembers();
+            if (remainingAlive.length === 0)
+            {
+                _this.stop();
+                return;
+            }
+
+            if (remainingAlive.length === 1 && remainingAlive[0] === _player)
+            {
+                // The player is the last one alive.
+                _tank = _player;
+            }
+            else
+            {
+                // Choose some random DPS to become the new tank.
+                _tank = _raid.getRandomMembers(1, false /* allowPlayer */)[0];
+            }
+
+            _this.targets.push(_tank);
+        }
+    };
+
     function _attackTank()
     {
         _targetTank();
@@ -78,7 +110,7 @@ function GordoRamzee()
     {
         _getAttackTankLoop().pause();
 
-        var throwFoodTargets = _raid.getRandomMembers(2);
+        var throwFoodTargets = _raid.getRandomMembers(2, true /* allowPlayer */);
         _this.targets(throwFoodTargets);
 
         var throwFood = new Actions["Throw Food"](

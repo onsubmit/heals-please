@@ -1,13 +1,12 @@
-var Friendly = require("./Friendly");
 var Random = require("./Random");
 
 function Party(members)
 {
     var _this = this;
 
-    _this.members = null;
+    _this.members = members;
 
-    _this.getRandomMembers = function (amount, allowDead)
+    _this.getRandomMembers = function (amount, allowPlayer, allowDead)
     {
         if (!amount)
         {
@@ -19,12 +18,24 @@ function Party(members)
             return _this.members;
         }
 
-        var clone = allowDead
+        var clone = allowDead && allowPlayer
             ? [].concat(_this.members)
             : _this.members.filter(
                 function (member)
                 {
-                    return !member.isDead();
+                    var allowed = true;
+
+                    if (!allowPlayer)
+                    {
+                        allowed = !member.isPlayer;
+                    }
+
+                    if (allowed && !allowDead)
+                    {
+                        allowed = !member.isDead();
+                    }
+
+                    return allowed;
                 });
 
         if (amount >= clone.length)
@@ -43,6 +54,24 @@ function Party(members)
         }
 
         return chooseMembersToRemove ? clone : randomMembers;
+    };
+
+    _this.getLivingMembers = function ()
+    {
+        return _this.members.filter(
+            function (member)
+            {
+                return !member.isDead();
+            });
+    };
+
+    _this.isWiped = function ()
+    {
+        return _this.members.every(
+            function (member)
+            {
+                return member.isDead();
+            });
     };
 
     _this.start = function ()
@@ -73,16 +102,6 @@ function Party(members)
                 member[functionName]();
             });
     }
-
-    (function _initialize()
-    {
-        _this.members = [
-            new Friendly("Tank", { health: 200 }),
-            new Friendly("DPS #1"),
-            new Friendly("DPS #2"),
-            new Friendly("DPS #3")
-        ].concat(members || []);
-    })();
 }
 
 module.exports = Party;

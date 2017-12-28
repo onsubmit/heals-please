@@ -29,7 +29,7 @@ function ThrowFood(targets, onSuccess)
                 var harmAmount = Random.fromIntegerIntervalInclusive(12, 18);
                 target.harm(harmAmount);
 
-                if (Math.random() < 0.5)
+                if (!target.isDead() && Math.random() < 0.5)
                 {
                     var foodPoisoningDebuff = new DotDebuff({
                         name: "Food Poisoning",

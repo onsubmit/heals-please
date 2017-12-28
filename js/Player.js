@@ -3,6 +3,18 @@ var Friendly = require("./Friendly.js");
 
 function Player(params)
 {
+    params.onDeath = (function (originalOnDeath)
+    {
+        return function ()
+        {
+            _onDeath();
+            if (originalOnDeath)
+            {
+                originalOnDeath(_this);
+            }
+        };
+    })(params.onDeath);
+
     Friendly.call(this, "Player", params);
 
     var _this = this;
@@ -10,6 +22,8 @@ function Player(params)
     var _mana = params.mana || 1000;
     var _maxMana = params.maxMana || _mana;
     var _actions = params.actions || [];
+
+    _this.isPlayer = true;
 
     _this.mana = ko.observable(_mana);
     _this.maxMana = ko.observable(_maxMana);
@@ -42,7 +56,10 @@ function Player(params)
 
     _this.setTarget = function (target)
     {
-        _this.target(target);
+        if (!_this.isDead())
+        {
+            _this.target(target);
+        }
     };
 
     function _adjustMana(amount)
@@ -62,6 +79,11 @@ function Player(params)
         {
             _this.mana(newMana);
         }
+    }
+
+    function _onDeath()
+    {
+        _this.target(null);
     }
 }
 

@@ -34,7 +34,11 @@
             <div class="party-member">
                 <div class="frame" data-bind="
                     click: $parent.player.setTarget,
-                    css: { 'selected': $parent.player.target() === member }">
+                    css:
+                        {
+                            'selected': $parent.player.target() === member,
+                            'disabled': member.isDead
+                        }">
                     <div class="party-member-name nowrap" data-bind="
                         text: member.name,
                         css: { 'targeted': $parent.boss.targets.indexOf(member) !== -1 }">
@@ -70,7 +74,10 @@
             <div class="health-bar-text nowrap" data-bind="text: player.manaStatusString"></div>
         </div>
     </div>
-    <div class="actions" data-bind="foreach: { data: player.actions, as: 'action' }">
+    <div class="actions" data-bind="
+        foreach: { data: player.actions, as: 'action' },
+        css: { 'disabled': player.isDead }">
+
         <div class="action frame" data-bind="text: action, click: $parent.cast"></div>
     </div>
 </div>

@@ -59,9 +59,17 @@ function Boss(encounterLength)
         throw new Error("Abstract method");
     };
 
+    _this.onDeathOfFriendly = function ()
+    {
+        throw new Error("Abstract method");
+    };
+
     _this.cast = function (action)
     {
-        _this.currentCasts.push(new PreviousValueTracker(action));
+        _this.currentCasts.push(ko.utils.extend(new PreviousValueTracker(action),
+            {
+                action: ko.observable().extend({ notify: "always" })
+            }));
     };
 
     _this.finishCast = function (action)
@@ -76,6 +84,18 @@ function Boss(encounterLength)
     _this.start = function ()
     {
         _loops.start();
+    };
+
+    _this.stop = function ()
+    {
+        _this.targets.removeAll();
+        _loops.stop();
+
+        _this.currentCasts().forEach(
+            function (cast)
+            {
+                cast.action("finish");
+            });
     };
 
     _this.pause = function ()
@@ -99,10 +119,7 @@ function Boss(encounterLength)
 
     function _onDeath()
     {
-        _this.targets.removeAll();
-
-        _loops.stop();
-
+        _this.stop();
         _onDeathCallback();
     }
 }

@@ -8,11 +8,13 @@ function Friendly(name, params)
 
     var _health = params.health || 100;
     var _maxHealth = params.maxHealth || _health;
+    var _onDeathCallback = params.onDeath;
 
     _this.name = name;
 
     _this.health = ko.observable(_health);
     _this.maxHealth = ko.observable(_maxHealth);
+    _this.isDead = ko.observable(false);
     _this.debuffs = ko.observableArray([]);
 
     _this.healthPercentageString = ko.pureComputed(
@@ -54,10 +56,6 @@ function Friendly(name, params)
         _this.debuffs.pop().stop();
     };
 
-    _this.isDead = function ()
-    {
-        return _this.health.peek() === 0;
-    };
 
     _this.pause = function ()
     {
@@ -103,6 +101,30 @@ function Friendly(name, params)
         _this.health(newHealth);
         return 0;
     }
+
+    function _onDeath()
+    {
+        _this.isDead(true);
+        _this.debuffs.removeAll();
+    }
+
+    (function _initialize()
+    {
+        var healthSubscription = _this.health.subscribe(
+            function (currentHealth)
+            {
+                if (currentHealth === 0)
+                {
+                    _onDeath();
+                    if (_onDeathCallback)
+                    {
+                        _onDeathCallback(_this);
+                    }
+
+                    healthSubscription.dispose();
+                }
+            });
+    })();
 }
 
 module.exports = Friendly;

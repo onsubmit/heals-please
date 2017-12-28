@@ -1,6 +1,7 @@
 var ko = require("knockout");
 
 var RequireHelper = require("./RequireHelper");
+var Friendly = require("./Friendly");
 var Player = require("./Player");
 var Party = require("./Party");
 var Heals = RequireHelper.requireAll(require.context("./Heals/", false, /\.js$/));
@@ -22,9 +23,10 @@ module.exports = function ()
     _this.inCombat = ko.observable(false);
 
     _this.allowPause = false;
-    _this.player = new Player({ actions: c_defaultHeals });
-    _this.friendlies = new Party([ _this.player ]);
-    _this.boss = new Bosses["Gordo Ramzee"];
+    _this.friendlies = null;
+    _this.player = null;
+    _this.boss = null;
+
     _this.currentCast = ko.utils.extend(new PreviousValueTracker(),
         {
             action: ko.observable().extend({ notify: "always" })
@@ -153,8 +155,49 @@ module.exports = function ()
         _this.currentCast.value(null);
     }
 
+    function _onFriendlyDeath(friendly)
+    {
+        if (_this.player.target() === friendly)
+        {
+            _this.player.setTarget(null);
+        }
+
+        _this.boss.onDeathOfFriendly(friendly);
+
+        if (_this.friendlies.isWiped())
+        {
+            setTimeout(
+                function ()
+                {
+                    alert("You lose!");
+                    _this.pause();
+                }, 0);
+
+            return;
+        }
+    }
+
     function _onBossKill()
     {
-        alert("You win!");
+        setTimeout(
+            function ()
+            {
+                alert("You win!");
+            }, 0);
     }
+
+    (function _initialize()
+    {
+        _this.player = new Player({ actions: c_defaultHeals, onDeath: _onFriendlyDeath });
+        _this.friendlies = new Party(
+            [
+                new Friendly("Tank", { health: 200, onDeath: _onFriendlyDeath }),
+                new Friendly("DPS #1", { onDeath: _onFriendlyDeath }),
+                new Friendly("DPS #2", { onDeath: _onFriendlyDeath }),
+                new Friendly("DPS #3", { onDeath: _onFriendlyDeath }),
+                _this.player
+            ]);
+
+        _this.boss = new Bosses["Gordo Ramzee"];
+    })();
 };
