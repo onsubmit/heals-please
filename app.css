@@ -130,10 +130,11 @@ body {
   right: 8px;
   bottom: 38px;
 }
-.party-member-buff {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
+.party-member-buffs img {
+  margin-right: 2px;
+}
+.party-member-buffs img:nth-last-child(1) {
+  margin: 0;
 }
 .cast-bar-background {
   background: #181800;
