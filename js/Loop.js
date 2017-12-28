@@ -8,7 +8,7 @@ function Loop(name, callback, delay)
     var _timerStart;
     var _timerRemaining;
 
-    this.pause = function ()
+    _this.pause = function ()
     {
         _timerRemaining -= new Date().getTime() - _timerStart;
 
@@ -16,7 +16,7 @@ function Loop(name, callback, delay)
         _timerId = null;
     };
 
-    this.resume = function ()
+    _this.resume = function ()
     {
         _loop(_timerRemaining);
     };

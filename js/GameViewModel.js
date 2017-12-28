@@ -21,6 +21,7 @@ module.exports = function ()
     _this.isPaused = ko.observable(false);
     _this.inCombat = ko.observable(false);
 
+    _this.allowPause = false;
     _this.player = new Player({ actions: c_defaultHeals });
     _this.friendlies = new Party([ _this.player ]);
     _this.boss = new Bosses["Gordo Ramzee"];

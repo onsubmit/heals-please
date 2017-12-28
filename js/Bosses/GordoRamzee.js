@@ -96,16 +96,14 @@ function GordoRamzee()
 
     function _enrage()
     {
-        _this.pause();
-
         var enrage = new Actions["Enrage"](
+            null, // No specific target
             function ()
             {
                 _isEnraged = true;
 
                 _this.finishCast(enrage);
                 _targetTank();
-                _this.resume();
             });
 
         _this.cast(enrage);
