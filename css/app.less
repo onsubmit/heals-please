@@ -98,7 +98,7 @@ body {
 }
 
 .health-bar-text {
-    top: -2px;
+    top: 0;
     left: 4px;
     position: absolute;
 
@@ -191,6 +191,8 @@ body {
 
 .cast-bar-text {
     .health-bar-text();
+    .absolute-center();
+    line-height: 24px;
     visibility: hidden;
 
     &.casting,
@@ -221,6 +223,12 @@ body {
     line-height: 24px;
 }
 
+.mana-bar-text {
+    .health-bar-text();
+    .absolute-center();
+    line-height: 24px;
+}
+
 .actions {
     text-align: center;
 }
@@ -246,6 +254,13 @@ body {
 
 .background {
     text-shadow: 1px 1px 1px #000;
+}
+
+.absolute-center {
+    top: 0;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, 0);
 }
 
 .white-text-with-background {
