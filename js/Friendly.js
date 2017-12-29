@@ -56,6 +56,11 @@ function Friendly(name, params)
 
     _this.heal = function (healParams)
     {
+        if (_this.isDead())
+        {
+            return;
+        }
+
         var overheal = _adjustHealth(healParams.amount);
 
         var healInfo =

@@ -1,5 +1,7 @@
 var ko = require("knockout");
 var Friendly = require("./Friendly.js");
+var Loop = require("js/Loop");
+var Loops = require("js/Loops");
 
 function Player(params)
 {
@@ -20,8 +22,11 @@ function Player(params)
     var _this = this;
 
     var _mana = params.mana || 1000;
+    var _baseMana = params.baseMana || _mana;
     var _maxMana = params.maxMana || _mana;
     var _actions = params.actions || [];
+
+    var _loops = null;
 
     _this.isPlayer = true;
 
@@ -81,10 +86,23 @@ function Player(params)
         }
     }
 
+    function _regenMana()
+    {
+        var increase = _baseMana * 0.05;
+        _adjustMana(increase);
+    }
+
     function _onDeath()
     {
         _this.target(null);
+        _loops.stop();
     }
+
+    (function _initialize()
+    {
+        _loops = new Loops(new Loop("Regen Mana", _regenMana, 5000));
+        _loops.start();
+    })();
 }
 
 module.exports = Player;
