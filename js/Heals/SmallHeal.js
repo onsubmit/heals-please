@@ -33,14 +33,15 @@ function SmallHeal(target, params)
 
     _this.cast = function ()
     {
+        var isCrit = Math.random() < _critChance;
         var healAmount = Random.fromIntegerIntervalInclusive(18, 24);
 
-        if (Math.random() < _critChance)
+        if (isCrit)
         {
             healAmount = Math.round(healAmount * _critMultiplier);
         }
 
-        return target.heal(healAmount);
+        return target.heal({ amount: healAmount, isCrit: isCrit });
     };
 
     _this.cancel = function ()

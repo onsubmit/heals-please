@@ -1,4 +1,5 @@
 var ko = require("knockout");
+var AnimationHelpers = require("./AnimationHelpers");
 
 function Friendly(name, params)
 {
@@ -16,6 +17,7 @@ function Friendly(name, params)
     _this.maxHealth = ko.observable(_maxHealth);
     _this.isDead = ko.observable(false);
     _this.debuffs = ko.observableArray([]);
+    _this.lastHealInfo = ko.observable();
 
     _this.healthPercentageString = ko.pureComputed(
         function ()
@@ -26,12 +28,45 @@ function Friendly(name, params)
     _this.healthStatusString = ko.pureComputed(
         function ()
         {
-            return _this.health() + " / " + _this.maxHealth();
+            return _this.health() + "/" + _this.maxHealth();
         });
 
-    _this.heal = function (amount)
+    _this.lastHealStatusString = ko.pureComputed(
+        function ()
+        {
+            var lastHealInfo = _this.lastHealInfo();
+            return lastHealInfo ? ("+" + lastHealInfo.effectiveAmount) : "";
+        });
+
+    _this.animations =
     {
-        return _adjustHealth(amount);
+        fastFadeOut:
+            {
+                animation:
+                    {
+                        properties: "fadeOut",
+                        options:
+                            {
+                                duration: 1000,
+                                begin: AnimationHelpers.removeStyleAttribute
+                            }
+                    }
+            }
+    };
+
+    _this.heal = function (healParams)
+    {
+        var overheal = _adjustHealth(healParams.amount);
+
+        var healInfo =
+        {
+            amount: healParams.amount,
+            effectiveAmount: healParams.amount - overheal,
+            overheal: overheal,
+            isCrit: healParams.isCrit
+        };
+
+        _this.lastHealInfo(healInfo);
     };
 
     _this.harm = function (amount)
@@ -55,7 +90,6 @@ function Friendly(name, params)
     {
         _this.debuffs.pop().stop();
     };
-
 
     _this.pause = function ()
     {

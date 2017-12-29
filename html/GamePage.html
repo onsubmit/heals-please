@@ -44,6 +44,15 @@
                     <div class="health-bar-background">
                         <div class="health-bar" data-bind="style: { width: member.healthPercentageString }">&nbsp;</div>
                         <div class="health-bar-text nowrap" data-bind="text: member.healthStatusString"></div>
+                        <div class="health-bar-last-heal nowrap" data-bind="
+                            text: member.lastHealStatusString,
+                            animate: member.lastHealInfo() && animations.fastFadeOut,
+                            css:
+                                {
+                                    'bold': member.lastHealInfo() && member.lastHealInfo().isCrit,
+                                    'bright-green': member.lastHealInfo() && member.lastHealInfo().effectiveAmount > 0
+                                }">
+                        </div>
                     </div>
                 </div>
                 <div class="party-member-buffs-container">

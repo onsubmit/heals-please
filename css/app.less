@@ -98,17 +98,25 @@ body {
 }
 
 .health-bar-text {
-    top: 0;
-    left: 50%;
+    top: -2px;
+    left: 4px;
     position: absolute;
-    transform: translate(-50%, 0);
 
     font-size: 16px;
     .white-text-with-background();
 }
 
+.health-bar-last-heal {
+    top: 0;
+    right: 4px;
+    position: absolute;
+
+    .background();
+}
+
 .party {
     width: 150px;
+    z-index: 1;
 
     .frame {
         margin: 0px 0px 10px 0px;
@@ -236,13 +244,25 @@ body {
     margin: 0;
 }
 
+.background {
+    text-shadow: 1px 1px 1px #000;
+}
+
 .white-text-with-background {
     color: white;
-    text-shadow: 1px 1px 1px #000;
+    .background();
 }
 
 .nowrap {
     white-space: nowrap;
+}
+
+.bright-green {
+    color: #0f0;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 &.disabled {
