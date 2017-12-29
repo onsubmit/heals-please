@@ -1,6 +1,6 @@
 body {
   font-family: georgia, arial, helvetica, sans-serif;
-  font-size: 1.2em;
+  font-size: 1.0em;
   line-height: 1.3em;
   margin: 0;
   padding: 0;
@@ -13,14 +13,14 @@ body {
   user-select: none;
 }
 .outer {
-  padding: 20px;
+  padding: 10px;
   min-width: 300px;
 }
 .bottom {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: calc(100% - 40px);
+  bottom: 10px;
+  left: 10px;
+  width: calc(100% - 20px);
 }
 .game-actions {
   float: right;
@@ -39,7 +39,7 @@ body {
   background: #000;
 }
 .boss {
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 .boss-name {
   padding: 10px;
@@ -48,6 +48,8 @@ body {
 }
 .raid {
   margin: 0;
+  width: 100%;
+  min-height: 400px;
 }
 .frame {
   cursor: pointer;
@@ -89,11 +91,11 @@ body {
   text-shadow: 1px 1px 1px #000;
 }
 .party {
-  display: inline-block;
-  width: 50%;
+  width: 150px;
 }
 .party .frame {
   margin: 0px 0px 10px 0px;
+  max-width: 150px;
 }
 .party-member {
   width: 100%;
@@ -101,8 +103,6 @@ body {
 }
 .party-member .health-bar {
   text-align: center;
-  font-size: 16px;
-  line-height: 24px;
 }
 .party-member-name {
   font-size: 16px;
@@ -186,8 +186,8 @@ body {
   text-align: center;
 }
 .action {
-  width: 75px;
-  height: 75px;
+  width: 50px;
+  height: 50px;
   margin-right: 10px;
   display: inline-block;
   background: #161616;
