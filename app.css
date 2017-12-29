@@ -83,15 +83,21 @@ body {
 }
 .health-bar-text {
   top: 0;
-  left: 50%;
+  left: 4px;
   position: absolute;
-  transform: translate(-50%, 0);
   font-size: 16px;
   color: white;
   text-shadow: 1px 1px 1px #000;
 }
+.health-bar-last-heal {
+  top: 0;
+  right: 4px;
+  position: absolute;
+  text-shadow: 1px 1px 1px #000;
+}
 .party {
   width: 150px;
+  z-index: 1;
 }
 .party .frame {
   margin: 0px 0px 10px 0px;
@@ -151,13 +157,15 @@ body {
   line-height: 24px;
 }
 .cast-bar-text {
+  left: 4px;
+  font-size: 16px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
   top: 0;
   left: 50%;
   position: absolute;
   transform: translate(-50%, 0);
-  font-size: 16px;
-  color: white;
-  text-shadow: 1px 1px 1px #000;
+  line-height: 24px;
   visibility: hidden;
 }
 .cast-bar-text.casting,
@@ -182,6 +190,17 @@ body {
   font-size: 16px;
   line-height: 24px;
 }
+.mana-bar-text {
+  left: 4px;
+  font-size: 16px;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+  top: 0;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+  line-height: 24px;
+}
 .actions {
   text-align: center;
 }
@@ -202,12 +221,27 @@ body {
 .action:nth-last-child(1) {
   margin: 0;
 }
+.background {
+  text-shadow: 1px 1px 1px #000;
+}
+.absolute-center {
+  top: 0;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+}
 .white-text-with-background {
   color: white;
   text-shadow: 1px 1px 1px #000;
 }
 .nowrap {
   white-space: nowrap;
+}
+.bright-green {
+  color: #0f0;
+}
+.bold {
+  font-weight: bold;
 }
 .disabled {
   pointer-events: none;
