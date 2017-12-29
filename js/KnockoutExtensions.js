@@ -1,4 +1,5 @@
 var Velocity = require("velocity-animate");
+var Draggable = require("Draggable");
 
 exports.applyExtensions = function (ko)
 {
@@ -40,6 +41,23 @@ exports.applyExtensions = function (ko)
                 {
                     return { animation: { properties: action } };
                 });
+        }
+    };
+
+    ko.bindingHandlers.draggable =
+    {
+        update: function (element, valueAccessor)
+        {
+            var allowDragging = ko.unwrap(valueAccessor());
+
+            if (allowDragging)
+            {
+                element.draggableInstance = new Draggable(element, { limit: document.body, threshold: 20, grid: 10, setCursor: true });
+            }
+            else if (element.draggableInstance)
+            {
+                element.draggableInstance.destroy();
+            }
         }
     };
 };

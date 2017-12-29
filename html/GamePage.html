@@ -27,10 +27,8 @@
             </div>
         </div>
     </div>
-</div>
-<div class="bottom">
     <div class="raid">
-        <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">
+        <div class="party" data-bind="draggable: !inCombat(), foreach: { data: friendlies.members, as: 'member' }">
             <div class="party-member">
                 <div class="frame" data-bind="
                     click: $parent.player.setTarget,
@@ -56,6 +54,8 @@
             </div>
         </div>
     </div>
+</div>
+<div class="bottom">
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
