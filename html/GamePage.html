@@ -10,7 +10,7 @@
                 <!-- /ko -->
             </div>
             <!-- /ko -->
-            <div class="health-bar" data-bind="animate: inCombat() ? boss.health : null">
+            <div class="health-bar" data-bind="style: { width: boss.healthPercentageString }">
                 <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
             </div>
         </div>

@@ -52,7 +52,7 @@ exports.applyExtensions = function (ko)
 
             if (allowDragging)
             {
-                element.draggableInstance = new Draggable(element, { threshold: 20, grid: 10, setCursor: true });
+                element.draggableInstance = new Draggable(element, { threshold: 20, grid: 10 });
             }
             else if (element.draggableInstance)
             {

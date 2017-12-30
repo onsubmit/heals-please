@@ -4,6 +4,7 @@ var RequireHelper = require("./RequireHelper");
 var Friendly = require("./Friendly");
 var Player = require("./Player");
 var Party = require("./Party");
+var Random = require("js/Random");
 var Heals = RequireHelper.requireAll(require.context("./Heals/", false, /\.js$/));
 var Bosses = RequireHelper.requireAll(require.context("./Bosses/", false, /\.js$/));
 var AnimationHelpers = require("./AnimationHelpers");
@@ -96,6 +97,7 @@ module.exports = function ()
     {
         var tank = _this.friendlies.members[0];
         _this.boss.engage(_this.player, tank, _this.friendlies, _onBossKill);
+        _this.friendlies.start();
         _this.inCombat(true);
     };
 
@@ -155,6 +157,25 @@ module.exports = function ()
         _this.currentCast.value(null);
     }
 
+    function _onFriendlyAttack(damageModifier)
+    {
+        return (function (innerDamageModifier)
+        {
+            return function ()
+            {
+                var isCrit = Math.random() < 0.2;
+                var attackAmount = innerDamageModifier * Random.fromIntegerIntervalInclusive(50, 80);
+
+                if (isCrit)
+                {
+                    attackAmount = Math.round(attackAmount * 2);
+                }
+
+                _this.boss.harm(attackAmount);
+            };
+        })(damageModifier || 1);
+    }
+
     function _onFriendlyDeath(friendly)
     {
         if (_this.player.target() === friendly)
@@ -169,8 +190,9 @@ module.exports = function ()
             setTimeout(
                 function ()
                 {
-                    alert("You lose!");
+                    _this.friendlies.stop();
                     _this.pause();
+                    alert("You lose!");
                 }, 0);
 
             return;
@@ -182,19 +204,51 @@ module.exports = function ()
         setTimeout(
             function ()
             {
+                _this.friendlies.stop();
                 alert("You win!");
             }, 0);
     }
 
     (function _initialize()
     {
-        _this.player = new Player({ actions: c_defaultHeals, onDeath: _onFriendlyDeath });
+        _this.player = new Player(
+            {
+                actions: c_defaultHeals,
+                attackInterval: 30000,
+                onAttack: _onFriendlyAttack(2),
+                onDeath: _onFriendlyDeath
+            });
+
         _this.friendlies = new Party(
             [
-                new Friendly("Tank", { health: 200, onDeath: _onFriendlyDeath }),
-                new Friendly("DPS #1", { onDeath: _onFriendlyDeath }),
-                new Friendly("DPS #2", { onDeath: _onFriendlyDeath }),
-                new Friendly("DPS #3", { onDeath: _onFriendlyDeath }),
+                new Friendly("Tank",
+                    {
+                        health: 200,
+                        attackInterval: 400,
+                        onAttack: _onFriendlyAttack(1),
+                        onDeath: _onFriendlyDeath
+                    }),
+                new Friendly("DPS #1",
+                    {
+                        attackInterval: 1000,
+                        initialAttackDelay: 4000,
+                        onAttack: _onFriendlyAttack(3.2),
+                        onDeath: _onFriendlyDeath
+                    }),
+                new Friendly("DPS #2",
+                    {
+                        attackInterval: 1200,
+                        initialAttackDelay: 3500,
+                        onAttack: _onFriendlyAttack(3.0),
+                        onDeath: _onFriendlyDeath
+                    }),
+                new Friendly("DPS #3",
+                    {
+                        attackInterval: 1400,
+                        initialAttackDelay: 3000,
+                        onAttack: _onFriendlyAttack(2.8),
+                        onDeath: _onFriendlyDeath
+                    }),
                 _this.player
             ]);
 

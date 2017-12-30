@@ -1,8 +1,7 @@
 var ko = require("knockout");
-var AnimationHelpers = require("js/AnimationHelpers");
 var PreviousValueTracker = require("js/PreviousValueTracker");
 
-function Boss(encounterLength)
+function Boss(health)
 {
     var _this = this;
 
@@ -10,25 +9,22 @@ function Boss(encounterLength)
     var _triggers = null;
     var _onDeathCallback = null;
 
+    _this.maxHealth = health;
+
+    _this.health = ko.observable(health);
     _this.targets = ko.observableArray([]);
     _this.currentCasts = ko.observableArray([]);
 
-    _this.health =
+    _this.healthPercentageString = ko.pureComputed(
+        function ()
         {
-            animation:
-            [
-                {
-                    properties: AnimationHelpers.zeroWidth,
-                    options:
-                        {
-                            duration: encounterLength,
-                            begin: AnimationHelpers.removeStyleAttribute,
-                            progress: AnimationHelpers.makeUpdateProgressFunction(_updateProgress),
-                            complete: _onDeath
-                        }
-                }
-            ]
-        };
+            return (100.0 * _this.health() / _this.maxHealth) + "%";
+        });
+
+    _this.harm = function (amount)
+    {
+        return _adjustHealth(0 - amount);
+    };
 
     _this.getLoop = function (loopName)
     {
@@ -108,12 +104,34 @@ function Boss(encounterLength)
         _loops.resume();
     };
 
-    function _updateProgress(progress)
+    function _adjustHealth(amount)
+    {
+        var newHealth = _this.health() + amount;
+
+        if (newHealth <= 0)
+        {
+            _this.health(0);
+            _updateProgress(0);
+            _onDeath();
+        }
+        else if (newHealth <= _this.maxHealth)
+        {
+            _this.health(newHealth);
+            _updateProgress(100.0 * newHealth / _this.maxHealth);
+        }
+        else
+        {
+            _this.health(_this.maxHealth);
+            _updateProgress(100);
+        }
+    }
+
+    function _updateProgress(healthPercentage)
     {
         _triggers.forEach(
             function (trigger)
             {
-                trigger.execute(progress.complete);
+                trigger.execute(healthPercentage);
             });
     }
 

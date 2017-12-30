@@ -4,11 +4,11 @@ function Trigger(callback)
 
     var _triggered = false;
 
-    _this.execute = function (progress)
+    _this.execute = function (healthPercentage)
     {
         if (!_triggered)
         {
-            _triggered = callback(progress);
+            _triggered = callback(healthPercentage);
         }
     };
 }

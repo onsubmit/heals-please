@@ -1,4 +1,4 @@
-function Loop(name, callback, delay)
+function Loop(name, callback, delay, startDelay)
 {
     var _this = this;
 
@@ -32,7 +32,14 @@ function Loop(name, callback, delay)
 
     _this.start = function ()
     {
-        _loop();
+        if (startDelay)
+        {
+            setTimeout(_loop, startDelay);
+        }
+        else
+        {
+            _loop();
+        }
     };
 
     function _loop(delayOverride)

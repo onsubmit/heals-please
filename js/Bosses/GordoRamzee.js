@@ -1,8 +1,8 @@
 var RequireHelper = require("js/RequireHelper");
 var Boss = require("js/Boss");
 var Random = require("js/Random");
-var Loops = require("js/Loops");
 var Loop = require("js/Loop");
+var Loops = require("js/Loops");
 var Trigger = require("js/Trigger");
 var Actions = RequireHelper.requireAll(require.context("./GordoRamzee/Actions/", false, /\.js$/));
 
@@ -10,7 +10,7 @@ GordoRamzee.id = GordoRamzee.prototype.name = "Gordo Ramzee";
 
 function GordoRamzee()
 {
-    Boss.call(this, 90000);
+    Boss.call(this, 60000);
 
     var _this = this;
 
@@ -39,9 +39,9 @@ function GordoRamzee()
         var triggers =
             [
                 new Trigger(
-                    function (progress)
+                    function (healthPercentage)
                     {
-                        if (progress >= 0.8)
+                        if (healthPercentage <= 20)
                         {
                             _enrage();
                             return true;
