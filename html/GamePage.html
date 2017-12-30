@@ -57,7 +57,7 @@
                 </div>
                 <div class="party-member-buffs-container">
                     <div class="party-member-buffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
-                        <img data-bind="attr: { src: debuff.icon }" />
+                        <a href="#" data-bind="click: $root.showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon }" /></a>
                     </div>
                 </div>
             </div>

@@ -101,9 +101,9 @@ module.exports = function ()
         _this.inCombat(true);
     };
 
-    _this.showDebuff = function (/*debuff*/)
+    _this.showDebuff = function (debuff, member)
     {
-
+        _this.player.setTarget(member);
     };
 
     _this.pause = function ()

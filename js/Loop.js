@@ -1,3 +1,10 @@
+var LoopState =
+{
+    Stopped: 0,
+    Paused: 1,
+    Running: 2
+};
+
 function Loop(name, callback, delay, startDelay)
 {
     var _this = this;
@@ -7,17 +14,30 @@ function Loop(name, callback, delay, startDelay)
     var _timerId;
     var _timerStart;
     var _timerRemaining;
+    var _state = LoopState.Stopped;
 
     _this.pause = function ()
     {
+        if (_state !== LoopState.Running)
+        {
+            return;
+        }
+
         _timerRemaining -= new Date().getTime() - _timerStart;
 
         clearTimeout(_timerId);
         _timerId = null;
+        _state = LoopState.Paused;
     };
 
     _this.resume = function ()
     {
+        if (_state !== LoopState.Paused)
+        {
+            return;
+        }
+
+        _state = LoopState.Running;
         _loop(_timerRemaining);
     };
 
@@ -28,10 +48,13 @@ function Loop(name, callback, delay, startDelay)
 
         clearTimeout(_timerId);
         _timerId = null;
+        _state = LoopState.Stopped;
     };
 
     _this.start = function ()
     {
+        _state = LoopState.Running;
+
         if (startDelay)
         {
             setTimeout(_loop, startDelay);
@@ -52,10 +75,13 @@ function Loop(name, callback, delay, startDelay)
             _timerId = setTimeout(
                 function ()
                 {
-                    callback();
+                    if (_state === LoopState.Running)
+                    {
+                        callback();
+                    }
 
-                    // If the callback stopped the loop, _timerId will be null
-                    if (_timerId)
+                    // The callback could have paused/stopped the loop.
+                    if (_state === LoopState.Running)
                     {
                         runLoopIteration();
                     }
