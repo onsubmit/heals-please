@@ -5,12 +5,6 @@ body {
   margin: 0;
   padding: 0;
   background: #4e4339;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 .outer {
   padding: 10px;
@@ -21,6 +15,26 @@ body {
   bottom: 10px;
   left: 10px;
   width: calc(100% - 20px);
+}
+.intro {
+  text-align: center;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
+}
+.intro * {
+  line-height: 1.0em;
+}
+.intro h1 {
+  font-size: 4.0em;
+}
+.intro h2 {
+  font-size: 2.0em;
+}
+.intro button {
+  font-family: georgia, arial, helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 2.0em;
+  padding: 10px;
 }
 .game-actions {
   float: right;
@@ -242,6 +256,14 @@ body {
 }
 .bold {
   font-weight: bold;
+}
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .disabled {
   pointer-events: none;
