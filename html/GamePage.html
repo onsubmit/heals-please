@@ -1,4 +1,16 @@
+<!-- ko if: showIntro -->
 <div class="outer">
+    <div class="intro">
+        <h1>Heals, please?</h1>
+        <h2>An MMO healing simulator</h2>
+        <div>
+            <button type="button" data-bind="click: joinGroupButton_onClick">Join group</button>
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+<!-- ko ifnot: showIntro -->
+<div class="outer no-select">
     <div class="boss frame" data-bind="css: { 'casting': boss.currentCasts }">
         <div class="health-bar-background">
             <!-- ko if: !inCombat() || allowPause -->
@@ -64,7 +76,7 @@
         </div>
     </div>
 </div>
-<div class="bottom">
+<div class="bottom no-select">
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
@@ -90,3 +102,4 @@
         <div class="action frame" data-bind="text: action, click: $parent.cast"></div>
     </div>
 </div>
+<!-- /ko -->

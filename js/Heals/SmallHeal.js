@@ -56,8 +56,8 @@ function SmallHeal(target, params)
 
     function _complete()
     {
-        _this.cast();
-        _onFinish(_this);
+        var outcome = _this.cast();
+        _onFinish(_this, outcome);
     }
 }
 

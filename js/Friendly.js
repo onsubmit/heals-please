@@ -42,7 +42,10 @@ function Friendly(name, params)
         function ()
         {
             var lastHealInfo = _this.lastHealInfo();
-            return lastHealInfo ? ("+" + lastHealInfo.effectiveAmount) : "";
+            if (lastHealInfo && !lastHealInfo.targetDied)
+            {
+                return lastHealInfo ? ("+" + lastHealInfo.effectiveAmount) : "";
+            }
         });
 
     _this.animations =
@@ -63,22 +66,28 @@ function Friendly(name, params)
 
     _this.heal = function (healParams)
     {
+        var healInfo = null;
+
         if (_this.isDead())
         {
-            return;
+            healInfo = { targetDied: true };
+        }
+        else
+        {
+            var overheal = _adjustHealth(healParams.amount);
+
+            healInfo =
+            {
+                amount: healParams.amount,
+                effectiveAmount: healParams.amount - overheal,
+                overheal: overheal,
+                isCrit: healParams.isCrit
+            };
         }
 
-        var overheal = _adjustHealth(healParams.amount);
-
-        var healInfo =
-        {
-            amount: healParams.amount,
-            effectiveAmount: healParams.amount - overheal,
-            overheal: overheal,
-            isCrit: healParams.isCrit
-        };
-
         _this.lastHealInfo(healInfo);
+
+        return healInfo;
     };
 
     _this.harm = function (amount)

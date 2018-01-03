@@ -20,6 +20,7 @@ module.exports = function ()
 
     var _queuedAction = null;
 
+    _this.showIntro = ko.observable(true);
     _this.isPaused = ko.observable(false);
     _this.inCombat = ko.observable(false);
 
@@ -124,22 +125,29 @@ module.exports = function ()
         AnimationHelpers.resume();
     };
 
+    _this.joinGroupButton_onClick = function ()
+    {
+        _this.showIntro(false);
+    };
+
     function _castAction(action)
     {
         if (action.isInstant)
         {
             _this.player.spendMana(action.manaCost);
-            action.cast();
-            return;
+            return action.cast();
         }
 
         _this.currentCast.action("finish");
         _this.currentCast.value(action);
     }
 
-    function _finishCast(action)
+    function _finishCast(action, outcome)
     {
-        _this.player.spendMana(action.manaCost);
+        if (!outcome.targetDied)
+        {
+            _this.player.spendMana(action.manaCost);
+        }
 
         if (_queuedAction)
         {
