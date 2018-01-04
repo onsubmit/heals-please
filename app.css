@@ -35,6 +35,32 @@ body {
   font-weight: bold;
   font-size: 2.0em;
   padding: 10px;
+  margin-bottom: 30px;
+}
+.intro .help {
+  color: #ccc;
+}
+.intro .help h5 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+.intro .help table {
+  margin-left: auto;
+  margin-right: auto;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+.intro .help tr {
+  border-bottom: 1px solid #bbb;
+}
+.intro .help td {
+  text-align: left;
+}
+.intro .help td.key {
+  text-align: right;
+  vertical-align: top;
+  font-weight: bold;
+  padding: 8px;
 }
 .game-actions {
   float: right;
@@ -186,6 +212,16 @@ body {
 .cast-bar-text.velocity-animating {
   visibility: visible;
 }
+.cast-bar-cancel {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  opacity: 0.5;
+}
+.cast-bar-cancel img {
+  width: 20px;
+  height: 20px;
+}
 .mana-bar-container {
   margin-bottom: 10px;
 }
@@ -219,6 +255,7 @@ body {
   text-align: center;
 }
 .action {
+  position: relative;
   width: 50px;
   height: 50px;
   margin-right: 10px;
@@ -234,6 +271,17 @@ body {
 }
 .action:nth-last-child(1) {
   margin: 0;
+}
+.action-name {
+  padding-top: 15px;
+}
+.shortcut {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  opacity: 0.5;
+  color: white;
+  text-shadow: 1px 1px 1px #000;
 }
 .background {
   text-shadow: 1px 1px 1px #000;
