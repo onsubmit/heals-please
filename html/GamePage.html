@@ -6,6 +6,29 @@
         <div>
             <button type="button" data-bind="click: joinGroupButton_onClick">Join group</button>
         </div>
+        <div class="help">
+            <h5>Keyboard shortcuts</h4>
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="key">1-5</td>
+                        <td>Cast heal</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Esc</td>
+                        <td>Cancel cast</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Space</td>
+                        <td>Cast previous</td>
+                    </tr>
+                    <tr>
+                        <td class="key">QWERT</td>
+                        <td>Target party member</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!-- /ko -->
@@ -87,6 +110,10 @@
                 css: { 'casting': currentCast.value },
                 text: currentCast.previous() && currentCast.previous().name,
                 animate: !currentCast.value() && animations.fadeOutCastBar"></div>
+
+            <!-- ko if: currentCast.value -->
+            <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg"></img></div>
+            <!-- /ko -->
         </div>
     </div>
     <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast.value }">
@@ -99,7 +126,10 @@
         foreach: { data: player.actions, as: 'action' },
         css: { 'disabled': player.isDead }">
 
-        <div class="action frame" data-bind="text: action, click: $parent.cast"></div>
+        <div class="action frame" data-bind="click: $parent.cast">
+            <div class="action-name" data-bind="text: action"></div>
+            <div class="shortcut" data-bind="text: $index() + 1"></div>
+        </div>
     </div>
 </div>
 <!-- /ko -->

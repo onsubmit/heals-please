@@ -67,6 +67,11 @@ function Player(params)
         }
     };
 
+    _this.getActionNameByIndex = function (index)
+    {
+        return index >= 0 && _this.actions().length > index ? _this.actions()[index] : null;
+    };
+
     function _adjustMana(amount)
     {
         var currentMana = _this.mana();

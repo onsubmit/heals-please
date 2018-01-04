@@ -46,7 +46,8 @@ function SmallHeal(target, params)
 
     _this.cancel = function ()
     {
-        _onCancel(_this);
+        var outcome = { wasCancelled: true };
+        _onCancel(_this, outcome);
     };
 
     function _updateProgress(progress)

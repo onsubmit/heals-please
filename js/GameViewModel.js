@@ -94,6 +94,15 @@ module.exports = function ()
         return _castAction(action);
     };
 
+    _this.cancelCast = function ()
+    {
+        var currentCast = _this.currentCast.value();
+        if (currentCast)
+        {
+            currentCast.cancel();
+        }
+    };
+
     _this.engageBoss = function ()
     {
         var tank = _this.friendlies.members[0];
@@ -162,6 +171,8 @@ module.exports = function ()
 
     function _cancelCast()
     {
+        _queuedAction = null;
+        _this.currentCast.action("stop");
         _this.currentCast.value(null);
     }
 
@@ -217,6 +228,61 @@ module.exports = function ()
             }, 0);
     }
 
+    function _document_onKeyPress(e)
+    {
+        var keyCode = e.which || event.keyCode;
+
+        if (keyCode === 27) // ESC
+        {
+            _this.cancelCast();
+        }
+        if (keyCode === 32) // SPACE
+        {
+            var previousCast = _this.currentCast.previous();
+            if (previousCast && previousCast.name)
+            {
+                _this.cast(previousCast.name);
+            }
+        }
+        else if (keyCode >= 48 && keyCode <= 57) // 0-9
+        {
+            var actionIndex = keyCode - 49; // - '0' - 1
+            var actionName = _this.player.getActionNameByIndex(actionIndex);
+            if (actionName)
+            {
+                _this.cast(actionName);
+            }
+        }
+        else
+        {
+            var partyIndex = -1;
+            switch (keyCode)
+            {
+                case 81: // q
+                    partyIndex = 0;
+                    break;
+                case 87: // w
+                    partyIndex = 1;
+                    break;
+                case 69: // e
+                    partyIndex = 2;
+                    break;
+                case 82: // r
+                    partyIndex = 3;
+                    break;
+                case 84: // t
+                    partyIndex = 4;
+                    break;
+            }
+
+            var member = _this.friendlies.getMemberByIndex(partyIndex);
+            if (member)
+            {
+                _this.player.setTarget(member);
+            }
+        }
+    }
+
     (function _initialize()
     {
         _this.player = new Player(
@@ -261,5 +327,7 @@ module.exports = function ()
             ]);
 
         _this.boss = new Bosses["Gordo Ramzee"];
+
+        ko.utils.registerEventHandler(document, "keydown", _document_onKeyPress);
     })();
 };

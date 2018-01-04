@@ -40,6 +40,38 @@ body {
         font-weight: bold;
         font-size: 2.0em;
         padding: 10px;
+        margin-bottom: 30px;
+    }
+
+    .help {
+        color: #ccc;
+
+        h5 {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        table {
+            margin-left: auto;
+            margin-right: auto;
+            border-spacing: 0;
+            border-collapse: collapse;
+          }
+
+          tr {
+            border-bottom : 1px solid #bbb;
+          }
+
+          td {
+              text-align: left;
+          }
+
+          td.key {
+            text-align: right;
+            vertical-align: top;
+            font-weight: bold;
+            padding: 8px;
+        }
     }
 }
 
@@ -218,6 +250,18 @@ body {
     }
 }
 
+.cast-bar-cancel {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    opacity: 0.5;
+
+    img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 .mana-bar-container {
     margin-bottom: 10px;
 }
@@ -251,6 +295,7 @@ body {
 }
 
 .action {
+    position: relative;
     width: 50px;
     height: 50px;
     margin-right: 10px;
@@ -267,6 +312,18 @@ body {
 
 .action:nth-last-child(1) {
     margin: 0;
+}
+
+.action-name {
+    padding-top: 15px;
+}
+
+.shortcut {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    opacity: 0.5;
+    .white-text-with-background();
 }
 
 .background {

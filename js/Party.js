@@ -65,6 +65,11 @@ function Party(members)
             });
     };
 
+    _this.getMemberByIndex = function (index)
+    {
+        return index >= 0 && _this.members.length > index ? _this.members[index] : null;
+    };
+
     _this.isWiped = function ()
     {
         return _this.members.every(
