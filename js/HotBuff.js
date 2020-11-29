@@ -1,7 +1,6 @@
 var Loop = require("./Loop");
-var DebuffType = require("./DebuffType");
 
-function DotDebuff(params)
+function HotBuff(params)
 {
     params = params || {};
 
@@ -9,20 +8,19 @@ function DotDebuff(params)
 
     var _name = params.name || "Missing name";
     var _description = params.description || "Missing description";
-    var _interval = params.interval || 1000;
-    var _duration = params.duration || 5000;
+    var _interval = params.interval || 2000;
+    var _duration = params.duration || 10000;
     var _effect = params.effect;
     var _icon = params.icon;
 
     var _loop = null;
     var _target = null;
     var _tickCount = 0;
-    var _numTicks = _duration > 0 ? Math.floor(_duration / _interval) : -1;
+    var _numTicks = Math.floor(_duration / _interval);
 
     _this.name = _name;
     _this.description = _description;
     _this.icon = _icon;
-    _this.type = DebuffType.DamageOverTime;
 
     _this.tooltip = _name + " -> " + _description;
 
@@ -30,7 +28,7 @@ function DotDebuff(params)
     {
         _target = target;
 
-        _loop = new Loop("Dot Debuff", _tick, _interval);
+        _loop = new Loop("Hot Buff", _tick, _interval);
         _loop.start();
     };
 
@@ -53,12 +51,12 @@ function DotDebuff(params)
     {
         _effect(_target);
 
-        if (_duration > 0 && ++_tickCount === _numTicks)
+        if (++_tickCount === _numTicks)
         {
             _loop.stop();
-            _target.removeDebuff(_this.name);
+            _target.removeBuff(_this.name);
         }
     }
 }
 
-module.exports = DotDebuff;
+module.exports = HotBuff;

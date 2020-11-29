@@ -59,6 +59,11 @@ function Player(params)
         _adjustMana(0 - amount);
     };
 
+    _this.restoreManaToMax = function ()
+    {
+        _this.mana(_this.maxMana());
+    };
+
     _this.setTarget = function (target)
     {
         if (!_this.isDead())

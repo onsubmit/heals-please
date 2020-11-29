@@ -99,6 +99,11 @@ function Party(members)
         _doMemberAction("resume");
     };
 
+    _this.reset = function ()
+    {
+        _doMemberAction("reset");
+    };
+
     function _doMemberAction(functionName)
     {
         _this.members.forEach(

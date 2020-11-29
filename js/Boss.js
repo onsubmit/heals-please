@@ -12,6 +12,7 @@ function Boss(health)
     _this.maxHealth = health;
 
     _this.health = ko.observable(health);
+    _this.isDead = ko.observable(false);
     _this.targets = ko.observableArray([]);
     _this.currentCasts = ko.observableArray([]);
 
@@ -38,6 +39,16 @@ function Boss(health)
             || !params.onDeathCallback)
         {
             throw new Error("Missing required parameter");
+        }
+
+        if (params.initialEvents)
+        {
+            params.initialEvents.forEach(
+                function (initialEvent)
+                {
+                    initialEvent();
+                }
+            );
         }
 
         if (params.initialTargets)
@@ -138,6 +149,7 @@ function Boss(health)
     function _onDeath()
     {
         _this.stop();
+        _this.isDead(true);
         _onDeathCallback();
     }
 }

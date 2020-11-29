@@ -19,15 +19,16 @@ module.exports = function ()
     var c_defaultHeals = ["Small Heal"];
 
     var _queuedAction = null;
+    var _rewards = null;
 
     _this.showIntro = ko.observable(true);
     _this.isPaused = ko.observable(false);
     _this.inCombat = ko.observable(false);
+    _this.boss = ko.observable(null);
 
     _this.allowPause = false;
     _this.friendlies = null;
     _this.player = null;
-    _this.boss = null;
 
     _this.currentCast = ko.utils.extend(new PreviousValueTracker(),
         {
@@ -81,7 +82,7 @@ module.exports = function ()
         var currentCast = _this.currentCast.value();
         if (currentCast)
         {
-            if (currentCast.castProgress > 0.5)
+            if (!currentCast.isInstant && currentCast.castProgress > 0.5)
             {
                 // If an action is cast while already casting, queue up the action.
                 // It will cast immediately after the current cast completes.
@@ -97,7 +98,7 @@ module.exports = function ()
     _this.cancelCast = function ()
     {
         var currentCast = _this.currentCast.value();
-        if (currentCast)
+        if (currentCast && !currentCast.isInstant)
         {
             currentCast.cancel();
         }
@@ -106,9 +107,14 @@ module.exports = function ()
     _this.engageBoss = function ()
     {
         var tank = _this.friendlies.members[0];
-        _this.boss.engage(_this.player, tank, _this.friendlies, _onBossKill);
+        _this.boss().engage(_this.player, tank, _this.friendlies, _onBossKill);
         _this.friendlies.start();
         _this.inCombat(true);
+    };
+
+    _this.showBuff = function (buff, member)
+    {
+        _this.player.setTarget(member);
     };
 
     _this.showDebuff = function (debuff, member)
@@ -120,7 +126,7 @@ module.exports = function ()
     {
         _this.isPaused(true);
 
-        _this.boss.pause();
+        _this.boss().pause();
         _this.friendlies.pause();
         AnimationHelpers.pause();
     };
@@ -129,7 +135,7 @@ module.exports = function ()
     {
         _this.isPaused(false);
 
-        _this.boss.resume();
+        _this.boss().resume();
         _this.friendlies.resume();
         AnimationHelpers.resume();
     };
@@ -144,7 +150,6 @@ module.exports = function ()
         if (action.isInstant)
         {
             _this.player.spendMana(action.manaCost);
-            return action.cast();
         }
 
         _this.currentCast.action("finish");
@@ -153,7 +158,7 @@ module.exports = function ()
 
     function _finishCast(action, outcome)
     {
-        if (!outcome.targetDied)
+        if (!outcome.manaSpent && !outcome.targetDied)
         {
             _this.player.spendMana(action.manaCost);
         }
@@ -190,19 +195,21 @@ module.exports = function ()
                     attackAmount = Math.round(attackAmount * 2);
                 }
 
-                _this.boss.harm(attackAmount);
+                _this.boss().harm(attackAmount);
             };
         })(damageModifier || 1);
     }
 
     function _onFriendlyDeath(friendly)
     {
+        friendly.stop();
+
         if (_this.player.target() === friendly)
         {
             _this.player.setTarget(null);
         }
 
-        _this.boss.onDeathOfFriendly(friendly);
+        _this.boss().onDeathOfFriendly(friendly);
 
         if (_this.friendlies.isWiped())
         {
@@ -210,8 +217,16 @@ module.exports = function ()
                 function ()
                 {
                     _this.friendlies.stop();
+                    _this.boss().stop();
                     _this.pause();
+
                     alert("You lose!");
+
+                    _this.inCombat(false);
+                    _this.friendlies.reset();
+                    _this.player.restoreManaToMax();
+
+                    _this.boss(new Bosses[_this.boss().name]);
                 }, 0);
 
             return;
@@ -220,12 +235,35 @@ module.exports = function ()
 
     function _onBossKill()
     {
-        setTimeout(
-            function ()
-            {
-                _this.friendlies.stop();
-                alert("You win!");
-            }, 0);
+        var bossName = _this.boss().name;
+        var reward = _rewards[bossName];
+
+        var promptFunction = function (message)
+        {
+            setTimeout(
+                function ()
+                {
+                    _this.friendlies.stop();
+
+                    alert(message);
+
+                    _this.inCombat(false);
+                    _this.friendlies.reset();
+                    _this.player.restoreManaToMax();
+                }, 0);
+        };
+
+        if (reward)
+        {
+            promptFunction("Good job. You've unlocked the '" + reward.heal + "' spell. It may come in handy against " + reward.boss + ".");
+
+            _this.player.actions.push(reward.heal);
+            _this.boss(new Bosses[reward.boss]);
+        }
+        else
+        {
+            promptFunction("You win!");
+        }
     }
 
     function _document_onKeyPress(e)
@@ -285,6 +323,15 @@ module.exports = function ()
 
     (function _initialize()
     {
+        _rewards =
+            {
+                "Gordo Ramzee":
+                    {
+                        heal: "Renew",
+                        boss: "Donny Frump"
+                    }
+            };
+
         _this.player = new Player(
             {
                 actions: c_defaultHeals,
@@ -326,7 +373,7 @@ module.exports = function ()
                 _this.player
             ]);
 
-        _this.boss = new Bosses["Gordo Ramzee"];
+        _this.boss(new Bosses["Gordo Ramzee"]);
 
         ko.utils.registerEventHandler(document, "keydown", _document_onKeyPress);
     })();

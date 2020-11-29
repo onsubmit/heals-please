@@ -2,6 +2,7 @@ var ko = require("knockout");
 var Loop = require("js/Loop");
 var Loops = require("js/Loops");
 var AnimationHelpers = require("./AnimationHelpers");
+var DebuffType = require("./DebuffType");
 
 function Friendly(name, params)
 {
@@ -23,13 +24,20 @@ function Friendly(name, params)
 
     _this.health = ko.observable(_health);
     _this.isDead = ko.observable(false);
+    _this.buffs = ko.observableArray([]);
     _this.debuffs = ko.observableArray([]);
     _this.lastHealInfo = ko.observable();
+
+    _this.healthPercentage = ko.pureComputed(
+        function ()
+        {
+            return _this.health() / _this.maxHealth;
+        });
 
     _this.healthPercentageString = ko.pureComputed(
         function ()
         {
-            return (100.0 * _this.health() / _this.maxHealth) + "%";
+            return (100.0 * _this.healthPercentage()) + "%";
         });
 
     _this.healthStatusString = ko.pureComputed(
@@ -90,9 +98,69 @@ function Friendly(name, params)
         return healInfo;
     };
 
+    _this.healToMax = function (allowResurrection)
+    {
+        if (_this.isDead() && allowResurrection)
+        {
+            _this.resurrect(_maxHealth);
+        }
+        else
+        {
+            _this.health(_maxHealth);
+        }
+    };
+
+    _this.resurrect = function (health)
+    {
+        if (_this.isDead())
+        {
+            _this.isDead(false);
+            _this.health(health || Math.round(_maxHealth * 0.2));
+        }
+    };
+
     _this.harm = function (amount)
     {
+        _getDebuffsByType(DebuffType.IncreaseDamageTaken)
+            .forEach(
+                function (debuff)
+                {
+                    amount = debuff.effect(amount);
+                });
+
         return _adjustHealth(0 - amount);
+    };
+
+    _this.applyBuff = function (buff)
+    {
+        // Remove any pre-existing buffs by this name.
+        _this.removeBuff(buff.name);
+
+        buff.start(_this);
+        _this.buffs.push(buff);
+    };
+
+    _this.removeBuff = function (buffNameToRemove)
+    {
+        var removedBuffs = _this.buffs.remove(
+            function (buff)
+            {
+                return buff.name === buffNameToRemove;
+            });
+
+        if (removedBuffs.length)
+        {
+            removedBuffs.forEach(
+                function (removedBuff)
+                {
+                    removedBuff.stop();
+                }
+            );
+
+            return true;
+        }
+
+        return false;
     };
 
     _this.applyDebuff = function (debuff)
@@ -101,10 +169,27 @@ function Friendly(name, params)
         _this.debuffs.push(debuff);
     };
 
-    _this.removeDebuff = function (debuffToRemove)
+    _this.removeDebuff = function (debuffNameToRemove)
     {
-        _this.debuffs.remove(debuffToRemove);
-        debuffToRemove.stop();
+        var removedDebuffs = _this.debuffs.remove(
+            function (debuff)
+            {
+                return debuff.name === debuffNameToRemove;
+            });
+
+        if (removedDebuffs.length)
+        {
+            removedDebuffs.forEach(
+                function (removedDebuff)
+                {
+                    removedDebuff.stop();
+                }
+            );
+
+            return true;
+        }
+
+        return false;
     };
 
     _this.removeLastDebuff = function ()
@@ -120,20 +205,39 @@ function Friendly(name, params)
     _this.stop = function ()
     {
         _loops.stop();
+        _doBuffAction("stop");
         _doDebuffAction("stop");
     };
 
     _this.pause = function ()
     {
         _loops.pause();
+        _doBuffAction("pause");
         _doDebuffAction("pause");
     };
 
     _this.resume = function ()
     {
         _loops.resume();
+        _doBuffAction("resume");
         _doDebuffAction("resume");
     };
+
+    _this.reset = function ()
+    {
+        _this.healToMax(true);
+        _this.buffs.removeAll();
+        _this.debuffs.removeAll();
+    };
+
+    function _doBuffAction(actionName)
+    {
+        _this.buffs().forEach(
+            function (buff)
+            {
+                buff[actionName]();
+            });
+    }
 
     function _doDebuffAction(actionName)
     {
@@ -141,6 +245,16 @@ function Friendly(name, params)
             function (debuff)
             {
                 debuff[actionName]();
+            });
+    }
+
+    function _getDebuffsByType(debuffType)
+    {
+        return ko.utils.arrayFilter(
+            _this.debuffs(),
+            function (debuff)
+            {
+                return debuff.type === debuffType;
             });
     }
 
@@ -167,8 +281,9 @@ function Friendly(name, params)
 
     function _onDeath()
     {
-        _this.debuffs.removeAll();
         _this.stop();
+        _this.buffs.removeAll();
+        _this.debuffs.removeAll();
         _this.isDead(true);
     }
 

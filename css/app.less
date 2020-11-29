@@ -203,14 +203,12 @@ body {
     background: green;
 }
 
-.party-member-buffs-container {
+.party-member-buffs-container, .party-member-debuffs-container {
     position: relative;
 }
 
-.party-member-buffs {
+.party-member-buffs, .party-member-debuffs {
     position: absolute;
-    right: 8px;
-    bottom: 36px;
 
     img {
         margin-right: 2px;
@@ -219,6 +217,16 @@ body {
     img:nth-last-child(1) {
         margin: 0;
     }
+}
+
+.party-member-buffs {
+    right: 60px;
+    bottom: 36px;
+}
+
+.party-member-debuffs {
+    right: 8px;
+    bottom: 36px;
 }
 
 .cast-bar-background {
@@ -236,6 +244,10 @@ body {
     text-align: center;
     font-size: 16px;
     line-height: 24px;
+
+    &.gcd {
+        background: linear-gradient(to top, rgb(117, 117, 117), rgb(42, 42, 42));
+    }
 }
 
 .cast-bar-text {
@@ -296,8 +308,9 @@ body {
 
 .action {
     position: relative;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
+    vertical-align: top;
     margin-right: 10px;
     display: inline-block;
     background: rgb(22, 22, 22);

@@ -34,22 +34,22 @@
 <!-- /ko -->
 <!-- ko ifnot: showIntro -->
 <div class="outer no-select">
-    <div class="boss frame" data-bind="css: { 'casting': boss.currentCasts }">
+    <div class="boss frame" data-bind="css: { 'casting': boss().currentCasts }">
         <div class="health-bar-background">
             <!-- ko if: !inCombat() || allowPause -->
             <div class="game-actions frame thin">
-                <div data-bind="click: engageBoss, visible: !inCombat()">Engage</div>
+                <div data-bind="click: engageBoss, visible: !inCombat() && !boss().isDead()">Engage</div>
                 <!-- ko if: allowPause -->
                 <div data-bind="click: pause, visible: inCombat() && !isPaused()">Pause</div>
                 <div data-bind="click: resume, visible: isPaused">Resume</div>
                 <!-- /ko -->
             </div>
             <!-- /ko -->
-            <div class="health-bar" data-bind="style: { width: boss.healthPercentageString }">
-                <div class="boss-name nowrap" data-bind="text: boss.name">&nbsp;</div>
+            <div class="health-bar" data-bind="style: { width: boss().healthPercentageString }">
+                <div class="boss-name nowrap" data-bind="text: boss().name">&nbsp;</div>
             </div>
         </div>
-        <div class="boss-cast-bars" data-bind="foreach: { data: boss.currentCasts, as: 'bossCast' }">
+        <div class="boss-cast-bars" data-bind="foreach: { data: boss().currentCasts, as: 'bossCast' }">
             <div class="cast-bar-background">
                 <div class="cast-bar" data-bind="
                     animate: bossCast.value() || $parent.animations.fadeOutCastBar,
@@ -74,7 +74,7 @@
                         }">
                     <div class="party-member-name nowrap" data-bind="
                         text: member.name,
-                        css: { 'targeted': $parent.boss.targets.indexOf(member) !== -1 }">
+                        css: { 'targeted': $parent.boss().targets.indexOf(member) !== -1 }">
                     </div>
                     <div class="health-bar-background">
                         <div class="health-bar" data-bind="style: { width: member.healthPercentageString }">&nbsp;</div>
@@ -91,8 +91,13 @@
                     </div>
                 </div>
                 <div class="party-member-buffs-container">
-                    <div class="party-member-buffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
-                        <a href="#" data-bind="click: $root.showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon }" /></a>
+                    <div class="party-member-buffs" data-bind="foreach: { data: member.buffs, as: 'buff' }">
+                        <a href="#" data-bind="click: $root.showBuff.bind(null, $data, member)"><img data-bind="attr: { src: buff.icon, title: buff.tooltip }" /></a>
+                    </div>
+                </div>
+                <div class="party-member-debuffs-container">
+                    <div class="party-member-debuffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
+                        <a href="#" data-bind="click: $root.showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon, title: debuff.tooltip }" /></a>
                     </div>
                 </div>
             </div>
@@ -103,6 +108,7 @@
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
+                css: { 'gcd': (currentCast.value() && currentCast.value().isInstant) || (currentCast.previous() && currentCast.previous().isInstant) },
                 animate: currentCast.value() || animations.fadeOutCastBar,
                 animateAction: currentCast.action">&nbsp;</div>
 
@@ -111,8 +117,8 @@
                 text: currentCast.previous() && currentCast.previous().name,
                 animate: !currentCast.value() && animations.fadeOutCastBar"></div>
 
-            <!-- ko if: currentCast.value -->
-            <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg"></img></div>
+            <!-- ko if: currentCast.value() && !currentCast.value().isInstant -->
+            <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg" alt="Cancel cast" title="Cancel cast"></img></div>
             <!-- /ko -->
         </div>
     </div>
