@@ -168,19 +168,29 @@ body {
 .party-member-health-bar {
   background: green;
 }
-.party-member-buffs-container {
+.party-member-buffs-container,
+.party-member-debuffs-container {
   position: relative;
 }
-.party-member-buffs {
+.party-member-buffs,
+.party-member-debuffs {
   position: absolute;
-  right: 8px;
-  bottom: 36px;
 }
-.party-member-buffs img {
+.party-member-buffs img,
+.party-member-debuffs img {
   margin-right: 2px;
 }
-.party-member-buffs img:nth-last-child(1) {
+.party-member-buffs img:nth-last-child(1),
+.party-member-debuffs img:nth-last-child(1) {
   margin: 0;
+}
+.party-member-buffs {
+  right: 60px;
+  bottom: 36px;
+}
+.party-member-debuffs {
+  right: 8px;
+  bottom: 36px;
 }
 .cast-bar-background {
   background: #181800;
@@ -195,6 +205,9 @@ body {
   text-align: center;
   font-size: 16px;
   line-height: 24px;
+}
+.cast-bar.gcd {
+  background: linear-gradient(to top, #757575, #2a2a2a);
 }
 .cast-bar-text {
   left: 4px;
@@ -256,8 +269,9 @@ body {
 }
 .action {
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+  vertical-align: top;
   margin-right: 10px;
   display: inline-block;
   background: #161616;
