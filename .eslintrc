@@ -2,113 +2,97 @@
 /* For information on specific rules we are using: http://eslint.org/docs/rules/ */
 
 {
-    "extends":
-    [
-      "eslint:recommended"
+  "extends": ["eslint:recommended"],
+  "parserOptions": {
+    "ecmaVersion": 2015,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "commonjs": true
+  },
+  "rules": {
+    // Possible errors
+    "no-empty": [
+      "error",
+      {
+        "allowEmptyCatch": true
+      }
     ],
-    "parserOptions":
-    {
-      "ecmaVersion": 3,
-      "sourceType": "module"
-    },
-    "env":
-    {
-      "browser": true,
-      "commonjs": true
-    },
-    "rules":
-    {
-      // Possible errors
-      "no-empty": [
-          "error",
-          {
-              "allowEmptyCatch": true
-          }
-      ],
-      // "valid-jsdoc": "error",
+    // "valid-jsdoc": "error",
 
-      // Best practices
-      "curly": "error",
-      "dot-location": [
-          "error",
-          "property"
-      ],
-      "eqeqeq": "error",
-      "no-eval": "error",
-      "no-floating-decimal": "error",
-      "no-labels": "error",
-      "no-lone-blocks": "error",
-      "no-multi-spaces": [
-          "error",
-          {
-              "ignoreEOLComments": true
-          }
-      ],
-      "no-return-assign": "error",
-      "no-self-compare": "error",
-      "no-sequences": "error",
-      "no-unmodified-loop-condition": "error",
-      "no-useless-call": "error",
-      "no-useless-concat": "error",
-      "wrap-iife": [
-          "error",
-          "inside"
-      ],
-      "yoda": "error",
+    // Best practices
+    "curly": "error",
+    "dot-location": ["error", "property"],
+    "eqeqeq": "error",
+    "no-eval": "error",
+    "no-floating-decimal": "error",
+    "no-labels": "error",
+    "no-lone-blocks": "error",
+    "no-multi-spaces": [
+      "error",
+      {
+        "ignoreEOLComments": true
+      }
+    ],
+    "no-return-assign": "error",
+    "no-self-compare": "error",
+    "no-sequences": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-useless-call": "error",
+    "no-useless-concat": "error",
+    "wrap-iife": ["error", "inside"],
+    "yoda": "error",
 
-      // Variables
-      "no-shadow": "error",
-      "no-undef-init": "error",
-      "no-unused-vars": "error",
+    // Variables
+    "no-shadow": "error",
+    "no-undef-init": "error",
+    "no-unused-vars": "error",
 
-      // Stylistic issues
-      "block-spacing": "error",
-      "brace-style": [
-          "error",
-          "allman",
-          {
-              "allowSingleLine": true
-          }],
-      "comma-dangle": "error",
-      "comma-style": "error",
-      "computed-property-spacing": "error",
-      "func-call-spacing": "error",
-      "guard-for-in": "error",
-      "indent": [
-          "error",
-          4,
-          {
-              "SwitchCase": 1
-          }
-      ],
-      "key-spacing": "error",
-      "keyword-spacing": "error",
-      "no-multiple-empty-lines": "error",
-      "no-tabs": "error",
-      "no-trailing-spaces": "error",
-      "no-whitespace-before-property": "error",
-      "object-curly-spacing": [
-          "error",
-          "always"
-      ],
-      "padded-blocks": [
-          "error",
-          "never"
-      ],
-      "quotes": "error",
-      "semi": "error",
-      "semi-spacing": "error",
-      "space-before-blocks": "error",
-      "space-in-parens": "error",
-      "block-scoped-var": "error",
-      "no-else-return": "error",
-      "no-new-wrappers": "error",
-      "no-unneeded-ternary": "error",
-      "space-before-function-paren": [
-          "error",
-          {
-              "anonymous": "always",
-              "named": "never"
-          }]
-    }
+    // Stylistic issues
+    "block-spacing": "error",
+    "brace-style": [
+      "error",
+      "allman",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "comma-dangle": "error",
+    "comma-style": "error",
+    "computed-property-spacing": "error",
+    "func-call-spacing": "error",
+    "guard-for-in": "error",
+    "indent": [
+      "error",
+      4,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "key-spacing": "error",
+    "keyword-spacing": "error",
+    "no-multiple-empty-lines": "error",
+    "no-tabs": "error",
+    "no-trailing-spaces": "error",
+    "no-whitespace-before-property": "error",
+    "object-curly-spacing": ["error", "always"],
+    "padded-blocks": ["error", "never"],
+    "quotes": "error",
+    "semi": "error",
+    "semi-spacing": "error",
+    "space-before-blocks": "error",
+    "space-in-parens": "error",
+    "block-scoped-var": "error",
+    "no-else-return": "error",
+    "no-new-wrappers": "error",
+    "no-unneeded-ternary": "error",
+    "space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "always",
+        "named": "never"
+      }
+    ]
   }
+}

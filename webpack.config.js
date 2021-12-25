@@ -1,41 +1,45 @@
-var path = require("path");
+const path = require("path");
 
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 
-var extractLess = new ExtractTextPlugin({
+const extractLess = new MiniCssExtractPlugin({
     filename: "app.css"
 });
 
-var extractHtml = new HtmlWebpackPlugin({
+const extractHtml = new HtmlWebpackPlugin({
     template: "index.template.html"
 });
 
+const esLintWebpack = new ESLintWebpackPlugin({
+    failOnWarning: true
+});
+
 module.exports = {
+    mode: "production",
     entry: "./js/app.js",
     output: {
         path: path.resolve(__dirname, "out"),
         filename: "app.bundle.js"
     },
     module: {
-        loaders: [
+        rules: [
             {
-                enforce: "pre",
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "eslint-loader",
+                test: /knockout-latest(\.debug)?\.js$/,
+                loader: "expose-loader",
                 options: {
-                    failOnWarning: true,
-                    failOnError: true
+                    exposes: [ "ko" ]
                 }
             },
             {
-                test: /knockout-latest(\.debug)?\.js$/,
-                loader: "expose-loader?ko"
-            },
-            {
                 test: /\.html$/,
-                loader: "html-loader"
+                loader: "html-loader",
+                options:
+                {
+                    minimize: false,
+                    esModule: false
+                }
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
@@ -44,23 +48,23 @@ module.exports = {
                         loader: "file-loader",
                         options:
                         {
-                            name: "[path][name].[ext]"
+                            name: "[path][name].[ext]",
+                            esModule: false
                         }
                     }
                 ]
             },
             {
                 test: /\.less$/,
-                use: extractLess.extract({
-                    use: [
-                        {
-                            loader: "css-loader"
-                        },
-                        {
-                            loader: "less-loader"
-                        }
-                    ]
-                })
+                use: [
+                    "style-loader",
+                    {
+                        loader: "css-loader"
+                    },
+                    {
+                        loader: "less-loader"
+                    }
+                ]
             }
         ]
     },
@@ -73,8 +77,9 @@ module.exports = {
         }
     },
     plugins: [
+        esLintWebpack,
         extractLess,
-        extractHtml,
+        extractHtml
     ],
-    devtool: 'eval-source-map'
+    devtool: "eval-source-map"
 };
