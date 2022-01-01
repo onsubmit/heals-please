@@ -1,9 +1,14 @@
-import Velocity from "velocity-animate";
+import Velocity, {
+  Properties,
+  VelocityElements,
+  VelocityProperty,
+} from "velocity-animate";
 import * as ko from "knockout";
+import { Animation, AnimationWrapper } from "./Animation";
 
 export default function applyExtensions() {
   ko.bindingHandlers.animate = {
-    update: (element: any, valueAccessor: () => any) => {
+    update: (element: VelocityElements, valueAccessor: () => any) => {
       const currentCast = valueAccessor();
 
       if (!currentCast) {
@@ -12,7 +17,7 @@ export default function applyExtensions() {
 
       ko.utils.arrayForEach(
         [].concat(currentCast.animation),
-        (animationStep: any) => {
+        (animationStep: Animation) => {
           Velocity(element, animationStep.properties, animationStep.options);
         }
       );
@@ -21,13 +26,13 @@ export default function applyExtensions() {
 
   ko.bindingHandlers.animateAction = {
     update: (
-      element: any,
+      element: VelocityElements,
       valueAccessor: () => any,
       allBindings: ko.AllBindings,
       viewModel: any,
       bindingContext: ko.BindingContext<any>
     ) => {
-      const action = ko.unwrap(valueAccessor());
+      const action: Properties<VelocityProperty> = ko.unwrap(valueAccessor());
 
       if (!action) {
         return;
@@ -39,8 +44,8 @@ export default function applyExtensions() {
 
       ko.bindingHandlers.animate.update(
         element,
-        () => {
-          return { animation: { properties: action } };
+        (): AnimationWrapper => {
+          return { animation: { properties: action, options: {} } };
         },
         allBindings,
         viewModel,

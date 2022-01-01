@@ -1,21 +1,30 @@
-import Velocity, { AnimationCall } from "velocity-animate";
+import Velocity, {
+  AnimationCall,
+  HTMLorSVGElement,
+  Properties,
+  VelocityProgressFn,
+  VelocityProperty,
+  VelocityResult,
+} from "velocity-animate";
+import { AnimationProgress } from "./AnimationProgress";
 
 class AnimationHelpers {
-  public fadeOut = { opacity: [0, 1] };
-  public fullWidth = { width: ["100%", "0%"] };
-  public makeUpdateProgressFunction = (updateProgressFunction: any) => {
-    // TODO: use types here
-    return function (
-      elements: any,
-      complete: number,
-      remaining: number,
-      tweenValue: number,
-      activeCall: AnimationCall
-    ) {
+  fadeOut: Properties<VelocityProperty> = { opacity: [0, 1] };
+  fullWidth: Properties<VelocityProperty> = { width: ["100%", "0%"] };
+  makeUpdateProgressFunction = (
+    updateProgressFunction: (progress: AnimationProgress) => void
+  ): VelocityProgressFn => {
+    return (
+      elements: VelocityResult | undefined,
+      complete: number | undefined,
+      remaining: number | undefined,
+      tweenValue: number | undefined,
+      activeCall: AnimationCall | undefined
+    ) => {
       updateProgressFunction({
         complete: complete,
         remaining: remaining,
-        start: new Date(Date.now() - (activeCall.ellapsedTime || 0)),
+        start: new Date(Date.now() - (activeCall?.ellapsedTime || 0)),
         tweenValue: tweenValue,
       });
     };
@@ -31,7 +40,13 @@ class AnimationHelpers {
     return animatingElements;
   };
 
-  public removeStyleAttribute = (elements: HTMLElement[]) => {
+  public removeStyleAttribute = (
+    elements: VelocityResult<HTMLorSVGElement> | undefined
+  ) => {
+    if (!elements || elements.length === 0) {
+      return;
+    }
+
     elements[0].removeAttribute("style");
   };
 

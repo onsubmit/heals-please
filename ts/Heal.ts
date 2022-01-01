@@ -1,8 +1,11 @@
-import AnimationHelpers from "./AnimationHelpers";
-import Friendly from "./Friendly";
+import { VelocityCallbackFn, VelocityResult } from "velocity-animate";
 import { ActionName } from "./ActionName";
-import { HealParams } from "./HealParams";
+import { Animation } from "./Animation";
+import AnimationHelpers from "./AnimationHelpers";
+import { AnimationProgress } from "./AnimationProgress";
+import Friendly from "./Friendly";
 import HealOutcome from "./HealOutcome";
+import { HealParams } from "./HealParams";
 
 export default abstract class Heal {
   private _complete = () => {
@@ -12,11 +15,15 @@ export default abstract class Heal {
 
   private _onCancel: (action: Heal, outcome: HealOutcome) => void;
   private _onFinish: (action: Heal, outcome: HealOutcome) => void;
-  private _updateProgress = (progress: { complete: number }) => {
-    this.castProgress = progress.complete;
+  private _updateProgress = (progress: AnimationProgress) => {
+    this.castProgress = progress.complete || 0;
   };
 
-  protected begin = (elements: HTMLElement[]) => {
+  protected begin: VelocityCallbackFn = (elements?: VelocityResult) => {
+    if (!elements || elements.length === 0) {
+      return;
+    }
+
     elements[0].style.width = "0%";
     AnimationHelpers.removeStyleAttribute(elements);
   };
@@ -49,7 +56,7 @@ export default abstract class Heal {
     this.castProgress = 0.0;
   }
 
-  get animation() {
+  get animation(): Animation[] {
     return [
       {
         properties: AnimationHelpers.fullWidth,

@@ -6,6 +6,7 @@ import Icon from "images/renew.svg";
 import { ActionName } from "ts/ActionName";
 import HealOutcome from "ts/HealOutcome";
 import { HealParams } from "ts/HealParams";
+import { VelocityCallbackFn, VelocityResult } from "velocity-animate";
 
 export default class Renew extends Heal {
   private _critChance: number;
@@ -18,7 +19,9 @@ export default class Renew extends Heal {
     return healOutcome;
   };
 
-  protected override begin = (elements: HTMLElement[]) => {
+  protected override begin: VelocityCallbackFn = (
+    elements?: VelocityResult
+  ) => {
     AnimationHelpers.removeStyleAttribute(elements);
     this.cast();
   };

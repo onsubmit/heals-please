@@ -16,6 +16,7 @@ import PreviousValueTracker from "./PreviousValueTracker";
 import Random from "./Random";
 import { ActionName } from "./ActionName";
 import HealOutcome from "./HealOutcome";
+import Animations from "./Animations";
 
 class GameViewModel {
   private _cancelCast = () => {
@@ -185,20 +186,9 @@ class GameViewModel {
 
   private _queuedAction: Heal | null = null;
 
-  // = ko.observable(null);
   allowPause: boolean = false;
-  animations = {
-    fadeOutCastBar: {
-      animation: {
-        properties: AnimationHelpers.fadeOut,
-        options: {
-          duration: 200,
-          complete: AnimationHelpers.removeStyleAttribute,
-        },
-      },
-    },
-  };
-  // = ko.observable(false);
+  animations: typeof Animations = Animations;
+
   boss: ko.Observable<Boss>;
   cancelCast = () => {
     const currentCast = this.currentCast.value();

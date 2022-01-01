@@ -1,22 +1,18 @@
 import Action from "ts/Action";
+import { Animation, AnimationWrapper } from "ts/Animation";
 import AnimationHelpers from "ts/AnimationHelpers";
+import Animations from "ts/Animations";
 import Friendly from "ts/Friendly";
 
 export default class Enrage extends Action {
-  animation: any;
+  animation: Animation[];
 
   constructor(targets: Friendly[], onSuccess: () => void) {
     super("Enrage");
 
-    this.animation = [
-      {
-        properties: AnimationHelpers.fullWidth,
-        options: {
-          duration: 5000,
-          begin: AnimationHelpers.removeStyleAttribute,
-          complete: onSuccess,
-        },
-      },
-    ];
+    const wrapper: AnimationWrapper = { ...Animations.fullWidth5000 };
+    wrapper.animation.options.complete = onSuccess;
+
+    this.animation = [wrapper.animation];
   }
 }

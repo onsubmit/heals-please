@@ -53,7 +53,7 @@
                         <div class="health-bar-text nowrap" data-bind="text: member.healthStatusString"></div>
                         <div class="health-bar-last-heal nowrap" data-bind="
                             text: member.lastHealStatusString,
-                            animate: member.lastHealInfo() && animations.fastFadeOut,
+                            animate: member.lastHealInfo() && animations.fadeOut1000,
                             css:
                                 {
                                     'bold': member.lastHealInfo() && member.lastHealInfo().isCrit,
@@ -93,13 +93,13 @@
         <div class="boss-cast-bars" data-bind="foreach: { data: boss().currentCasts, as: 'bossCast' }">
             <div class="cast-bar-background">
                 <div class="cast-bar" data-bind="
-                    animate: bossCast.value() || $parent.animations.fadeOutCastBar,
+                    animate: bossCast.value() || $parent.animations.fadeOut200,
                     animateAction: bossCast && bossCast.action">&nbsp;</div>
 
                 <div class="cast-bar-text nowrap" data-bind="
                     css: { 'casting': bossCast.value },
                     text: bossCast && bossCast.previous() && bossCast.previous().name,
-                    animate: !bossCast.value && $parent.animations.fadeOutCastBar"></div>
+                    animate: !bossCast.value && $parent.animations.fadeOut200"></div>
             </div>
         </div>
     </div>
@@ -109,13 +109,13 @@
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
                 css: { 'gcd': (currentCast.value() && currentCast.value().isInstant) || (currentCast.previous() && currentCast.previous().isInstant) },
-                animate: currentCast.value() || animations.fadeOutCastBar,
+                animate: currentCast.value() || animations.fadeOut200,
                 animateAction: currentCast.action">&nbsp;</div>
 
             <div class="cast-bar-text nowrap" data-bind="
                 css: { 'casting': currentCast.value },
                 text: currentCast.previous() && currentCast.previous().name,
-                animate: !currentCast.value() && animations.fadeOutCastBar"></div>
+                animate: !currentCast.value() && animations.fadeOut200"></div>
 
             <!-- ko if: currentCast.value() && !currentCast.value().isInstant -->
             <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg" alt="Cancel cast" title="Cancel cast"></img></div>

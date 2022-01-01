@@ -3,6 +3,8 @@ import AnimationHelpers from "ts/AnimationHelpers";
 import { DotDebuff } from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 import Icon from "images/uncertainty.svg";
+import { Animation, AnimationWrapper } from "ts/Animation";
+import Animations from "ts/Animations";
 
 export default class Uncertainty extends Action {
   private _cast = () => {
@@ -37,7 +39,7 @@ export default class Uncertainty extends Action {
 
   private _onSuccess: () => void;
 
-  animation: any;
+  animation: Animation[];
   targets: Friendly[];
 
   constructor(targets: Friendly[], onSuccess: () => void) {
@@ -46,15 +48,9 @@ export default class Uncertainty extends Action {
     this.targets = targets;
     this._onSuccess = onSuccess;
 
-    this.animation = [
-      {
-        properties: AnimationHelpers.fullWidth,
-        options: {
-          duration: 2000,
-          begin: AnimationHelpers.removeStyleAttribute,
-          complete: this._complete,
-        },
-      },
-    ];
+    const wrapper: AnimationWrapper = { ...Animations.fullWidth2000 };
+    wrapper.animation.options.complete = this._complete;
+
+    this.animation = [wrapper.animation];
   }
 }

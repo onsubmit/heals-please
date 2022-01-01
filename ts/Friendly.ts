@@ -1,5 +1,6 @@
 import * as ko from "knockout";
 import AnimationHelpers from "./AnimationHelpers";
+import Animations from "./Animations";
 import Buff from "./Buff";
 import Debuff from "./Debuff";
 import { DebuffType } from "./DebuffType";
@@ -62,18 +63,8 @@ export default class Friendly {
     this.isDead(true);
   };
 
-  animations: any = {
-    // TODO: Create type for animations
-    fastFadeOut: {
-      animation: {
-        properties: AnimationHelpers.fadeOut,
-        options: {
-          duration: 1000,
-          begin: AnimationHelpers.removeStyleAttribute,
-        },
-      },
-    },
-  };
+  animations: typeof Animations = Animations;
+
   applyBuff = (buff: Buff) => {
     // Remove any pre-existing buffs by this name.
     this.removeBuff(buff.name);
