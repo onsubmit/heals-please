@@ -1,22 +1,22 @@
 import * as ko from "knockout";
 import "../css/app.less";
 import GamePageHtml from "../html/GamePage.html";
+import { ActionName } from "./ActionName";
+import ActionObservable from "./ActionObservable";
 import AnimationHelpers from "./AnimationHelpers";
+import Animations from "./Animations";
 import Boss from "./Boss";
-import GordoRamzee from "./Bosses/GordoRamzee";
 import DonnyFrump from "./Bosses/DonnyFrump";
+import GordoRamzee from "./Bosses/GordoRamzee";
 import Buff from "./Buff";
 import Debuff from "./Debuff";
 import Friendly from "./Friendly";
 import Heal from "./Heal";
 import HealFactory from "./HealFactory";
+import HealOutcome from "./HealOutcome";
 import Party from "./Party";
 import Player from "./Player";
-import PreviousValueTracker from "./PreviousValueTracker";
 import Random from "./Random";
-import { ActionName } from "./ActionName";
-import HealOutcome from "./HealOutcome";
-import Animations from "./Animations";
 
 class GameViewModel {
   private _cancelCast = () => {
@@ -73,12 +73,12 @@ class GameViewModel {
         case 84: // t
           partyIndex = 4;
           break;
+        default:
+          return;
       }
 
       const member = this.friendlies.getMemberByIndex(partyIndex);
-      if (member) {
-        this.player.setTarget(member);
-      }
+      this.player.setTarget(member);
     }
   };
 
@@ -233,9 +233,8 @@ class GameViewModel {
     return this._castAction(heal);
   };
 
-  currentCast = ko.utils.extend(new PreviousValueTracker<Heal>(), {
-    action: ko.observable().extend({ notify: "always" }),
-  });
+  currentCast: ActionObservable<Heal> = new ActionObservable<Heal>();
+
   engageBoss = () => {
     this.boss().engage();
     this.friendlies.start();
@@ -243,9 +242,7 @@ class GameViewModel {
   };
 
   friendlies: Party;
-  // = ko.observable(false);
   inCombat: ko.Observable<boolean>;
-  // = ko.observable(true);
   isPaused: ko.Observable<boolean>;
   joinGroupButton_onClick = () => {
     this.showIntro(false);

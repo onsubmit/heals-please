@@ -1,13 +1,13 @@
 import Boss from "ts/Boss";
-import Random from "ts/Random";
+import Friendly from "ts/Friendly";
 import Loop from "ts/Loop";
 import Loops from "ts/Loops";
-import Player from "ts/Player";
-import Friendly from "ts/Friendly";
 import Party from "ts/Party";
+import Player from "ts/Player";
+import Random from "ts/Random";
 import Trigger from "ts/Trigger";
-import Enrage from "./Shared/Actions/Enrage";
 import ThrowFood from "./GordoRamzee/Actions/ThrowFood";
+import Enrage from "./Shared/Actions/Enrage";
 
 // The encounter begins and Gordo Ramzee is not pleased he is being interrupted.
 // He targets the tank and does 20-25 damage every 2-4 seconds.

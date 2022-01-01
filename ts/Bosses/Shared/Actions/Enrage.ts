@@ -1,6 +1,5 @@
 import Action from "ts/Action";
 import { Animation, AnimationWrapper } from "ts/Animation";
-import AnimationHelpers from "ts/AnimationHelpers";
 import Animations from "ts/Animations";
 import Friendly from "ts/Friendly";
 

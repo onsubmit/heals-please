@@ -1,12 +1,11 @@
+import Icon from "images/confusion.svg";
 import Action from "ts/Action";
-import AnimationHelpers from "ts/AnimationHelpers";
+import { Animation, AnimationWrapper } from "ts/Animation";
+import Animations from "ts/Animations";
 import Debuff from "ts/Debuff";
 import { DebuffType } from "ts/DebuffType";
 import Friendly from "ts/Friendly";
 import Random from "ts/Random";
-import Icon from "images/confusion.svg";
-import Animations from "ts/Animations";
-import { Animation, AnimationWrapper } from "ts/Animation";
 
 export default class AngryTweet extends Action {
   private _cast = () => {

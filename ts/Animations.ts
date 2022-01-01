@@ -1,4 +1,4 @@
-import { Animation, AnimationWrapper } from "./Animation";
+import { AnimationWrapper } from "./Animation";
 import AnimationHelpers from "./AnimationHelpers";
 
 class Animations {

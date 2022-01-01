@@ -1,15 +1,14 @@
 import Boss from "ts/Boss";
-import Random from "ts/Random";
+import Friendly from "ts/Friendly";
 import Loop from "ts/Loop";
 import Loops from "ts/Loops";
-import Player from "ts/Player";
-import Friendly from "ts/Friendly";
 import Party from "ts/Party";
+import Player from "ts/Player";
+import Random from "ts/Random";
 import Trigger from "ts/Trigger";
-import Enrage from "./Shared/Actions/Enrage";
 import AngryTweet from "./DonnyFrump/Actions/AngryTweet";
 import Uncertainty from "./DonnyFrump/Actions/Uncertainty";
-import Action from "ts/Action";
+import Enrage from "./Shared/Actions/Enrage";
 
 // The encounter begins and Donny Frump is not pleased people on Twitter are being mean to him.
 // He casts Uncertainty on the entire raid, a debuff that does damage over time and

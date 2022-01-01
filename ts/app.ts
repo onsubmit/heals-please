@@ -1,6 +1,6 @@
 import * as ko from "knockout";
-import applyExtensions from "./KnockoutExtensions";
 import GameViewModel from "./GameViewModel";
+import applyExtensions from "./KnockoutExtensions";
 
 ko.components.register("game", GameViewModel);
 

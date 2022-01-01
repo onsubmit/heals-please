@@ -1,12 +1,10 @@
+import Icon from "images/food-poisoning.svg";
 import Action from "ts/Action";
-import AnimationHelpers from "ts/AnimationHelpers";
+import { Animation, AnimationWrapper } from "ts/Animation";
+import Animations from "ts/Animations";
 import { DotDebuff } from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 import Random from "ts/Random";
-import Icon from "images/food-poisoning.svg";
-import { DebuffType } from "ts/DebuffType";
-import { Animation, AnimationWrapper } from "ts/Animation";
-import Animations from "ts/Animations";
 
 export default class ThrowFood extends Action {
   private _cast = () => {

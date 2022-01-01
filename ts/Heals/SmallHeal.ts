@@ -1,8 +1,8 @@
-import Heal from "ts/Heal";
-import Random from "ts/Random";
-import Friendly from "ts/Friendly";
 import { ActionName } from "ts/ActionName";
+import Friendly from "ts/Friendly";
+import Heal from "ts/Heal";
 import { HealParams } from "ts/HealParams";
+import Random from "ts/Random";
 
 export default class SmallHeal extends Heal {
   private _critChance: number;

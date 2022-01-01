@@ -1,11 +1,11 @@
-import AnimationHelpers from "ts/AnimationHelpers";
-import Heal from "ts/Heal";
-import Friendly from "ts/Friendly";
-import HotBuff from "ts/HotBuff";
 import Icon from "images/renew.svg";
 import { ActionName } from "ts/ActionName";
+import AnimationHelpers from "ts/AnimationHelpers";
+import Friendly from "ts/Friendly";
+import Heal from "ts/Heal";
 import HealOutcome from "ts/HealOutcome";
 import { HealParams } from "ts/HealParams";
+import HotBuff from "ts/HotBuff";
 import { VelocityCallbackFn, VelocityResult } from "velocity-animate";
 
 export default class Renew extends Heal {

@@ -1,9 +1,9 @@
+import * as ko from "knockout";
 import Velocity, {
   Properties,
   VelocityElements,
   VelocityProperty,
 } from "velocity-animate";
-import * as ko from "knockout";
 import { Animation, AnimationWrapper } from "./Animation";
 
 export default function applyExtensions() {

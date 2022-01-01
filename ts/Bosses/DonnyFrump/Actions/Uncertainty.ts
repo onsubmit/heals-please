@@ -1,10 +1,9 @@
-import Action from "ts/Action";
-import AnimationHelpers from "ts/AnimationHelpers";
-import { DotDebuff } from "ts/DotDebuff";
-import Friendly from "ts/Friendly";
 import Icon from "images/uncertainty.svg";
+import Action from "ts/Action";
 import { Animation, AnimationWrapper } from "ts/Animation";
 import Animations from "ts/Animations";
+import { DotDebuff } from "ts/DotDebuff";
+import Friendly from "ts/Friendly";
 
 export default class Uncertainty extends Action {
   private _cast = () => {

@@ -1,12 +1,12 @@
 import * as ko from "knockout";
+import Action from "ts/Action";
+import ActionObservable from "./ActionObservable";
 import Friendly from "./Friendly";
+import Loop from "./Loop";
+import Loops from "./Loops";
 import Party from "./Party";
 import Player from "./Player";
-import Loops from "./Loops";
-import PreviousValueTracker from "./PreviousValueTracker";
-import Action from "ts/Action";
 import Trigger from "./Trigger";
-import Loop from "./Loop";
 
 export default abstract class Boss {
   private _adjustHealth = (amount: number) => {
@@ -47,15 +47,10 @@ export default abstract class Boss {
   protected abstract triggers: Trigger[];
 
   cast = (action: Action) => {
-    this.currentCasts.push(
-      ko.utils.extend(new PreviousValueTracker<Action>(action), {
-        action: ko.observable().extend({ notify: "always" }),
-        name: "foo", // TODO, fix this so we don't need to extend anything
-      })
-    );
+    this.currentCasts.push(new ActionObservable<Action>(action));
   };
 
-  currentCasts: ko.ObservableArray<Action>;
+  currentCasts: ko.ObservableArray<ActionObservable<Action>>;
   engage = () => {
     this.initialEvents.forEach((initialEvent: () => void) => {
       initialEvent();
@@ -122,7 +117,7 @@ export default abstract class Boss {
     this.health = ko.observable(health);
     this.isDead = ko.observable(false);
     this.targets = ko.observableArray<Friendly>([]);
-    this.currentCasts = ko.observableArray<Action>([]);
+    this.currentCasts = ko.observableArray<ActionObservable<Action>>([]);
 
     this.maxHealth = health;
 

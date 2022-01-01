@@ -1,5 +1,4 @@
 import * as ko from "knockout";
-import AnimationHelpers from "./AnimationHelpers";
 import Animations from "./Animations";
 import Buff from "./Buff";
 import Debuff from "./Debuff";
