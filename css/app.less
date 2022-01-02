@@ -7,6 +7,19 @@ body {
   background: rgb(78, 67, 57);
 }
 
+a:link,
+a:visited {
+  color: #000;
+}
+
+a:hover {
+  color: #111;
+}
+
+a:active {
+  color: #222;
+}
+
 .outer {
   padding: 10px;
   min-width: 300px;
@@ -107,6 +120,44 @@ body {
   position: absolute;
   width: 150px;
   min-height: 400px;
+}
+
+.stats {
+  margin-top: 110px;
+  position: absolute;
+  width: calc(100% - 25px);
+  max-height: 310px;
+  overflow-y: auto;
+  color: #fff;
+  border: 1px solid #000;
+  box-shadow: 0 0 5px #000;
+  background: #000;
+  font-size: 12px;
+
+  > table {
+    width: 100%;
+
+    th,
+    td {
+      padding: 1px 2px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    thead tr {
+      background-color: #333;
+      color: #fff;
+      text-align: left;
+    }
+
+    tbody tr:nth-of-type(even) {
+      background-color: #222;
+    }
+
+    tbody tr:nth-of-type(odd) {
+      background-color: #111;
+    }
+  }
 }
 
 .frame {
@@ -302,6 +353,16 @@ body {
   .health-bar-text();
   .absolute-center();
   line-height: 24px;
+}
+
+.center-link {
+  text-align: center;
+  font-size: 12px;
+}
+
+.toggleStats {
+  .center-link();
+  margin-bottom: 20px;
 }
 
 .actions {

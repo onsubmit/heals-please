@@ -17,6 +17,7 @@ import HealOutcome from "./HealOutcome";
 import Party from "./Party";
 import Player from "./Player";
 import Random from "./Random";
+import Stats from "./Stats";
 
 class GameViewModel {
   private _cancelCast = () => {
@@ -87,6 +88,19 @@ class GameViewModel {
       this.player.spendMana(action.manaCost);
     }
 
+    if (!outcome.targetDied) {
+      const heals = `${outcome.isCrit ? "crits" : "heals"}`;
+      let message = `${action.name} ${heals} ${action.target.name} for ${outcome.effectiveAmount}`;
+
+      if (outcome.overheal) {
+        message += ` (${outcome.overheal} overheal)`;
+      }
+
+      message += ".";
+
+      this.addLog(message);
+    }
+
     if (this._queuedAction) {
       this._castAction(this._queuedAction);
       this._queuedAction = null;
@@ -97,6 +111,8 @@ class GameViewModel {
 
   private _onBossKill = () => {
     const bossName = this.boss().name;
+
+    this.addLog(`${bossName} was defeated!`);
 
     let heal: ActionName | undefined;
     let boss: Boss | undefined;
@@ -141,21 +157,31 @@ class GameViewModel {
 
   private _onFriendlyAttack = (damageModifier: number) => {
     return ((innerDamageModifier: number) => {
-      return () => {
+      return (friendly: Friendly) => {
         const isCrit = Math.random() < 0.2;
         let attackAmount =
           innerDamageModifier * Random.fromIntegerIntervalInclusive(50, 80);
 
         if (isCrit) {
-          attackAmount = Math.round(attackAmount * 2);
+          attackAmount = attackAmount * 2;
         }
 
+        attackAmount = Math.round(attackAmount);
+
+        const attacks = isCrit ? "crits" : "attacks";
+        const message = `${friendly.name} ${attacks} ${
+          this.boss().name
+        } for ${attackAmount}`;
+
+        this.addLog(message);
         this.boss().harm(attackAmount);
       };
     })(damageModifier || 1);
   };
 
   private _onFriendlyDeath = (friendly: Friendly) => {
+    this.addLog(`${friendly.name} died.`);
+
     friendly.stop();
 
     if (this.player.target() === friendly) {
@@ -187,6 +213,10 @@ class GameViewModel {
   private _queuedAction: Heal | null = null;
 
   allowPause: boolean = false;
+  addLog = (message: string) => {
+    console.log(message);
+  };
+
   animations: typeof Animations = Animations;
 
   boss: ko.Observable<Boss>;
@@ -236,17 +266,27 @@ class GameViewModel {
   currentCast: ActionObservable<Heal> = new ActionObservable<Heal>();
 
   engageBoss = () => {
+    this.addLog(`${this.boss().name} engaged.`);
     this.boss().engage();
     this.friendlies.start();
     this.inCombat(true);
   };
 
   friendlies: Party;
+  stats = Stats;
   inCombat: ko.Observable<boolean>;
   isPaused: ko.Observable<boolean>;
   joinGroupButton_onClick = () => {
     this.showIntro(false);
   };
+
+  toggleStats_onClick = () => {
+    this.showStats(!this.showStats());
+  };
+
+  toggleStatsLink = ko.pureComputed<string>(() => {
+    return this.showStats() ? "Hide stats" : "Show stats";
+  });
 
   pause = () => {
     this.isPaused(true);
@@ -258,6 +298,11 @@ class GameViewModel {
   };
 
   player: Player;
+
+  resetStats_onClick = () => {
+    this.stats.reset();
+  };
+
   resume = () => {
     this.isPaused(false);
 
@@ -276,9 +321,11 @@ class GameViewModel {
   };
 
   showIntro: ko.Observable<boolean>;
+  showStats: ko.Observable<boolean>;
 
   constructor() {
     this.showIntro = ko.observable(true);
+    this.showStats = ko.observable(false);
     this.isPaused = ko.observable(false);
     this.inCombat = ko.observable(false);
 

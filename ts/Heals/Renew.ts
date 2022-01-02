@@ -11,10 +11,11 @@ import { VelocityCallbackFn, VelocityResult } from "velocity-animate";
 export default class Renew extends Heal {
   private _critChance: number;
   private _critMultiplier: number;
+  private _hasTicked: boolean = false;
 
   protected castTime: number = 250;
   protected getOutcome = (): HealOutcome => {
-    const healOutcome = new HealOutcome();
+    const healOutcome = new HealOutcome(this.name);
     healOutcome.manaSpent = this.manaCost;
     return healOutcome;
   };
@@ -42,13 +43,15 @@ export default class Renew extends Heal {
           healAmount = Math.round(healAmount * this._critMultiplier);
         }
 
-        renewTarget.heal(healAmount, isCrit);
+        renewTarget.heal(this.name, healAmount, isCrit, true, !this._hasTicked);
+
+        this._hasTicked = true;
       },
     });
 
     this.target.applyBuff(renewBuff);
 
-    const healOutcome = new HealOutcome();
+    const healOutcome = new HealOutcome(this.name);
     return healOutcome;
   };
 

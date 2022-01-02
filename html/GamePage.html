@@ -34,6 +34,31 @@
 <!-- /ko -->
 <!-- ko ifnot: showIntro -->
 <div class="outer no-select">
+    <!-- ko if: showStats -->
+    <div class="stats">
+        <table>
+            <thead>
+                <tr>
+                    <th>Heal</th>
+                    <th>#</th>
+                    <th>Crits</th>
+                    <th>Total</th>
+                    <th>Overheal</th>
+                    <th>Efficiency</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: stats.healStats">
+                <td data-bind="text: name"></td>
+                <td data-bind="text: numHeals"></td>
+                <td data-bind="text: numCrits"></td>
+                <td data-bind="text: total"></td>
+                <td data-bind="text: overheal"></td>
+                <td data-bind="text: efficiency"></td>
+            </tbody>
+        </table>
+    </div>
+    <!-- /ko -->
+    <!-- ko ifnot: showStats -->
     <div class="raid">
         <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">
             <div class="party-member">
@@ -75,6 +100,7 @@
             </div>
         </div>
     </div>
+    <!-- /ko -->
     <div class="boss frame" data-bind="css: { 'casting': boss().currentCasts }">
         <div class="health-bar-background">
             <!-- ko if: !inCombat() || allowPause -->
@@ -87,7 +113,7 @@
             </div>
             <!-- /ko -->
             <div class="health-bar" data-bind="style: { width: boss().healthPercentageString }">
-                <div class="boss-name nowrap" data-bind="text: boss().name">&nbsp;</div>
+                <div class="boss-name nowrap" data-bind="text: boss().label">&nbsp;</div>
             </div>
         </div>
         <div class="boss-cast-bars" data-bind="foreach: { data: boss().currentCasts, as: 'bossCast' }">
@@ -105,6 +131,12 @@
     </div>
 </div>
 <div class="bottom no-select">
+    <!-- ko if: showStats -->
+    <div class="center-link"><a href="#" data-bind="click: resetStats_onClick">Reset stats</a></div>
+    <!-- /ko -->
+    <!-- ko ifnot: inCombat -->
+    <div class="toggleStats"><a href="#" data-bind="text: toggleStatsLink, click: toggleStats_onClick"></a></div>
+    <!-- /ko -->
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="

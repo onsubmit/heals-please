@@ -25,6 +25,8 @@ export default abstract class Boss {
     }
   };
 
+  private _isStarted: boolean = false;
+
   private _onDeath = () => {
     this.stop();
     this.isDead(true);
@@ -61,8 +63,8 @@ export default abstract class Boss {
     this.start();
   };
 
-  finishCast = (action: any) => {
-    this.currentCasts.remove((cast: any) => {
+  finishCast = (action: Action) => {
+    this.currentCasts.remove((cast: ActionObservable<Action>) => {
       return cast.value() === action;
     });
   };
@@ -72,6 +74,12 @@ export default abstract class Boss {
   harm = (amount: number) => this._adjustHealth(0 - amount);
 
   health: ko.Observable<number>;
+  label: ko.PureComputed<string> = ko.pureComputed(
+    () =>
+      `${this.name} (${this.health().toLocaleString(
+        "en-US"
+      )}/${this.maxHealth.toLocaleString("en-US")})`
+  );
   healthPercentageString: ko.PureComputed<string> = ko.pureComputed(
     () => `${(100.0 * this.health()) / this.maxHealth}%`
   );
@@ -93,6 +101,11 @@ export default abstract class Boss {
   };
 
   start = () => {
+    if (this._isStarted) {
+      return;
+    }
+
+    this._isStarted = true;
     this.loops.start();
   };
 

@@ -1,4 +1,5 @@
 import * as ko from "knockout";
+import { ActionName } from "./ActionName";
 import Animations from "./Animations";
 import Buff from "./Buff";
 import Debuff from "./Debuff";
@@ -7,6 +8,7 @@ import { FriendlyParams } from "./FriendlyParams";
 import HealOutcome from "./HealOutcome";
 import Loop from "./Loop";
 import Loops from "./Loops";
+import Stats from "./Stats";
 
 export default class Friendly {
   private _adjustHealth = (amount: number): number => {
@@ -25,6 +27,10 @@ export default class Friendly {
 
     this.health(newHealth);
     return 0;
+  };
+
+  private _attack = () => {
+    this._onAttackCallback(this);
   };
 
   private _attackInterval: number;
@@ -51,8 +57,9 @@ export default class Friendly {
   };
 
   private _maxHealth: number;
-  private _onAttackCallback: () => void;
+  private _onAttackCallback: (friendly: Friendly) => void;
   private _onDeathCallback: (friendly: Friendly) => any;
+  private _stats = Stats;
 
   protected _loops: Loops;
   protected _onDeath = () => {
@@ -88,10 +95,18 @@ export default class Friendly {
     return this._adjustHealth(0 - amount);
   };
 
-  heal = (amount: number, isCrit: boolean): HealOutcome => {
-    const healOutcome = new HealOutcome();
+  heal = (
+    healName: ActionName,
+    amount: number,
+    isCrit: boolean,
+    isFromHotBuff: boolean = false,
+    isFirstHotTick: boolean = false
+  ): HealOutcome => {
+    const healOutcome = new HealOutcome(healName);
     healOutcome.amount = amount;
     healOutcome.isCrit = isCrit;
+    healOutcome.isFromHotBuff = isFromHotBuff;
+    healOutcome.isFirstHotTick = isFirstHotTick;
 
     if (this.isDead()) {
       healOutcome.targetDied = true;
@@ -102,6 +117,7 @@ export default class Friendly {
 
     this.lastHealInfo(healOutcome);
 
+    this._stats.update(healOutcome);
     return healOutcome;
   };
 
@@ -212,7 +228,11 @@ export default class Friendly {
   };
 
   stop = () => {
-    this._loops.stop();
+    if (!this.isPlayer) {
+      // Don't stop regenerating mana.
+      this._loops.stop();
+    }
+
     this.buffs().forEach(function (buff: Buff) {
       buff.stop();
     });
@@ -243,7 +263,7 @@ export default class Friendly {
     this._loops = new Loops(
       new Loop(
         "Attack",
-        this._onAttackCallback,
+        this._attack,
         this._attackInterval,
         this._initialAttackDelay
       )

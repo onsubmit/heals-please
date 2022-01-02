@@ -5,6 +5,6 @@ export type FriendlyParams = {
   maxHealth?: number;
   initialAttackDelay?: number;
   attackInterval?: number;
-  onAttack: () => void;
+  onAttack: (friendly: Friendly) => void;
   onDeath: (friendly: Friendly) => void;
 };

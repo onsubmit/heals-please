@@ -30,10 +30,10 @@ export default abstract class Heal {
 
   protected abstract castTime: number;
   protected abstract getOutcome: () => HealOutcome;
-  protected target: Friendly;
+  target: Friendly;
 
   cancel = () => {
-    const outcome = new HealOutcome();
+    const outcome = new HealOutcome(this.name);
     outcome.wasCancelled = true;
 
     this._onCancel(this, outcome);

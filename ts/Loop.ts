@@ -5,6 +5,8 @@ enum LoopState {
 }
 
 export default class Loop {
+  private _callback: () => void;
+  private _delay: (() => number) | number;
   private _loop = (delayOverride?: number) => {
     this._runLoopIteration(delayOverride);
   };
@@ -13,11 +15,11 @@ export default class Loop {
     this._timerStart = new Date().getTime();
     this._timerRemaining =
       delayOverride ||
-      (typeof this.delay === "function" ? this.delay() : this.delay);
+      (typeof this._delay === "function" ? this._delay() : this._delay);
 
     this._timerId = setTimeout(() => {
       if (this._state === LoopState.Running) {
-        this.callback();
+        this._callback();
       }
 
       // The callback could have paused/stopped the loop.
@@ -27,13 +29,12 @@ export default class Loop {
     }, this._timerRemaining);
   };
 
+  private _startDelay: number;
   private _state: LoopState = LoopState.Stopped;
   private _timerId: number = -1;
   private _timerRemaining: number = -1;
   private _timerStart: number = -1;
 
-  callback: () => void;
-  delay: (() => number) | number;
   name: string;
   pause = () => {
     if (this._state !== LoopState.Running) {
@@ -59,14 +60,13 @@ export default class Loop {
   start = () => {
     this._state = LoopState.Running;
 
-    if (this.startDelay) {
-      setTimeout(this._loop, this.startDelay);
+    if (this._startDelay) {
+      setTimeout(this._loop, this._startDelay);
     } else {
       this._loop();
     }
   };
 
-  startDelay: number;
   stop = () => {
     this._timerStart = -1;
     this._timerRemaining = -1;
@@ -80,11 +80,11 @@ export default class Loop {
     name: string,
     callback: () => void,
     delay: (() => number) | number,
-    startDelay?: number
+    startDelay: number = 0
   ) {
     this.name = name;
-    this.callback = callback;
-    this.delay = delay;
-    this.startDelay = startDelay || 0;
+    this._callback = callback;
+    this._delay = delay;
+    this._startDelay = startDelay;
   }
 }

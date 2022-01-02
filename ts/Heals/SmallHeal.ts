@@ -19,7 +19,7 @@ export default class SmallHeal extends Heal {
       healAmount = Math.round(healAmount * this._critMultiplier);
     }
 
-    return this.target.heal(healAmount, isCrit);
+    return this.target.heal(this.name, healAmount, isCrit);
   };
 
   manaCost: number = 40;
