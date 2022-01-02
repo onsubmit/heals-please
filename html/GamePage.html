@@ -34,6 +34,47 @@
 <!-- /ko -->
 <!-- ko ifnot: showIntro -->
 <div class="outer no-select">
+    <div class="raid">
+        <div class="party" data-bind="foreach: { data: friendlies.members, as: 'member' }">
+            <div class="party-member">
+                <div class="frame" data-bind="
+                    click: $parent.player.setTarget,
+                    css:
+                        {
+                            'selected': $parent.player.target() === member,
+                            'disabled': member.isDead
+                        }">
+                    <div class="party-member-name nowrap" data-bind="
+                        text: member.name,
+                        css: { 'targeted': $parent.boss().targets.indexOf(member) !== -1 }">
+                    </div>
+                    <div class="health-bar-background">
+                        <div class="health-bar" data-bind="style: { width: member.healthPercentageString }">&nbsp;</div>
+                        <div class="health-bar-text nowrap" data-bind="text: member.healthStatusString"></div>
+                        <div class="health-bar-last-heal nowrap" data-bind="
+                            text: member.lastHealStatusString,
+                            animate: member.lastHealInfo() && animations.fadeOut1000,
+                            css:
+                                {
+                                    'bold': member.lastHealInfo() && member.lastHealInfo().isCrit,
+                                    'bright-green': member.lastHealInfo() && member.lastHealInfo().effectiveAmount > 0
+                                }">
+                        </div>
+                    </div>
+                </div>
+                <div class="party-member-buffs-container">
+                    <div class="party-member-buffs" data-bind="foreach: { data: member.buffs, as: 'buff' }">
+                        <a href="#" data-bind="click: $parents[1].showBuff.bind(null, $data, member)"><img data-bind="attr: { src: buff.icon, title: buff.tooltip }" /></a>
+                    </div>
+                </div>
+                <div class="party-member-debuffs-container">
+                    <div class="party-member-debuffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
+                        <a href="#" data-bind="click: $parents[1].showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon, title: debuff.tooltip }" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="boss frame" data-bind="css: { 'casting': boss().currentCasts }">
         <div class="health-bar-background">
             <!-- ko if: !inCombat() || allowPause -->
@@ -52,54 +93,13 @@
         <div class="boss-cast-bars" data-bind="foreach: { data: boss().currentCasts, as: 'bossCast' }">
             <div class="cast-bar-background">
                 <div class="cast-bar" data-bind="
-                    animate: bossCast.value() || $parent.animations.fadeOutCastBar,
+                    animate: bossCast.value() || $parent.animations.fadeOut200,
                     animateAction: bossCast && bossCast.action">&nbsp;</div>
 
                 <div class="cast-bar-text nowrap" data-bind="
                     css: { 'casting': bossCast.value },
                     text: bossCast && bossCast.previous() && bossCast.previous().name,
-                    animate: !bossCast.value && $parent.animations.fadeOutCastBar"></div>
-            </div>
-        </div>
-    </div>
-    <div class="raid">
-        <div class="party" data-bind="draggable: !inCombat(), foreach: { data: friendlies.members, as: 'member' }">
-            <div class="party-member">
-                <div class="frame" data-bind="
-                    click: $parent.player.setTarget,
-                    css:
-                        {
-                            'selected': $parent.player.target() === member,
-                            'disabled': member.isDead
-                        }">
-                    <div class="party-member-name nowrap" data-bind="
-                        text: member.name,
-                        css: { 'targeted': $parent.boss().targets.indexOf(member) !== -1 }">
-                    </div>
-                    <div class="health-bar-background">
-                        <div class="health-bar" data-bind="style: { width: member.healthPercentageString }">&nbsp;</div>
-                        <div class="health-bar-text nowrap" data-bind="text: member.healthStatusString"></div>
-                        <div class="health-bar-last-heal nowrap" data-bind="
-                            text: member.lastHealStatusString,
-                            animate: member.lastHealInfo() && animations.fastFadeOut,
-                            css:
-                                {
-                                    'bold': member.lastHealInfo() && member.lastHealInfo().isCrit,
-                                    'bright-green': member.lastHealInfo() && member.lastHealInfo().effectiveAmount > 0
-                                }">
-                        </div>
-                    </div>
-                </div>
-                <div class="party-member-buffs-container">
-                    <div class="party-member-buffs" data-bind="foreach: { data: member.buffs, as: 'buff' }">
-                        <a href="#" data-bind="click: $root.showBuff.bind(null, $data, member)"><img data-bind="attr: { src: buff.icon, title: buff.tooltip }" /></a>
-                    </div>
-                </div>
-                <div class="party-member-debuffs-container">
-                    <div class="party-member-debuffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
-                        <a href="#" data-bind="click: $root.showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon, title: debuff.tooltip }" /></a>
-                    </div>
-                </div>
+                    animate: !bossCast.value && $parent.animations.fadeOut200"></div>
             </div>
         </div>
     </div>
@@ -109,13 +109,13 @@
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
                 css: { 'gcd': (currentCast.value() && currentCast.value().isInstant) || (currentCast.previous() && currentCast.previous().isInstant) },
-                animate: currentCast.value() || animations.fadeOutCastBar,
+                animate: currentCast.value() || animations.fadeOut200,
                 animateAction: currentCast.action">&nbsp;</div>
 
             <div class="cast-bar-text nowrap" data-bind="
                 css: { 'casting': currentCast.value },
                 text: currentCast.previous() && currentCast.previous().name,
-                animate: !currentCast.value() && animations.fadeOutCastBar"></div>
+                animate: !currentCast.value() && animations.fadeOut200"></div>
 
             <!-- ko if: currentCast.value() && !currentCast.value().isInstant -->
             <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg" alt="Cancel cast" title="Cancel cast"></img></div>

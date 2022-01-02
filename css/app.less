@@ -1,382 +1,384 @@
 body {
-    font-family: georgia, arial, helvetica, sans-serif;
-    font-size: 1.0em;
-    line-height: 1.3em;
-    margin: 0;
-    padding: 0;
-    background: rgb(78, 67, 57);
+  font-family: georgia, arial, helvetica, sans-serif;
+  font-size: 1em;
+  line-height: 1.3em;
+  margin: 0;
+  padding: 0;
+  background: rgb(78, 67, 57);
 }
 
 .outer {
-    padding: 10px;
-    min-width: 300px;
+  padding: 10px;
+  min-width: 300px;
 }
 
 .bottom {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    width: calc(~"100% - 20px");
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  width: calc(~"100% - 20px");
 }
 
 .intro {
-    text-align: center;
-    .white-text-with-background();
+  text-align: center;
+  .white-text-with-background();
 
-    * {
-        line-height: 1.0em;
+  * {
+    line-height: 1em;
+  }
+
+  h1 {
+    font-size: 4em;
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  button {
+    font-family: georgia, arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 2em;
+    padding: 10px;
+    margin-bottom: 30px;
+  }
+
+  .help {
+    color: #ccc;
+
+    h5 {
+      font-size: 1.2em;
+      margin-bottom: 5px;
     }
 
-    h1 {
-        font-size: 4.0em;
+    table {
+      margin-left: auto;
+      margin-right: auto;
+      border-spacing: 0;
+      border-collapse: collapse;
     }
 
-    h2 {
-        font-size: 2.0em;
+    tr {
+      border-bottom: 1px solid #bbb;
     }
 
-    button {
-        font-family: georgia, arial, helvetica, sans-serif;
-        font-weight: bold;
-        font-size: 2.0em;
-        padding: 10px;
-        margin-bottom: 30px;
+    td {
+      text-align: left;
     }
 
-    .help {
-        color: #ccc;
-
-        h5 {
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-
-        table {
-            margin-left: auto;
-            margin-right: auto;
-            border-spacing: 0;
-            border-collapse: collapse;
-          }
-
-          tr {
-            border-bottom : 1px solid #bbb;
-          }
-
-          td {
-              text-align: left;
-          }
-
-          td.key {
-            text-align: right;
-            vertical-align: top;
-            font-weight: bold;
-            padding: 8px;
-        }
+    td.key {
+      text-align: right;
+      vertical-align: top;
+      font-weight: bold;
+      padding: 8px;
     }
+  }
 }
 
 .game-actions {
-    float: right;
-    margin: 5px;
+  float: right;
+  margin: 5px;
 
-    div {
-        background: #333;
-        padding: 3px;
-        width: 60px;
-        text-align: center;
-        font-size: 0.8em;
-        .white-text-with-background();
-    }
+  div {
+    background: #333;
+    padding: 3px;
+    width: 60px;
+    text-align: center;
+    font-size: 0.8em;
+    .white-text-with-background();
+  }
 
-    div:active {
-        background: #000;
-    }
+  div:active {
+    background: #000;
+  }
 }
 
 .boss {
-    margin-bottom: 40px;
+  margin-bottom: 40px;
 }
 
 .boss-name {
-    padding: 10px;
-    .white-text-with-background();
+  padding: 10px;
+  .white-text-with-background();
 }
 
 .raid {
-    margin: 0;
-    width: 100%;
-    min-height: 400px;
+  margin-top: 110px;
+  position: absolute;
+  width: 150px;
+  min-height: 400px;
 }
 
 .frame {
-    cursor: pointer;
-    border: 1px solid #000;
-    box-shadow: 0 0 5px #000;
-    background: linear-gradient(to bottom, #666, #000);
-    color: #fff;
-    padding: 4px;
-    border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #000;
+  box-shadow: 0 0 5px #000;
+  background: linear-gradient(to bottom, #666, #000);
+  color: #fff;
+  padding: 4px;
+  border-radius: 4px;
 
-    &.thin {
-        padding: 1px;
-        border-radius: 1px;
-    }
+  &.thin {
+    padding: 1px;
+    border-radius: 1px;
+  }
 
-    &.unselectable {
-        cursor: default;
-    }
+  &.unselectable {
+    cursor: default;
+  }
 
-    div {
-        border-radius: 2px;
-    }
+  div {
+    border-radius: 2px;
+  }
 }
 
-
 .frame.selected {
-    border: 1px solid #fff;
+  border: 1px solid #fff;
 }
 
 .health-bar-background {
-    position: relative;
-    background: rgb(0, 24, 0);
-    border: 1px solid rgb(0, 24, 0);
+  position: relative;
+  background: rgb(0, 24, 0);
+  border: 1px solid rgb(0, 24, 0);
 }
 
 .health-bar {
-    background: linear-gradient(to top right, rgb(0, 200, 0), rgb(0, 150, 0));
+  background: linear-gradient(to top right, rgb(0, 200, 0), rgb(0, 150, 0));
 }
 
 .health-bar-text {
-    top: 0;
-    left: 4px;
-    position: absolute;
+  top: 0;
+  left: 4px;
+  position: absolute;
 
-    font-size: 16px;
-    .white-text-with-background();
+  font-size: 16px;
+  .white-text-with-background();
 }
 
 .health-bar-last-heal {
-    top: 0;
-    right: 4px;
-    position: absolute;
+  top: 0;
+  right: 4px;
+  position: absolute;
 
-    .background();
+  .background();
 }
 
 .party {
-    width: 150px;
-    z-index: 1;
+  width: 150px;
+  z-index: 1;
 
-    .frame {
-        margin: 0px 0px 10px 0px;
-        max-width: 150px;
-    }
+  .frame {
+    margin: 0px 0px 10px 0px;
+    max-width: 150px;
+  }
 }
 
 .party-member {
-    width: 100%;
-    max-width: 300px;
+  width: 100%;
+  max-width: 300px;
 
-    .health-bar {
-        text-align: center;
-    }
+  .health-bar {
+    text-align: center;
+  }
 }
 
 .party-member-name {
-    font-size: 16px;
-    line-height: 16px;
-    background: black;
-    border: 1px solid black;
-    padding: 4px;
+  font-size: 16px;
+  line-height: 16px;
+  background: black;
+  border: 1px solid black;
+  padding: 4px;
 
-    &.targeted {
-        background: linear-gradient(to top, #a00 , #300);
-        .white-text-with-background();
-    }
+  &.targeted {
+    background: linear-gradient(to top, #a00, #300);
+    .white-text-with-background();
+  }
 }
 
 .party-member-health {
-    background: red;
+  background: red;
 }
 
 .party-member-health-bar {
-    background: green;
+  background: green;
 }
 
-.party-member-buffs-container, .party-member-debuffs-container {
-    position: relative;
+.party-member-buffs-container,
+.party-member-debuffs-container {
+  position: relative;
 }
 
-.party-member-buffs, .party-member-debuffs {
-    position: absolute;
+.party-member-buffs,
+.party-member-debuffs {
+  position: absolute;
 
-    img {
-        margin-right: 2px;
-    }
+  img {
+    margin-right: 2px;
+  }
 
-    img:nth-last-child(1) {
-        margin: 0;
-    }
+  img:nth-last-child(1) {
+    margin: 0;
+  }
 }
 
 .party-member-buffs {
-    right: 60px;
-    bottom: 36px;
+  right: 60px;
+  bottom: 36px;
 }
 
 .party-member-debuffs {
-    right: 8px;
-    bottom: 36px;
+  right: 8px;
+  bottom: 36px;
 }
 
 .cast-bar-background {
-    background: rgb(24, 24, 0);
-    border-radius: 4px;
-    position: relative;
-    height: 24px;
+  background: rgb(24, 24, 0);
+  border-radius: 4px;
+  position: relative;
+  height: 24px;
 }
 
 .cast-bar {
-    background: linear-gradient(to top, rgb(219, 117, 0), rgb(104, 42, 0));
-    border-radius: 4px;
-    width: 0;
+  background: linear-gradient(to top, rgb(219, 117, 0), rgb(104, 42, 0));
+  border-radius: 4px;
+  width: 0;
 
-    text-align: center;
-    font-size: 16px;
-    line-height: 24px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
 
-    &.gcd {
-        background: linear-gradient(to top, rgb(117, 117, 117), rgb(42, 42, 42));
-    }
+  &.gcd {
+    background: linear-gradient(to top, rgb(117, 117, 117), rgb(42, 42, 42));
+  }
 }
 
 .cast-bar-text {
-    .health-bar-text();
-    .absolute-center();
-    line-height: 24px;
-    visibility: hidden;
+  .health-bar-text();
+  .absolute-center();
+  line-height: 24px;
+  visibility: hidden;
 
-    &.casting,
-    &.velocity-animating {
-        visibility: visible;
-    }
+  &.casting,
+  &.velocity-animating {
+    visibility: visible;
+  }
 }
 
 .cast-bar-cancel {
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    opacity: 0.5;
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  opacity: 0.5;
 
-    img {
-        width: 20px;
-        height: 20px;
-    }
+  img {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .mana-bar-container {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .mana-bar-background {
-    background: rgb(0, 0, 24);
-    border-radius: 4px;
-    position: relative;
-    height: 24px;
+  background: rgb(0, 0, 24);
+  border-radius: 4px;
+  position: relative;
+  height: 24px;
 }
 
 .mana-bar {
-    background: linear-gradient(to top, rgb(0, 0, 150), rgb(0, 0, 200));
-    border-radius: 4px;
-    width: 100%;
-    opacity: 1;
+  background: linear-gradient(to top, rgb(0, 0, 150), rgb(0, 0, 200));
+  border-radius: 4px;
+  width: 100%;
+  opacity: 1;
 
-    text-align: center;
-    font-size: 16px;
-    line-height: 24px;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .mana-bar-text {
-    .health-bar-text();
-    .absolute-center();
-    line-height: 24px;
+  .health-bar-text();
+  .absolute-center();
+  line-height: 24px;
 }
 
 .actions {
-    text-align: center;
+  text-align: center;
 }
 
 .action {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    vertical-align: top;
-    margin-right: 10px;
-    display: inline-block;
-    background: rgb(22, 22, 22);
-    border: 1px solid #ccc;
-    box-shadow: inset 1px 1px 5px rgb(128,128,128), 0 0 10px rgb(0,0,0);
-    .white-text-with-background();
+  position: relative;
+  width: 60px;
+  height: 60px;
+  vertical-align: top;
+  margin-right: 10px;
+  display: inline-block;
+  background: rgb(22, 22, 22);
+  border: 1px solid #ccc;
+  box-shadow: inset 1px 1px 5px rgb(128, 128, 128), 0 0 10px rgb(0, 0, 0);
+  .white-text-with-background();
 }
 
 .action:active {
-    background: black;
+  background: black;
 }
 
 .action:nth-last-child(1) {
-    margin: 0;
+  margin: 0;
 }
 
 .action-name {
-    padding-top: 15px;
+  padding-top: 15px;
 }
 
 .shortcut {
-    position: absolute;
-    top: 0;
-    right: 4px;
-    opacity: 0.5;
-    .white-text-with-background();
+  position: absolute;
+  top: 0;
+  right: 4px;
+  opacity: 0.5;
+  .white-text-with-background();
 }
 
 .background {
-    text-shadow: 1px 1px 1px #000;
+  text-shadow: 1px 1px 1px #000;
 }
 
 .absolute-center {
-    top: 0;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, 0);
+  top: 0;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
 }
 
 .white-text-with-background {
-    color: white;
-    .background();
+  color: white;
+  .background();
 }
 
 .nowrap {
-    white-space: nowrap;
+  white-space: nowrap;
 }
 
 .bright-green {
-    color: #0f0;
+  color: #0f0;
 }
 
 .bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .disabled {
-    pointer-events: none;
-    opacity: 0.5;
+  pointer-events: none;
+  opacity: 0.5;
 }

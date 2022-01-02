@@ -18,13 +18,17 @@ const esLintWebpack = new ESLintWebpackPlugin({
 
 module.exports = {
     mode: "production",
-    entry: "./js/app.js",
+    entry: "./ts/app.ts",
     output: {
         path: path.resolve(__dirname, "out"),
         filename: "app.bundle.js"
     },
     module: {
         rules: [
+            {
+                test: /\.ts$/,
+                loader: "ts-loader"
+            },
             {
                 test: /knockout-latest(\.debug)?\.js$/,
                 loader: "expose-loader",
@@ -48,8 +52,7 @@ module.exports = {
                         loader: "file-loader",
                         options:
                         {
-                            name: "[path][name].[ext]",
-                            esModule: false
+                            name: "[path][name].[ext]"
                         }
                     }
                 ]
@@ -69,11 +72,11 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".js"],
+        extensions: [".ts"],
         alias: {
-            js: path.resolve(__dirname, "./js"),
-            html: path.resolve(__dirname, "./html"),
-            images: path.resolve(__dirname, "./images")
+            ts: path.resolve(__dirname, "ts"),
+            html: path.resolve(__dirname, "html"),
+            images: path.resolve(__dirname, "images")
         }
     },
     plugins: [
