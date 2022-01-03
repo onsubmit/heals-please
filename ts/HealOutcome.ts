@@ -36,7 +36,7 @@ export default class HealOutcome {
   }
 
   set isCrit(value: boolean) {
-    this._isFirstHotTick = value;
+    this._isCrit = value;
   }
 
   get isFromHotBuff(): boolean {
