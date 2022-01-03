@@ -1,9 +1,11 @@
 import * as ko from "knockout";
+import { HTMLorSVGElement, VelocityResult } from "velocity-animate";
 import { ActionName } from "./ActionName";
+import { AnimationWrapper } from "./Animation";
+import AnimationHelpers from "./AnimationHelpers";
+import Animations from "./Animations";
 import Friendly from "./Friendly";
 import { FriendlyParams } from "./FriendlyParams";
-import Loop from "./Loop";
-import Loops from "./Loops";
 
 export default class Player extends Friendly {
   private _adjustMana = (amount: number) => {
@@ -22,6 +24,7 @@ export default class Player extends Friendly {
   private _regenMana = () => {
     const increase = this.maxMana() * 0.05;
     this._adjustMana(increase);
+    this.regenManaNotifier(true);
   };
 
   protected override _onDeath = () => {
@@ -40,6 +43,10 @@ export default class Player extends Friendly {
       : null;
   };
 
+  hasFullMana: ko.PureComputed<boolean> = ko.pureComputed(
+    () => this.mana() >= this.maxMana()
+  );
+
   inGlobalCooldown: ko.Observable<boolean>;
   mana: ko.Observable<number>;
   manaPercentageString = ko.pureComputed(
@@ -49,6 +56,21 @@ export default class Player extends Friendly {
     () => `${this.mana()} / ${this.maxMana()}`
   );
   maxMana: ko.Observable<number>;
+  regenManaNotifier: ko.Observable<boolean> = ko
+    .observable(true)
+    .extend({ notify: "always" });
+
+  get regenManaAnimation(): AnimationWrapper {
+    const wrapper = { ...Animations.fullWidth5000 };
+    wrapper.animation.options.begin = () => this.regenManaNotifier(true);
+    wrapper.animation.options.complete = (
+      elements: VelocityResult<HTMLorSVGElement> | undefined
+    ) => {
+      AnimationHelpers.removeStyleAttribute(elements);
+      this._regenMana();
+    };
+    return wrapper;
+  }
   restoreManaToMax = () => {
     this.mana(this.maxMana());
   };
@@ -75,8 +97,5 @@ export default class Player extends Friendly {
     this.inGlobalCooldown = ko.observable(false);
 
     this.isPlayer = true;
-
-    this._loops = new Loops(new Loop("Regen Mana", this._regenMana, 5000));
-    this._loops.start();
   }
 }

@@ -9,15 +9,17 @@ body {
 
 a:link,
 a:visited {
-  color: #000;
+  .white-text-with-background();
 }
 
 a:hover {
-  color: #111;
+  color: #ccc;
+  .background();
 }
 
 a:active {
-  color: #222;
+  color: #aaa;
+  .background();
 }
 
 .outer {
@@ -349,6 +351,17 @@ a:active {
   line-height: 24px;
 }
 
+div.mana-regen-bar {
+  height: 2px;
+  width: 0;
+  background: #666;
+  opacity: 0.5;
+  border-radius: 0;
+  border-right: 1px solid #fff;
+  position: absolute;
+  bottom: 0;
+}
+
 .mana-bar-text {
   .health-bar-text();
   .absolute-center();
@@ -357,7 +370,6 @@ a:active {
 
 .center-link {
   text-align: center;
-  font-size: 12px;
 }
 
 .toggleStats {

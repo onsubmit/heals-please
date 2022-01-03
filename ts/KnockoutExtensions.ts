@@ -18,6 +18,7 @@ export default function applyExtensions() {
       ko.utils.arrayForEach(
         [].concat(currentCast.animation),
         (animationStep: Animation) => {
+          animationStep.options.easing = "linear";
           Velocity(element, animationStep.properties, animationStep.options);
         }
       );

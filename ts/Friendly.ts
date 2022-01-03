@@ -228,10 +228,7 @@ export default class Friendly {
   };
 
   stop = () => {
-    if (!this.isPlayer) {
-      // Don't stop regenerating mana.
-      this._loops.stop();
-    }
+    this._loops.stop();
 
     this.buffs().forEach(function (buff: Buff) {
       buff.stop();
