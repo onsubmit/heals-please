@@ -6,6 +6,7 @@ import Party from "ts/Party";
 import Player from "ts/Player";
 import Random from "ts/Random";
 import Trigger from "ts/Trigger";
+import { BossName } from "./BossName";
 import ThrowFood from "./GordoRamzee/Actions/ThrowFood";
 import Enrage from "./Shared/Actions/Enrage";
 
@@ -73,7 +74,7 @@ export default class GordoRamzee extends Boss {
   protected loops: Loops;
   protected triggers: Trigger[];
 
-  name: string;
+  name: BossName;
   onDeathOfFriendly = (friendly: Friendly): void => {
     if (friendly === this._tank) {
       // The tank just died.
@@ -106,7 +107,7 @@ export default class GordoRamzee extends Boss {
   ) {
     super(60000, player, tank, raid, onDeathCallback);
 
-    this.name = "Gordo Ramzee";
+    this.name = BossName.GordoRamzee;
     this._isEnraged = false;
 
     this.loops = new Loops(

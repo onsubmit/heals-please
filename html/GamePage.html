@@ -103,7 +103,7 @@
     <!-- /ko -->
     <div class="boss frame" data-bind="css: { 'casting': boss().currentCasts }">
         <div class="health-bar-background">
-            <!-- ko if: !inCombat() || allowPause -->
+            <!-- ko if: !showStats() && (!inCombat() || allowPause) -->
             <div class="game-actions frame thin">
                 <div data-bind="click: engageBoss, visible: !inCombat() && !boss().isDead()">Engage</div>
                 <!-- ko if: allowPause -->

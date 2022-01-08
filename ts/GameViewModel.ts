@@ -6,8 +6,8 @@ import ActionObservable from "./ActionObservable";
 import AnimationHelpers from "./AnimationHelpers";
 import Animations from "./Animations";
 import Boss from "./Boss";
-import DonnyFrump from "./Bosses/DonnyFrump";
-import GordoRamzee from "./Bosses/GordoRamzee";
+import { BossName } from "./Bosses/BossName";
+import BossFactory from "./BossFactory";
 import Buff from "./Buff";
 import Debuff from "./Debuff";
 import Friendly from "./Friendly";
@@ -17,6 +17,7 @@ import HealOutcome from "./HealOutcome";
 import Party from "./Party";
 import Player from "./Player";
 import Random from "./Random";
+import Rewards from "./Rewards";
 import Stats from "./Stats";
 
 class GameViewModel {
@@ -114,19 +115,6 @@ class GameViewModel {
 
     this.addLog(`${bossName} was defeated!`);
 
-    let heal: ActionName | undefined;
-    let boss: Boss | undefined;
-    switch (bossName) {
-      case "Gordo Ramzee":
-        heal = ActionName.Renew;
-        boss = new DonnyFrump(
-          this.player,
-          this.friendlies.members[0],
-          this.friendlies,
-          this._onBossKill
-        );
-    }
-
     const promptFunction = (message: string) => {
       setTimeout(() => {
         this.friendlies.stop();
@@ -139,17 +127,26 @@ class GameViewModel {
       }, 0);
     };
 
-    if (heal && boss) {
+    const reward = Rewards.get(bossName);
+    if (reward) {
       promptFunction(
         "Good job. You've unlocked the '" +
-          heal +
+          reward.healName +
           "' spell. It may come in handy against " +
-          boss.name +
+          reward.bossName +
           "."
       );
 
-      this.player.actions.push(heal);
-      this.boss(boss);
+      this.player.actions.push(reward.healName);
+      this.boss(
+        BossFactory.create(
+          reward.bossName,
+          this.player,
+          this.friendlies.members[0],
+          this.friendlies,
+          this._onBossKill
+        )
+      );
     } else {
       promptFunction("You win!");
     }
@@ -212,13 +209,12 @@ class GameViewModel {
 
   private _queuedAction: Heal | null = null;
 
-  allowPause: boolean = false;
   addLog = (message: string) => {
     console.log(message);
   };
 
+  allowPause: boolean = true;
   animations: typeof Animations = Animations;
-
   boss: ko.Observable<Boss>;
   cancelCast = () => {
     const currentCast = this.currentCast.value();
@@ -264,7 +260,6 @@ class GameViewModel {
   };
 
   currentCast: ActionObservable<Heal> = new ActionObservable<Heal>();
-
   engageBoss = () => {
     this.addLog(`${this.boss().name} engaged.`);
     this.boss().engage();
@@ -273,20 +268,11 @@ class GameViewModel {
   };
 
   friendlies: Party;
-  stats = Stats;
   inCombat: ko.Observable<boolean>;
   isPaused: ko.Observable<boolean>;
   joinGroupButton_onClick = () => {
     this.showIntro(false);
   };
-
-  toggleStats_onClick = () => {
-    this.showStats(!this.showStats());
-  };
-
-  toggleStatsLink = ko.pureComputed<string>(() => {
-    return this.showStats() ? "Hide stats" : "Show stats";
-  });
 
   pause = () => {
     this.isPaused(true);
@@ -298,7 +284,6 @@ class GameViewModel {
   };
 
   player: Player;
-
   resetStats_onClick = () => {
     this.stats.reset();
   };
@@ -322,6 +307,13 @@ class GameViewModel {
 
   showIntro: ko.Observable<boolean>;
   showStats: ko.Observable<boolean>;
+  stats = Stats;
+  toggleStatsLink = ko.pureComputed<string>(() => {
+    return this.showStats() ? "Hide stats" : "Show stats";
+  });
+  toggleStats_onClick = () => {
+    this.showStats(!this.showStats());
+  };
 
   constructor() {
     this.showIntro = ko.observable(true);
@@ -374,7 +366,13 @@ class GameViewModel {
     ]);
 
     this.boss = ko.observable<Boss>(
-      new GordoRamzee(this.player, tank, this.friendlies, this._onBossKill)
+      BossFactory.create(
+        BossName.GordoRamzee,
+        this.player,
+        tank,
+        this.friendlies,
+        this._onBossKill
+      )
     );
 
     ko.utils.registerEventHandler(

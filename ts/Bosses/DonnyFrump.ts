@@ -6,6 +6,7 @@ import Party from "ts/Party";
 import Player from "ts/Player";
 import Random from "ts/Random";
 import Trigger from "ts/Trigger";
+import { BossName } from "./BossName";
 import AngryTweet from "./DonnyFrump/Actions/AngryTweet";
 import Uncertainty from "./DonnyFrump/Actions/Uncertainty";
 import Enrage from "./Shared/Actions/Enrage";
@@ -90,7 +91,7 @@ export default class DonnyFrump extends Boss {
   protected loops: Loops;
   protected triggers: Trigger[];
 
-  name: string;
+  name: BossName;
   onDeathOfFriendly = (friendly: Friendly) => {
     if (friendly === this._tank) {
       // The tank just died.
@@ -123,7 +124,7 @@ export default class DonnyFrump extends Boss {
   ) {
     super(80000, player, tank, raid, onDeathCallback);
 
-    this.name = "Donny Frump";
+    this.name = BossName.DonnyFrump;
     this._isEnraged = false;
 
     this.loops = new Loops(

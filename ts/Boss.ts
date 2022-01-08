@@ -1,11 +1,13 @@
 import * as ko from "knockout";
 import Action from "ts/Action";
 import ActionObservable from "./ActionObservable";
+import { BossName } from "./Bosses/BossName";
 import Friendly from "./Friendly";
 import Loop from "./Loop";
 import Loops from "./Loops";
 import Party from "./Party";
 import Player from "./Player";
+import Reward from "./Reward";
 import Trigger from "./Trigger";
 
 export default abstract class Boss {
@@ -26,13 +28,13 @@ export default abstract class Boss {
   };
 
   private _isStarted: boolean = false;
-
   private _onDeath = () => {
     this.stop();
     this.isDead(true);
     this._onDeathCallback();
   };
 
+  private _reward: Reward | null = null;
   private _updateProgress = (healthPercentage: number) => {
     this.triggers.forEach((trigger: Trigger) => {
       trigger.execute(healthPercentage);
@@ -74,18 +76,18 @@ export default abstract class Boss {
   harm = (amount: number) => this._adjustHealth(0 - amount);
 
   health: ko.Observable<number>;
+  healthPercentageString: ko.PureComputed<string> = ko.pureComputed(
+    () => `${(100.0 * this.health()) / this.maxHealth}%`
+  );
+  isDead: ko.Observable<boolean>;
   label: ko.PureComputed<string> = ko.pureComputed(
     () =>
       `${this.name} (${this.health().toLocaleString(
         "en-US"
       )}/${this.maxHealth.toLocaleString("en-US")})`
   );
-  healthPercentageString: ko.PureComputed<string> = ko.pureComputed(
-    () => `${(100.0 * this.health()) / this.maxHealth}%`
-  );
-  isDead: ko.Observable<boolean>;
   maxHealth: number;
-  abstract name: string;
+  abstract name: BossName;
   abstract onDeathOfFriendly: (friendly: Friendly) => void;
   pause = () => {
     this.loops.pause();
@@ -138,5 +140,13 @@ export default abstract class Boss {
     this._tank = tank;
     this._raid = raid;
     this._onDeathCallback = onDeathCallback;
+  }
+
+  get reward(): Reward | null {
+    return this._reward;
+  }
+
+  set reward(reward: Reward | null) {
+    this._reward = reward;
   }
 }
