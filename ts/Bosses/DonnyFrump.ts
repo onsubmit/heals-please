@@ -109,7 +109,7 @@ export default class DonnyFrump extends Boss {
         this._tank = this._player;
       } else {
         // Choose some random DPS to become the new tank.
-        this._tank = this._raid.getRandomDps();
+        this._tank = this._raid.getOneRandomNpc();
       }
 
       this.targets.push(this._tank);

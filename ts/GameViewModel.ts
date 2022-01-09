@@ -213,7 +213,7 @@ class GameViewModel {
     console.log(message);
   };
 
-  allowPause: boolean = true;
+  allowPause: boolean = false;
   animations: typeof Animations = Animations;
   boss: ko.Observable<Boss>;
   cancelCast = () => {

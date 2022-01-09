@@ -230,11 +230,11 @@ export default class Friendly {
   stop = () => {
     this._loops.stop();
 
-    this.buffs().forEach(function (buff: Buff) {
+    this.buffs.removeAll().forEach(function (buff: Buff) {
       buff.stop();
     });
 
-    this.debuffs().forEach(function (debuff: Debuff) {
+    this.debuffs.removeAll().forEach(function (debuff: Debuff) {
       debuff.stop();
     });
   };

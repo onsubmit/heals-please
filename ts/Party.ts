@@ -16,7 +16,7 @@ export default class Party {
     return this.members[index];
   };
 
-  getRandomDps = (): Friendly => this.getRandomMembers(1)[0];
+  getOneRandomNpc = (): Friendly => this.getRandomMembers(1)[0];
 
   getRandomMembers = (
     amount: number,
