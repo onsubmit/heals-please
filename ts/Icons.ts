@@ -1,30 +1,22 @@
-import { ActionName } from "./ActionName";
+import { BuffName } from "./BuffName";
 import { DebuffName } from "./DebuffName";
 
-const _actionIcons: Map<ActionName, string> = new Map([
-  [ActionName.Renew, "🌿"],
-]);
-
-const _debuffIcons: Map<DebuffName, string> = new Map([
-  [DebuffName.FoodPoisoning, "🤢"],
-  [DebuffName.Confusion, "😕"],
-  [DebuffName.Uncertainty, "😵‍💫"],
-]);
-
-export function getActionIcon(actionName: ActionName): string {
-  const icon = _actionIcons.get(actionName);
-  if (!icon) {
-    throw new Error(`Could not find action icon for: ${actionName}`);
+export function getBuffIcon(buffName: BuffName): string {
+  switch (buffName) {
+    case BuffName.Renew:
+      return "🌿";
   }
-
-  return icon;
 }
 
 export function getDebuffIcon(debuffName: DebuffName): string {
-  const icon = _debuffIcons.get(debuffName);
-  if (!icon) {
-    throw new Error(`Could not find debuff icon for: ${debuffName}`);
+  switch (debuffName) {
+    case DebuffName.FoodPoisoning:
+      return "🤢";
+    case DebuffName.Confusion:
+      return "😕";
+    case DebuffName.Uncertainty:
+      return "😵‍💫";
+    case DebuffName.Bleed:
+      return "🩸";
   }
-
-  return icon;
 }

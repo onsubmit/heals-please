@@ -2,7 +2,9 @@ import * as ko from "knockout";
 import { ActionName } from "./ActionName";
 import Animations from "./Animations";
 import Buff from "./Buff";
+import { BuffName } from "./BuffName";
 import Debuff from "./Debuff";
+import { DebuffName } from "./DebuffName";
 import { DebuffType } from "./DebuffType";
 import { FriendlyParams } from "./FriendlyParams";
 import HealOutcome from "./HealOutcome";
@@ -70,7 +72,6 @@ export default class Friendly {
   };
 
   animations: typeof Animations = Animations;
-
   applyBuff = (buff: Buff) => {
     // Remove any pre-existing buffs by this name.
     this.removeBuff(buff.name);
@@ -80,8 +81,14 @@ export default class Friendly {
   };
 
   applyDebuff = (debuff: Debuff) => {
-    debuff.start(this);
-    this.debuffs.push(debuff);
+    const currentDebuffs = this._getDebuffsByType(debuff.type);
+    if (currentDebuffs.length) {
+      // Don't apply the buff twice, just restart the current one.
+      currentDebuffs.forEach((currentDebuff) => currentDebuff.restart());
+    } else {
+      debuff.start(this);
+      this.debuffs.push(debuff);
+    }
   };
 
   buffs: ko.ObservableArray<Buff>;
@@ -112,6 +119,8 @@ export default class Friendly {
       healOutcome.targetDied = true;
     } else {
       const overheal = this._adjustHealth(amount);
+      this.debuffs().forEach((debuff) => debuff.postHealCallback(this));
+
       healOutcome.overheal = overheal;
     }
 
@@ -163,7 +172,7 @@ export default class Friendly {
     });
   };
 
-  removeBuff = (buffNameToRemove: string) => {
+  removeBuff = (buffNameToRemove: BuffName) => {
     const removedBuffs = this.buffs.remove(
       (buff: Buff) => buff.name === buffNameToRemove
     );
@@ -179,7 +188,7 @@ export default class Friendly {
     return false;
   };
 
-  removeDebuff = (debuffNameToRemove: string): boolean => {
+  removeDebuff = (debuffNameToRemove: DebuffName): boolean => {
     const removedDebuffs = this.debuffs.remove(
       (debuff: Debuff) => debuff.name === debuffNameToRemove
     );
@@ -267,5 +276,9 @@ export default class Friendly {
     );
 
     this._initialize();
+  }
+
+  get isAtFullHealth(): boolean {
+    return this.health() === this._maxHealth;
   }
 }

@@ -1,6 +1,7 @@
+import { BuffName } from "./BuffName";
 import { BuffParams } from "./BuffParams";
 import Friendly from "./Friendly";
-import { getActionIcon } from "./Icons";
+import { getBuffIcon } from "./Icons";
 import Loop from "./Loop";
 
 export default class Buff {
@@ -22,7 +23,7 @@ export default class Buff {
 
   description: string;
   icon: string;
-  name: string;
+  name: BuffName;
   pause = () => {
     this._loop.pause();
   };
@@ -47,7 +48,7 @@ export default class Buff {
     this._duration = params.duration;
     this._target = params.target;
     this._effect = params.effect;
-    this.icon = getActionIcon(name);
+    this.icon = getBuffIcon(name);
 
     this._loop = new Loop(name, this._tick, this._duration);
   }

@@ -57,8 +57,13 @@ export default class Loop {
     this._loop(this._timerRemaining);
   };
 
-  start = () => {
-    this._state = LoopState.Running;
+  restart = () => {
+    this.stop();
+    this.start(LoopState.Paused);
+  };
+
+  start = (initialState: LoopState = LoopState.Running) => {
+    this._state = initialState;
 
     if (this._startDelay) {
       setTimeout(this._loop, this._startDelay);

@@ -2,7 +2,7 @@ import Action from "ts/Action";
 import { Animation, AnimationWrapper } from "ts/Animation";
 import Animations from "ts/Animations";
 import { DebuffName } from "ts/DebuffName";
-import { DotDebuff } from "ts/DotDebuff";
+import DotDebuff from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 
 export default class Uncertainty extends Action {

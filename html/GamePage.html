@@ -112,6 +112,11 @@
                 <!-- /ko -->
             </div>
             <!-- /ko -->
+            <!-- ko if: allowSkip -->
+            <div class="game-actions frame thin">
+                <div data-bind="click: skip">Skip</div>
+            </div>
+            <!-- /ko -->
             <div class="health-bar" data-bind="style: { width: boss().healthPercentageString }">
                 <div class="boss-name nowrap" data-bind="text: boss().label">&nbsp;</div>
             </div>

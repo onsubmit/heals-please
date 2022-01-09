@@ -1,3 +1,4 @@
+import { DebuffName } from "./DebuffName";
 import { DebuffParams } from "./DebuffParams";
 import { DebuffType } from "./DebuffType";
 import Friendly from "./Friendly";
@@ -6,6 +7,7 @@ import Loop from "./Loop";
 
 export default class Debuff {
   private _applied: boolean = false;
+  private _postHealCallback?: (target: Friendly) => void;
 
   protected _duration: number;
   protected _loop: Loop;
@@ -23,13 +25,17 @@ export default class Debuff {
   description: string;
   effect: (target: Friendly, damage: number) => number;
   icon: string;
-  name: string;
+  name: DebuffName;
   pause = () => {
     this._loop.pause();
   };
 
   resume = () => {
     this._loop.resume();
+  };
+
+  restart = () => {
+    this._loop.restart();
   };
 
   start = (target: Friendly) => {
@@ -39,6 +45,12 @@ export default class Debuff {
 
   stop = () => {
     this._loop.stop();
+  };
+
+  postHealCallback = (target: Friendly): void => {
+    if (this._postHealCallback) {
+      this._postHealCallback(target);
+    }
   };
 
   type: DebuffType;
@@ -51,6 +63,7 @@ export default class Debuff {
     this.type = params.type || DebuffType.None;
     this.effect = params.effect;
     this.icon = getDebuffIcon(name);
+    this._postHealCallback = params.postHealCallback;
 
     this._duration = params.duration || 5000;
 

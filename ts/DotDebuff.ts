@@ -9,7 +9,7 @@ type DotDebuffParams = DebuffParams & {
   getTickDamage: (target: Friendly) => number;
 };
 
-export class DotDebuff extends Debuff {
+export default class DotDebuff extends Debuff {
   private _interval: number;
   private _numTicks: number;
   private _tickCount: number;

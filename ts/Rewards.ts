@@ -7,8 +7,9 @@ class Rewards {
     switch (bossName) {
       case BossName.GordoRamzee:
         return new Reward(ActionName.Renew, BossName.DonnyFrump);
+      case BossName.DonnyFrump:
+        return new Reward(ActionName.MediumHeal, BossName.ElongTusk);
     }
-
     return null;
   };
 }

@@ -1,5 +1,6 @@
 import { ActionName } from "ts/ActionName";
 import AnimationHelpers from "ts/AnimationHelpers";
+import { BuffName } from "ts/BuffName";
 import Friendly from "ts/Friendly";
 import Heal from "ts/Heal";
 import HealOutcome from "ts/HealOutcome";
@@ -28,7 +29,7 @@ export default class Renew extends Heal {
 
   override cast = () => {
     const renewBuff = new HotBuff({
-      name: ActionName.Renew,
+      name: BuffName.Renew,
       description: "The target feels renewed, gaining health over time.",
       duration: 10000,
       interval: 2000,

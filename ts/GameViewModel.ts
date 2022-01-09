@@ -214,6 +214,7 @@ class GameViewModel {
   };
 
   allowPause: boolean = false;
+  allowSkip: boolean = true;
   animations: typeof Animations = Animations;
   boss: ko.Observable<Boss>;
   cancelCast = () => {
@@ -307,6 +308,10 @@ class GameViewModel {
 
   showIntro: ko.Observable<boolean>;
   showStats: ko.Observable<boolean>;
+  skip = () => {
+    this.boss().stop();
+    this._onBossKill();
+  };
   stats = Stats;
   toggleStatsLink = ko.pureComputed<string>(() => {
     return this.showStats() ? "Hide stats" : "Show stats";

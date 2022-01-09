@@ -6,30 +6,33 @@ import DotDebuff from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 import Random from "ts/Random";
 
-export default class ThrowFood extends Action {
+export default class Gore extends Action {
   private _cast = () => {
     this.targets.forEach((target: Friendly) => {
-      const harmAmount = Random.fromIntegerIntervalInclusive(12, 18);
+      const harmAmount = Random.fromIntegerIntervalInclusive(24, 42);
       target.harm(harmAmount);
 
-      if (!target.isDead() && Math.random() < 0.5) {
-        const foodPoisoningDebuff = new DotDebuff({
-          name: DebuffName.FoodPoisoning,
+      if (!target.isDead()) {
+        const bleedDebuff = new DotDebuff({
+          name: DebuffName.Bleed,
           description:
-            "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
+            "Bleeding for 4 damage every second until healed to full.",
           interval: 1000,
-          duration: 5000,
+          duration: -1,
           target: target,
           effect: (foodPoisoningTarget: Friendly, harmAmount: number) => {
             foodPoisoningTarget.harm(harmAmount);
             return harmAmount;
           },
-          getTickDamage: (target: Friendly): number => {
-            return Random.fromIntegerIntervalInclusive(8, 16);
+          getTickDamage: (target: Friendly): number => 4,
+          postHealCallback: (target: Friendly): void => {
+            if (target.isAtFullHealth) {
+              target.removeDebuff(DebuffName.Bleed);
+            }
           },
         });
 
-        target.applyDebuff(foodPoisoningDebuff);
+        target.applyDebuff(bleedDebuff);
       }
     });
   };
@@ -45,7 +48,7 @@ export default class ThrowFood extends Action {
   targets: Friendly[];
 
   constructor(targets: Friendly[], onSuccess: () => void) {
-    super("Throw Food");
+    super("Gore");
 
     this.targets = targets;
     this._onSuccess = onSuccess;

@@ -1,8 +1,8 @@
-import { ActionName } from "./ActionName";
+import { BuffName } from "./BuffName";
 import Friendly from "./Friendly";
 
 export type BuffParams = {
-  name: ActionName;
+  name: BuffName;
   description: string;
   duration: number;
   target: Friendly;
