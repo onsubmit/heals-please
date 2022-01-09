@@ -1,7 +1,7 @@
-import Icon from "images/food-poisoning.svg";
 import Action from "ts/Action";
 import { Animation, AnimationWrapper } from "ts/Animation";
 import Animations from "ts/Animations";
+import { DebuffName } from "ts/DebuffName";
 import { DotDebuff } from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 import Random from "ts/Random";
@@ -14,10 +14,9 @@ export default class ThrowFood extends Action {
 
       if (!target.isDead() && Math.random() < 0.5) {
         const foodPoisoningDebuff = new DotDebuff({
-          name: "Food Poisoning",
+          name: DebuffName.FoodPoisoning,
           description:
             "The food was bland and dry, dealing 8-16 damage every 1 second for 5 seconds.",
-          icon: Icon,
           interval: 1000,
           duration: 5000,
           target: target,

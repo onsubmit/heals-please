@@ -1,7 +1,7 @@
-import Icon from "images/uncertainty.svg";
 import Action from "ts/Action";
 import { Animation, AnimationWrapper } from "ts/Animation";
 import Animations from "ts/Animations";
+import { DebuffName } from "ts/DebuffName";
 import { DotDebuff } from "ts/DotDebuff";
 import Friendly from "ts/Friendly";
 
@@ -9,10 +9,9 @@ export default class Uncertainty extends Action {
   private _cast = () => {
     this.targets.forEach((target: Friendly) => {
       const uncertaintyDebuff = new DotDebuff({
-        name: "Uncertainty",
+        name: DebuffName.Uncertainty,
         description:
           "Target can't tell what's true anymore. At full health, target takes 1 damage every 2 seconds. Increases to 5 per 2 seconds when near death.",
-        icon: Icon,
         interval: 2000,
         duration: -1,
         target: target,

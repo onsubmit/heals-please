@@ -1,4 +1,3 @@
-import Icon from "images/renew.svg";
 import { ActionName } from "ts/ActionName";
 import AnimationHelpers from "ts/AnimationHelpers";
 import Friendly from "ts/Friendly";
@@ -34,7 +33,6 @@ export default class Renew extends Heal {
       duration: 10000,
       interval: 2000,
       target: this.target,
-      icon: Icon,
       effect: (renewTarget: Friendly) => {
         const isCrit = Math.random() < this._critChance;
         let healAmount = 8;

@@ -1,6 +1,7 @@
 import { DebuffParams } from "./DebuffParams";
 import { DebuffType } from "./DebuffType";
 import Friendly from "./Friendly";
+import { getDebuffIcon } from "./Icons";
 import Loop from "./Loop";
 
 export default class Debuff {
@@ -21,7 +22,7 @@ export default class Debuff {
 
   description: string;
   effect: (target: Friendly, damage: number) => number;
-  icon: any;
+  icon: string;
   name: string;
   pause = () => {
     this._loop.pause();
@@ -49,7 +50,7 @@ export default class Debuff {
     this.description = params.description;
     this.type = params.type || DebuffType.None;
     this.effect = params.effect;
-    this.icon = params.icon;
+    this.icon = getDebuffIcon(name);
 
     this._duration = params.duration || 5000;
 

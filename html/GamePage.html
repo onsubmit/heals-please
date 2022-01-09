@@ -89,12 +89,12 @@
                 </div>
                 <div class="party-member-buffs-container">
                     <div class="party-member-buffs" data-bind="foreach: { data: member.buffs, as: 'buff' }">
-                        <a href="#" data-bind="click: $parents[1].showBuff.bind(null, $data, member)"><img data-bind="attr: { src: buff.icon, title: buff.tooltip }" /></a>
+                        <a href="#" class="icon" data-bind="click: $parents[1].showBuff.bind(null, $data, member)"><span data-bind="text: buff.icon, attr: { title: buff.tooltip }"></span></a>
                     </div>
                 </div>
                 <div class="party-member-debuffs-container">
                     <div class="party-member-debuffs" data-bind="foreach: { data: member.debuffs, as: 'debuff' }">
-                        <a href="#" data-bind="click: $parents[1].showDebuff.bind(null, $data, member)"><img data-bind="attr: { src: debuff.icon, title: debuff.tooltip }" /></a>
+                        <a href="#" class="icon" data-bind="click: $parents[1].showDebuff.bind(null, $data, member)"><span data-bind="text: debuff.icon, attr: { title: debuff.tooltip }"></span></a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                 animate: !currentCast.value() && animations.fadeOut200"></div>
 
             <!-- ko if: currentCast.value() && !currentCast.value().isInstant -->
-            <div class="cast-bar-cancel" data-bind="click: cancelCast"><img src="../images/cancel.svg" alt="Cancel cast" title="Cancel cast"></img></div>
+            <div class="cast-bar-cancel" data-bind="click: cancelCast"><span title="Cancel cast">❌</span></div>
             <!-- /ko -->
         </div>
     </div>

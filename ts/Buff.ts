@@ -1,5 +1,6 @@
 import { BuffParams } from "./BuffParams";
 import Friendly from "./Friendly";
+import { getActionIcon } from "./Icons";
 import Loop from "./Loop";
 
 export default class Buff {
@@ -19,22 +20,22 @@ export default class Buff {
     }
   };
 
-  public description: string;
-  public icon: any;
-  public name: string;
-  public pause = () => {
+  description: string;
+  icon: string;
+  name: string;
+  pause = () => {
     this._loop.pause();
   };
 
-  public resume = () => {
+  resume = () => {
     this._loop.resume();
   };
 
-  public start = (target: Friendly) => {
+  start = (target: Friendly) => {
     this._target = target;
   };
 
-  public stop = () => {
+  stop = () => {
     this._loop.stop();
   };
 
@@ -46,12 +47,12 @@ export default class Buff {
     this._duration = params.duration;
     this._target = params.target;
     this._effect = params.effect;
-    this.icon = params.icon;
+    this.icon = getActionIcon(name);
 
     this._loop = new Loop(name, this._tick, this._duration);
   }
 
-  public get tooltip() {
+  get tooltip() {
     return `${this.name} -> ${this.description}`;
   }
 }
