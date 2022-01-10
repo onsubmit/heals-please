@@ -211,8 +211,8 @@ export default class Friendly {
 
   reset = () => {
     this.healToMax(true);
-    this.buffs.removeAll();
-    this.debuffs.removeAll();
+    this.buffs.removeAll().forEach((buff) => buff.stop());
+    this.debuffs.removeAll().forEach((debuff) => debuff.stop());
   };
 
   resume = () => {
