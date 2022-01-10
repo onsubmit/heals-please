@@ -20,11 +20,11 @@ export default class ThrowFood extends Action {
           interval: 1000,
           duration: 5000,
           target: target,
-          effect: (foodPoisoningTarget: Friendly, harmAmount: number) => {
-            foodPoisoningTarget.harm(harmAmount);
+          harmEffect: (target: Friendly, harmAmount: number) => {
+            target.harm(harmAmount);
             return harmAmount;
           },
-          getTickDamage: (target: Friendly): number => {
+          getHarmAmount: (target: Friendly): number => {
             return Random.fromIntegerIntervalInclusive(8, 16);
           },
         });

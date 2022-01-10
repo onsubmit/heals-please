@@ -2,7 +2,6 @@ import * as ko from "knockout";
 import "../css/app.less";
 import GamePageHtml from "../html/GamePage.html";
 import { ActionName } from "./ActionName";
-import ActionObservable from "./ActionObservable";
 import AnimationHelpers from "./AnimationHelpers";
 import Animations from "./Animations";
 import Boss from "./Boss";
@@ -21,21 +20,6 @@ import Rewards from "./Rewards";
 import Stats from "./Stats";
 
 class GameViewModel {
-  private _cancelCast = () => {
-    this._queuedAction = null;
-    this.currentCast.action("stop");
-    this.currentCast.value(null);
-  };
-
-  private _castAction = (action: Heal) => {
-    if (action.isInstant) {
-      this.player.spendMana(action.manaCost);
-    }
-
-    this.currentCast.action("finish");
-    this.currentCast.value(action);
-  };
-
   private _document_onKeyPress = (e: Event) => {
     const keyboardEvent = e as KeyboardEvent;
     const keyCode = keyboardEvent.keyCode;
@@ -46,7 +30,7 @@ class GameViewModel {
     }
     if (keyCode === 32) {
       // SPACE
-      const previousCast = this.currentCast.previous();
+      const previousCast = this.player.currentCast.previous();
       if (previousCast && previousCast.name) {
         this.cast(previousCast.name);
       }
@@ -102,12 +86,7 @@ class GameViewModel {
       this.addLog(message);
     }
 
-    if (this._queuedAction) {
-      this._castAction(this._queuedAction);
-      this._queuedAction = null;
-    } else {
-      this.currentCast.value(null);
-    }
+    this.player.castQueuedHeal();
   };
 
   private _onBossKill = () => {
@@ -122,8 +101,6 @@ class GameViewModel {
         alert(message);
 
         this.inCombat(false);
-        this.friendlies.reset();
-        this.player.restoreManaToMax();
       }, 0);
     };
 
@@ -138,6 +115,14 @@ class GameViewModel {
       );
 
       this.player.actions.push(reward.healName);
+      this.player.maxMana(Math.round(this.player.maxMana() * 1.2));
+      this.friendlies.members.forEach((friendly) =>
+        friendly.maxHealth(Math.round(friendly.maxHealth() * 1.1))
+      );
+
+      this.friendlies.reset();
+      this.player.restoreManaToMax();
+
       this.boss(
         BossFactory.create(
           reward.bossName,
@@ -207,18 +192,16 @@ class GameViewModel {
     }
   };
 
-  private _queuedAction: Heal | null = null;
-
   addLog = (message: string) => {
     console.log(message);
   };
 
-  allowPause: boolean = false;
-  allowSkip: boolean = true;
+  allowPause: boolean = document.location.protocol === "file:";
+  allowSkip: boolean = document.location.protocol === "file:";
   animations: typeof Animations = Animations;
   boss: ko.Observable<Boss>;
   cancelCast = () => {
-    const currentCast = this.currentCast.value();
+    const currentCast = this.player.currentCast.value();
     if (currentCast && !currentCast.isInstant) {
       currentCast.cancel();
     }
@@ -237,7 +220,7 @@ class GameViewModel {
     const healParams = {
       critChance: this.player.critChance(),
       onFinish: this._finishCast,
-      onCancel: this._cancelCast,
+      onCancel: this.player.cancelCast,
     };
 
     const heal = HealFactory.create(actionName, target, healParams);
@@ -246,21 +229,9 @@ class GameViewModel {
       return;
     }
 
-    const currentCast = this.currentCast.value();
-    if (currentCast) {
-      if (!currentCast.isInstant && currentCast.castProgress > 0.5) {
-        // If an action is cast while already casting, queue up the action.
-        // It will cast immediately after the current cast completes.
-        this._queuedAction = heal;
-      }
-
-      return;
-    }
-
-    return this._castAction(heal);
+    this.player.cast(heal);
   };
 
-  currentCast: ActionObservable<Heal> = new ActionObservable<Heal>();
   engageBoss = () => {
     this.addLog(`${this.boss().name} engaged.`);
     this.boss().engage();
@@ -328,17 +299,17 @@ class GameViewModel {
 
     this.player = new Player(
       {
-        health: 100,
+        health: 109,
         attackInterval: 30000,
         onAttack: this._onFriendlyAttack(2),
         onDeath: this._onFriendlyDeath,
       },
-      1000,
+      1081,
       [ActionName.SmallHeal]
     );
 
     const tank = new Friendly("Tank", {
-      health: 200,
+      health: 212,
       attackInterval: 400,
       onAttack: this._onFriendlyAttack(1),
       onDeath: this._onFriendlyDeath,
@@ -347,21 +318,21 @@ class GameViewModel {
     this.friendlies = new Party([
       tank,
       new Friendly("DPS #1", {
-        health: 100,
+        health: 127,
         attackInterval: 1000,
         initialAttackDelay: 4000,
         onAttack: this._onFriendlyAttack(3.2),
         onDeath: this._onFriendlyDeath,
       }),
       new Friendly("DPS #2", {
-        health: 100,
+        health: 113,
         attackInterval: 1200,
         initialAttackDelay: 3500,
         onAttack: this._onFriendlyAttack(3.0),
         onDeath: this._onFriendlyDeath,
       }),
       new Friendly("DPS #3", {
-        health: 100,
+        health: 141,
         attackInterval: 1400,
         initialAttackDelay: 3000,
         onAttack: this._onFriendlyAttack(2.8),

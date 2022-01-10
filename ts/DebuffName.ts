@@ -3,4 +3,5 @@ export enum DebuffName {
   Uncertainty = "Uncertainty",
   Confusion = "Confusion",
   Bleed = "Bleed",
+  Silence = "Silence",
 }

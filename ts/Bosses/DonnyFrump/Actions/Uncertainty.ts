@@ -15,11 +15,11 @@ export default class Uncertainty extends Action {
         interval: 2000,
         duration: -1,
         target: target,
-        effect: (uncertaintyTarget: Friendly, harmAmount: number): number => {
-          uncertaintyTarget.harm(harmAmount);
+        harmEffect: (target: Friendly, harmAmount: number): number => {
+          target.harm(harmAmount);
           return harmAmount;
         },
-        getTickDamage: (uncertaintyTarget: Friendly): number => {
+        getHarmAmount: (uncertaintyTarget: Friendly): number => {
           // 1 dps @ 100% health
           // 5 dps @ 0% health
           return Math.round(-4 * uncertaintyTarget.healthPercentage() + 5);

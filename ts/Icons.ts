@@ -18,5 +18,7 @@ export function getDebuffIcon(debuffName: DebuffName): string {
       return "😵‍💫";
     case DebuffName.Bleed:
       return "🩸";
+    case DebuffName.Silence:
+      return "🤫";
   }
 }

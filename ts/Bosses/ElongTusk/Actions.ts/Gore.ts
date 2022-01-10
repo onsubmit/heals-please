@@ -20,11 +20,11 @@ export default class Gore extends Action {
           interval: 1000,
           duration: -1,
           target: target,
-          effect: (foodPoisoningTarget: Friendly, harmAmount: number) => {
+          harmEffect: (foodPoisoningTarget: Friendly, harmAmount: number) => {
             foodPoisoningTarget.harm(harmAmount);
             return harmAmount;
           },
-          getTickDamage: (target: Friendly): number => 4,
+          getHarmAmount: (target: Friendly): number => 4,
           postHealCallback: (target: Friendly): void => {
             if (target.isAtFullHealth) {
               target.removeDebuff(DebuffName.Bleed);

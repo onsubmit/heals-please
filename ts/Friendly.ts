@@ -17,9 +17,9 @@ export default class Friendly {
     const currentHealth = this.health();
     const newHealth = currentHealth + amount;
 
-    if (newHealth >= this._maxHealth) {
-      this.health(this._maxHealth);
-      return newHealth - this._maxHealth; // overheal
+    if (newHealth >= this.maxHealth()) {
+      this.health(this.maxHealth());
+      return newHealth - this.maxHealth(); // overheal
     }
 
     if (newHealth <= 0) {
@@ -36,12 +36,6 @@ export default class Friendly {
   };
 
   private _attackInterval: number;
-  private _getDebuffsByType = (debuffType: DebuffType): Debuff[] => {
-    return this.debuffs().filter(
-      (debuff: Debuff) => debuff.type === debuffType
-    );
-  };
-
   private _initialAttackDelay: number;
   private _initialize = () => {
     const healthSubscription = this.health.subscribe(
@@ -58,10 +52,15 @@ export default class Friendly {
     );
   };
 
-  private _maxHealth: number;
   private _onAttackCallback: (friendly: Friendly) => void;
   private _onDeathCallback: (friendly: Friendly) => any;
   private _stats = Stats;
+
+  protected getDebuffsByType = (debuffType: DebuffType): Debuff[] => {
+    return this.debuffs().filter(
+      (debuff: Debuff) => debuff.type === debuffType
+    );
+  };
 
   protected _loops: Loops;
   protected _onDeath = () => {
@@ -81,7 +80,7 @@ export default class Friendly {
   };
 
   applyDebuff = (debuff: Debuff) => {
-    const currentDebuffs = this._getDebuffsByType(debuff.type);
+    const currentDebuffs = this.getDebuffsByType(debuff.type);
     if (currentDebuffs.length) {
       // Don't apply the buff twice, just restart the current one.
       currentDebuffs.forEach((currentDebuff) => currentDebuff.restart());
@@ -94,9 +93,11 @@ export default class Friendly {
   buffs: ko.ObservableArray<Buff>;
   debuffs: ko.ObservableArray<Debuff>;
   harm = (amount: number) => {
-    const debuffs = this._getDebuffsByType(DebuffType.IncreaseDamageTaken);
+    const debuffs = this.getDebuffsByType(DebuffType.IncreaseDamageTaken);
     debuffs.forEach((debuff: Debuff) => {
-      amount = debuff.effect(this, amount);
+      if (debuff.harmEffect) {
+        amount = debuff.harmEffect(this, amount);
+      }
     });
 
     return this._adjustHealth(0 - amount);
@@ -132,24 +133,23 @@ export default class Friendly {
 
   healToMax = (allowResurrection: boolean) => {
     if (this.isDead() && allowResurrection) {
-      this.resurrect(this._maxHealth);
+      this.resurrect(this.maxHealth());
     } else {
-      this.health(this._maxHealth);
+      this.health(this.maxHealth());
     }
   };
 
   health: ko.Observable<number>;
   healthPercentage: ko.PureComputed<number> = ko.pureComputed(
-    () => this.health() / this._maxHealth
+    () => this.health() / this.maxHealth()
   );
   healthPercentageString: ko.PureComputed<string> = ko.pureComputed(
     () => `${100.0 * this.healthPercentage()}%`
   );
   healthStatusString: ko.PureComputed<string> = ko.pureComputed(
-    () => `${this.health()}/${this._maxHealth}`
+    () => `${this.health()}/${this.maxHealth()}`
   );
   isDead: ko.Observable<boolean>;
-  isPlayer: boolean;
   lastHealInfo: ko.Observable<HealOutcome | undefined>;
   lastHealStatusString: ko.PureComputed<string> = ko.pureComputed(() => {
     const lastHealInfo = this.lastHealInfo();
@@ -160,6 +160,7 @@ export default class Friendly {
 
     return `+${lastHealInfo.effectiveAmount}`;
   });
+  maxHealth: ko.Observable<number>;
   name: string;
   pause = () => {
     this._loops.pause();
@@ -228,7 +229,7 @@ export default class Friendly {
   resurrect = (health: number) => {
     if (this.isDead()) {
       this.isDead(false);
-      this.health(health || Math.round(this._maxHealth * 0.2));
+      this.health(health || Math.round(this.maxHealth() * 0.2));
     }
   };
 
@@ -258,9 +259,7 @@ export default class Friendly {
     this.debuffs = ko.observableArray<Debuff>([]);
     this.lastHealInfo = ko.observable<HealOutcome | undefined>();
 
-    this.isPlayer = false;
-
-    this._maxHealth = params.maxHealth || health;
+    this.maxHealth = ko.observable(params.maxHealth || health);
     this._initialAttackDelay = params.initialAttackDelay || 0;
     this._attackInterval = params.attackInterval || 1000;
     this._onAttackCallback = params.onAttack;
@@ -279,6 +278,6 @@ export default class Friendly {
   }
 
   get isAtFullHealth(): boolean {
-    return this.health() === this._maxHealth;
+    return this.health() === this.maxHealth();
   }
 }

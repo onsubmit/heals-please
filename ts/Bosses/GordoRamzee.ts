@@ -105,7 +105,7 @@ export default class GordoRamzee extends Boss {
     raid: Party,
     onDeathCallback: () => void
   ) {
-    super(60000, player, tank, raid, onDeathCallback);
+    super(58418, player, tank, raid, onDeathCallback);
 
     this.name = BossName.GordoRamzee;
     this._isEnraged = false;

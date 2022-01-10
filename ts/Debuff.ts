@@ -6,45 +6,43 @@ import { getDebuffIcon } from "./Icons";
 import Loop from "./Loop";
 
 export default class Debuff {
-  private _applied: boolean = false;
   private _postHealCallback?: (target: Friendly) => void;
 
-  protected _duration: number;
-  protected _loop: Loop;
-  protected _target: Friendly;
-  protected _tick = () => {
-    if (!this._applied) {
-      this.effect(this._target, 0);
-      this._applied = true;
-    } else {
-      this._loop.stop();
-      this._target.removeDebuff(this.name);
-    }
+  protected duration: number;
+  protected loop: Loop;
+  protected getHarmAmount: (target: Friendly) => number;
+  protected target: Friendly;
+  protected tick = () => {
+    this.loop.stop();
+    this.target.removeDebuff(this.name);
   };
 
   description: string;
-  effect: (target: Friendly, damage: number) => number;
+  harmEffect?: (target: Friendly, harmAmount: number) => number;
   icon: string;
   name: DebuffName;
   pause = () => {
-    this._loop.pause();
+    this.loop.pause();
   };
 
   resume = () => {
-    this._loop.resume();
+    this.loop.resume();
   };
 
   restart = () => {
-    this._loop.restart();
+    this.loop.restart();
   };
 
   start = (target: Friendly) => {
-    this._target = target;
-    this._loop.start();
+    this.target = target;
+    if (this.harmEffect) {
+      this.harmEffect(this.target, 0);
+    }
+    this.loop.start();
   };
 
   stop = () => {
-    this._loop.stop();
+    this.loop.stop();
   };
 
   postHealCallback = (target: Friendly): void => {
@@ -61,14 +59,15 @@ export default class Debuff {
     this.name = name;
     this.description = params.description;
     this.type = params.type || DebuffType.None;
-    this.effect = params.effect;
+    this.harmEffect = params.harmEffect;
+    this.getHarmAmount = params.getHarmAmount || ((target: Friendly) => 0);
     this.icon = getDebuffIcon(name);
     this._postHealCallback = params.postHealCallback;
 
-    this._duration = params.duration || 5000;
+    this.duration = params.duration || 5000;
 
-    this._target = params.target;
-    this._loop = new Loop(name, this._tick, this._duration);
+    this.target = params.target;
+    this.loop = new Loop(name, this.tick, this.duration);
   }
 
   get tooltip() {

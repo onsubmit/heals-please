@@ -145,21 +145,21 @@
     <div class="cast-bar-container frame thin unselectable">
         <div class="cast-bar-background">
             <div class="cast-bar" data-bind="
-                css: { 'gcd': (currentCast.value() && currentCast.value().isInstant) || (currentCast.previous() && currentCast.previous().isInstant) },
-                animate: currentCast.value() || animations.fadeOut200,
-                animateAction: currentCast.action">&nbsp;</div>
+                css: { 'gcd': (player.currentCast.value() && player.currentCast.value().isInstant) || (player.currentCast.previous() && player.currentCast.previous().isInstant) },
+                animate: player.currentCast.value() || animations.fadeOut200,
+                animateAction: player.currentCast.action">&nbsp;</div>
 
             <div class="cast-bar-text nowrap" data-bind="
-                css: { 'casting': currentCast.value },
-                text: currentCast.previous() && currentCast.previous().name,
-                animate: !currentCast.value() && animations.fadeOut200"></div>
+                css: { 'casting': player.currentCast.value },
+                text: player.currentCast.previous() && player.currentCast.previous().name,
+                animate: !player.currentCast.value() && animations.fadeOut200"></div>
 
-            <!-- ko if: currentCast.value() && !currentCast.value().isInstant -->
+            <!-- ko if: player.currentCast.value() && !player.currentCast.value().isInstant -->
             <div class="cast-bar-cancel" data-bind="click: cancelCast"><span title="Cancel cast">❌</span></div>
             <!-- /ko -->
         </div>
     </div>
-    <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': currentCast.value }">
+    <div class="mana-bar-container frame thin unselectable" data-bind="css: { 'casting': player.currentCast.value }">
         <div class="mana-bar-background">
             <div class="mana-bar" data-bind="style: { width: player.manaPercentageString }">&nbsp;</div>
             <div class="mana-regen-bar" data-bind="animate: player.regenManaNotifier() && player.regenManaAnimation">&nbsp;</div>

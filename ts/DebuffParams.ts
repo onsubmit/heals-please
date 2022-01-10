@@ -8,6 +8,7 @@ export type DebuffParams = {
   type?: DebuffType;
   duration: number;
   target: Friendly;
-  effect: (target: Friendly, harmAmount: number) => number;
+  getHarmAmount?: (target: Friendly) => number;
+  harmEffect?: (target: Friendly, harmAmount: number) => number;
   postHealCallback?: (target: Friendly) => void;
 };

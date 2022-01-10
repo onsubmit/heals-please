@@ -1,4 +1,5 @@
 import Friendly from "./Friendly";
+import Player from "./Player";
 import Random from "./Random";
 
 export default class Party {
@@ -34,7 +35,7 @@ export default class Party {
             let allowed = true;
 
             if (!allowPlayer) {
-              allowed = !member.isPlayer;
+              allowed = !(member instanceof Player);
             }
 
             if (allowed && !allowDead) {

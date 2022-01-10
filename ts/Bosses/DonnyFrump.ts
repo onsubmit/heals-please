@@ -122,7 +122,7 @@ export default class DonnyFrump extends Boss {
     raid: Party,
     onDeathCallback: () => void
   ) {
-    super(80000, player, tank, raid, onDeathCallback);
+    super(78558, player, tank, raid, onDeathCallback);
 
     this.name = BossName.DonnyFrump;
     this._isEnraged = false;
